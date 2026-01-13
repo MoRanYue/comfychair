@@ -1,6 +1,8 @@
 package sh.hnet.comfychair.ui.screens
 
+import android.app.LocaleManager
 import android.net.Uri
+import android.os.LocaleList
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -39,6 +41,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import sh.hnet.comfychair.R
+import sh.hnet.comfychair.ui.components.LanguageDropdown
+import sh.hnet.comfychair.ui.components.LanguageOption
 import sh.hnet.comfychair.ui.components.LogViewerDialog
 import sh.hnet.comfychair.ui.components.SettingsScreenScaffold
 import sh.hnet.comfychair.util.DebugLogger
@@ -160,11 +164,76 @@ fun ApplicationSettingsScreen(
         )
     }
 
+    // Language options - System default first, then alphabetical by native name
+    val languageOptions = remember {
+        listOf(
+            LanguageOption("", R.string.language_system_default),
+            LanguageOption("de", R.string.language_name_de),
+            LanguageOption("en", R.string.language_name_en),
+            LanguageOption("es", R.string.language_name_es),
+            LanguageOption("fr", R.string.language_name_fr),
+            LanguageOption("pl", R.string.language_name_pl),
+            LanguageOption("zh", R.string.language_name_zh)
+        )
+    }
+
+    // Get current app locale from LocaleManager
+    val localeManager = context.getSystemService(LocaleManager::class.java)
+    val currentLocales = localeManager.applicationLocales
+    val currentLocaleTag = if (currentLocales.isEmpty) {
+        ""
+    } else {
+        currentLocales.get(0)?.language ?: ""
+    }
+
     SettingsScreenScaffold(
         title = stringResource(R.string.application_settings_title),
         onNavigateToGeneration = onNavigateToGeneration,
         onLogout = onLogout
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Language Card
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_language_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = stringResource(R.string.settings_language_description),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LanguageDropdown(
+                    languages = languageOptions,
+                    selectedLocaleTag = currentLocaleTag,
+                    onLanguageSelected = { localeTag ->
+                        val newLocales = if (localeTag.isEmpty()) {
+                            LocaleList.getEmptyLocaleList()
+                        } else {
+                            LocaleList.forLanguageTags(localeTag)
+                        }
+                        localeManager.applicationLocales = newLocales
+                        // Activity will be recreated automatically by the system
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         // Connection Card

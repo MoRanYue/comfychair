@@ -114,6 +114,18 @@
     <string name="gallery_refresh_success">Gallery refreshed</string>
     <string name="gallery_refresh_failed">Failed to refresh gallery</string>
 
+    <!-- Language settings -->
+    <string name="settings_language_title">Language</string>
+    <string name="settings_language_description">Choose your preferred app language</string>
+    <string name="language_system_default">System default</string>
+    <string name="language_label">App language</string>
+    <string name="language_name_en" translatable="false">English</string>
+    <string name="language_name_de" translatable="false">Deutsch</string>
+    <string name="language_name_es" translatable="false">Español</string>
+    <string name="language_name_fr" translatable="false">Français</string>
+    <string name="language_name_pl" translatable="false">Polski</string>
+    <string name="language_name_zh" translatable="false">中文</string>
+
     <!-- Settings section titles -->
     <string name="settings_connection_title">Connection</string>
     <string name="settings_connection_description">Server connection behavior</string>

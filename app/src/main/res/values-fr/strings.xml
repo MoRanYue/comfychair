@@ -1,4 +1,10 @@
 <resources>
+    <!-- Language settings -->
+    <string name="settings_language_title">Langue</string>
+    <string name="settings_language_description">Choisissez votre langue préférée</string>
+    <string name="language_system_default">Par défaut du système</string>
+    <string name="language_label">Langue de l\'application</string>
+
     <!-- Login screen strings -->
     <string name="hostname_hint">Nom d\'hôte</string>
     <string name="port_hint">Port</string>

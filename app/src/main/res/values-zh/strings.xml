@@ -1,4 +1,10 @@
 <resources>
+    <!-- Language settings -->
+    <string name="settings_language_title">语言</string>
+    <string name="settings_language_description">选择您偏好的应用语言</string>
+    <string name="language_system_default">系统默认</string>
+    <string name="language_label">应用语言</string>
+
     <!-- Login screen strings -->
     <string name="hostname_hint">主机名</string>
     <string name="port_hint">端口</string>
