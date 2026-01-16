@@ -276,8 +276,22 @@ class GenerationViewModel : ViewModel() {
                 val promptId = message.promptId
                 if (promptId.isNotEmpty()) {
                     // Look up job info from JobRegistry
-                    val owner = JobRegistry.findOwner(promptId)
-                    val contentType = JobRegistry.findContentType(promptId)
+                    var owner = JobRegistry.findOwner(promptId)
+                    var contentType = JobRegistry.findContentType(promptId)
+
+                    // Fallback: If not found in JobRegistry but we have a pending submission,
+                    // use the pending owner/contentType (execution_start arrived before registerJob completed)
+                    if (owner == null && generationOwnerId != null) {
+                        val pendingOwner = generationOwnerId!!
+                        val pendingContentType = generationContentType
+                        owner = pendingOwner
+                        contentType = pendingContentType
+                        DebugLogger.w(TAG, "ExecutionStart arrived before registerJob, using pending owner: $pendingOwner")
+
+                        // Register the job now since we know the promptId
+                        JobRegistry.registerJob(promptId, pendingOwner, pendingContentType)
+                        applicationContext?.let { ctx -> JobRegistry.saveState(ctx) }
+                    }
 
                     if (owner != null && contentType != null) {
                         val previousOwner = generationOwnerId
