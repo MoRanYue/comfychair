@@ -2,7 +2,7 @@
 
 An unofficial, native Android UI for [ComfyUI](https://github.com/comfyanonymous/ComfyUI).
 
-**Current version**: v0.8.9
+**Current version**: v0.8.10
 
 [<img src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png"
     alt="Get it on GitHub"
@@ -35,28 +35,33 @@ ComfyChair provides a streamlined mobile interface for interacting with ComfyUI 
   - **UNET mode**: Modern diffusion workflows (Flux, Z-Image, etc.) with separate UNET, VAE, and CLIP model selection
 - **LoRA chain support**:
   - Add up to 5 LoRAs per chain with individual strength control (0.0-2.0)
-  - Text to image and Image to image: Separate LoRA chains for Checkpoint and UNET modes
-  - Text to video and Image to video: Separate High noise and Low noise LoRA chains
+  - Text to Image and Image to Image: Separate LoRA chains for Checkpoint and UNET modes
+  - Text to Video and Image to Video: Separate High Noise and Low Noise LoRA chains
   - LoRAs are dynamically injected into workflows at generation time
-- **Localization**: Available in English (default), German, French, Polish, Spanish, and Chinese
+- **Prompt Library**:
+  - Save prompts as reusable presets with custom names and tags
+  - Organize presets with favorites and tag-based filtering
+  - Quick access via dropdown or full library dialog
+  - Search presets by name, prompt text, or tags
+- **Localization**: Available in English (default), German, French, Polish, Spanish, and Chinese with per-app language selection
 - **Native Android experience**: Built with Kotlin and Jetpack Compose with Material Design 3
 
-### Supported modes
+### Generation Modes
 
-- **Text to image**:
+- **Text to Image**:
   - Mobile-optimized interface with live progress updates
   - Live preview images during generation (when supported by server)
-- **Image to image**:
+- **Image to Image**:
   - Two modes: **Editing** (transformation) and **Inpainting** (mask-based)
   - **Editing mode**: Transform images with optional reference images (up to 2)
   - **Inpainting mode**: Mask editor with adjustable brush size and feathered edges
   - Live progress updates and preview images during generation
-- **Text to video**:
-  - Generate AI videos with high/low noise UNET and LoRA model selection
+- **Text to Video**:
+  - Generate AI videos with High Noise / Low Noise UNET and LoRA model selection
   - Live preview during generation
-- **Image to video**:
+- **Image to Video**:
   - Animate still images into videos with adjustable length and frame rate
-  - High/low noise UNET and LoRA model selection
+  - High Noise / Low Noise UNET and LoRA model selection
   - Live preview during generation
 
 ### Media

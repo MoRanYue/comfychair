@@ -558,8 +558,8 @@
 
     <!-- LoRA chain editor strings -->
     <string name="lora_chain_title">LoRA chain (optional)</string>
-    <string name="highnoise_lora_chain_title">High noise LoRAs (optional)</string>
-    <string name="lownoise_lora_chain_title">Low noise LoRAs (optional)</string>
+    <string name="highnoise_lora_chain_title">High Noise LoRAs (optional)</string>
+    <string name="lownoise_lora_chain_title">Low Noise LoRAs (optional)</string>
     <string name="add_lora_button">Add LoRA</string>
     <string name="label_lora" translatable="false">LoRA</string>
     <string name="lora_strength_label">Strength:</string>
