@@ -1,14 +1,17 @@
 package sh.hnet.comfychair.ui.components.shared
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedIconToggleButton
 import androidx.compose.runtime.Composable
@@ -48,14 +51,16 @@ fun SeedRow(
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // Random seed toggle
         OutlinedIconToggleButton(
             checked = randomSeed,
             onCheckedChange = { onRandomSeedToggle() },
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(56.dp),
+            shape = CircleShape,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
         ) {
             Icon(
                 imageVector = Icons.Filled.Shuffle,
@@ -79,7 +84,13 @@ fun SeedRow(
         OutlinedIconButton(
             onClick = onRandomizeSeed,
             enabled = !randomSeed,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(56.dp),
+            shape = CircleShape,
+            border = BorderStroke(
+                1.dp,
+                if (randomSeed) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                else MaterialTheme.colorScheme.outline
+            )
         ) {
             Icon(
                 imageVector = Icons.Filled.Casino,
