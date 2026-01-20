@@ -268,8 +268,9 @@ data class ImageToImageUiState(
     val deferredEditingHighnoiseLora: String? = null,
     val deferredEditingLownoiseLora: String? = null,
 
-    // Upload state
-    val isUploading: Boolean = false
+    // Upload/fetch state
+    val isUploading: Boolean = false,
+    val isFetching: Boolean = false
 ) : CommonGenerationState
 
 /**
@@ -2060,8 +2061,11 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
             return
         }
 
+        _uiState.update { it.copy(isFetching = true) }
+
         client.fetchHistory(promptId) { historyJson ->
             if (historyJson == null) {
+                _uiState.update { it.copy(isFetching = false) }
                 onComplete(false)
                 return@fetchHistory
             }
@@ -2070,6 +2074,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
             val outputs = promptHistory?.optJSONObject("outputs")
 
             if (outputs == null) {
+                _uiState.update { it.copy(isFetching = false) }
                 onComplete(false)
                 return@fetchHistory
             }
@@ -2088,6 +2093,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     val type = imageInfo.optString("type", "output")
 
                     client.fetchImage(filename, subfolder, type) { bitmap, failureType ->
+                        _uiState.update { it.copy(isFetching = false) }
                         if (bitmap != null) {
                             // Store in cache (memory or disk based on mode)
                             MediaStateHolder.putBitmap(MediaStateHolder.MediaKey.ItiPreview, bitmap, context)
@@ -2111,6 +2117,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                 }
             }
 
+            _uiState.update { it.copy(isFetching = false) }
             onComplete(false)
         }
     }

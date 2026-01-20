@@ -161,7 +161,10 @@ data class TextToVideoUiState(
     override val loraChain: List<LoraSelection> = emptyList(),
 
     // Workflow capabilities (unified flags derived from placeholders)
-    override val capabilities: WorkflowCapabilities = WorkflowCapabilities()
+    override val capabilities: WorkflowCapabilities = WorkflowCapabilities(),
+
+    // Fetch state
+    val isFetching: Boolean = false
 ) : CommonGenerationState
 
 /**
@@ -1092,12 +1095,15 @@ class TextToVideoViewModel : BaseGenerationViewModel<TextToVideoUiState, TextToV
         val context = applicationContext ?: return
         val client = comfyUIClient ?: return
 
+        _uiState.update { it.copy(isFetching = true) }
+
         VideoUtils.fetchVideoFromHistory(
             context = context,
             client = client,
             promptId = promptId,
             filePrefix = VideoUtils.FilePrefix.TEXT_TO_VIDEO
         ) { uri ->
+            _uiState.update { it.copy(isFetching = false) }
             if (uri != null) {
                 DebugLogger.i(TAG, "Video fetch successful")
                 // Clear preview bitmap so video player takes display precedence

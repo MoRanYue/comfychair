@@ -439,6 +439,7 @@ fun ImageToVideoScreen(
                 isEnabled = imageToVideoViewModel.hasValidConfiguration() && uiState.positivePrompt.isNotBlank(),
                 isOfflineMode = isOfflineMode,
                 isUploading = uiState.isUploading,
+                isFetching = uiState.isFetching,
                 isConnecting = isConnecting,
                 onGenerate = {
                     scope.launch {

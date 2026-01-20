@@ -349,6 +349,7 @@ fun TextToVideoScreen(
                 isExecuting = queueState.isExecuting,
                 isEnabled = textToVideoViewModel.hasValidConfiguration() && uiState.positivePrompt.isNotBlank(),
                 isOfflineMode = isOfflineMode,
+                isFetching = uiState.isFetching,
                 isConnecting = isConnecting,
                 onGenerate = {
                     val workflowJson = textToVideoViewModel.prepareWorkflow()

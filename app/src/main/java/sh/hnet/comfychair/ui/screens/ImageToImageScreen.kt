@@ -453,6 +453,7 @@ fun ImageToImageScreen(
                     uiState.sourceImage != null,
                 isOfflineMode = isOfflineMode,
                 isUploading = uiState.isUploading,
+                isFetching = uiState.isFetching,
                 isConnecting = isConnecting,
                 onGenerate = {
                     scope.launch {

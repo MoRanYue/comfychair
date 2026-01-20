@@ -150,6 +150,7 @@ data class TextToImageUiState(
     // Loading states
     val isLoadingModels: Boolean = false,
     val modelsLoaded: Boolean = false,
+    val isFetching: Boolean = false,
 
     // Validation errors
     val widthError: String? = null,
@@ -777,6 +778,8 @@ class TextToImageViewModel : BaseGenerationViewModel<TextToImageUiState, TextToI
             return
         }
 
+        _uiState.update { it.copy(isFetching = true) }
+
         client.fetchHistory(promptId) { historyJson ->
             if (historyJson != null) {
                 try {
@@ -795,6 +798,7 @@ class TextToImageViewModel : BaseGenerationViewModel<TextToImageUiState, TextToI
 
                             client.fetchImage(filename, subfolder, type) { bitmap, failureType ->
                                 viewModelScope.launch {
+                                    _uiState.update { it.copy(isFetching = false) }
                                     if (bitmap != null) {
                                         setCurrentImage(bitmap, filename, subfolder, type)
                                         onComplete(true)
@@ -811,11 +815,14 @@ class TextToImageViewModel : BaseGenerationViewModel<TextToImageUiState, TextToI
                             return@fetchHistory
                         }
                     }
+                    _uiState.update { it.copy(isFetching = false) }
                     onComplete(false)
                 } catch (_: Exception) {
+                    _uiState.update { it.copy(isFetching = false) }
                     onComplete(false)
                 }
             } else {
+                _uiState.update { it.copy(isFetching = false) }
                 onComplete(false)
             }
         }

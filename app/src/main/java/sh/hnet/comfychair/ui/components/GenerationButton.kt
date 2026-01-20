@@ -42,13 +42,14 @@ import sh.hnet.comfychair.R
  * Leading button: Always submits to queue ("Generate" or "Add to queue (X)")
  * Trailing button: Dropdown menu with queue management actions
  *
- * Button text priority: Connecting > Uploading > Queue size > Generate
+ * Button text priority: Connecting > Uploading > Fetching > Queue size > Generate
  *
  * @param queueSize Total number of jobs in the server queue (all clients)
  * @param isExecuting Whether any job is currently executing on the server
  * @param isEnabled Whether the button should be enabled (valid input to submit)
  * @param isOfflineMode Whether the app is in offline mode (disables all generation)
  * @param isUploading Whether image upload is in progress (shows "Uploading...")
+ * @param isFetching Whether result fetch is in progress (shows "Fetching...")
  * @param isConnecting Whether connection check is in progress (shows "Connecting...")
  * @param onGenerate Callback when Generate/Add to queue is clicked
  * @param onCancelCurrent Callback to cancel the currently executing job
@@ -64,6 +65,7 @@ fun GenerationButton(
     isEnabled: Boolean,
     isOfflineMode: Boolean = false,
     isUploading: Boolean = false,
+    isFetching: Boolean = false,
     isConnecting: Boolean = false,
     onGenerate: () -> Unit,
     onCancelCurrent: () -> Unit,
@@ -78,12 +80,14 @@ fun GenerationButton(
     val containerColor = MaterialTheme.colorScheme.primary
     val contentColor = MaterialTheme.colorScheme.onPrimary
 
-    // Button text changes based on connection/upload state and queue size
+    // Button text changes based on connection/upload/fetch state and queue size
     val buttonText = when {
         isConnecting && queueSize > 0 -> stringResource(R.string.button_connecting_queue, queueSize)
         isConnecting -> stringResource(R.string.button_connecting)
         isUploading && queueSize > 0 -> stringResource(R.string.button_uploading_queue, queueSize)
         isUploading -> stringResource(R.string.button_uploading)
+        isFetching && queueSize > 0 -> stringResource(R.string.button_fetching_queue, queueSize)
+        isFetching -> stringResource(R.string.button_fetching)
         queueSize > 0 -> stringResource(R.string.button_add_to_queue, queueSize)
         else -> stringResource(R.string.button_generate)
     }

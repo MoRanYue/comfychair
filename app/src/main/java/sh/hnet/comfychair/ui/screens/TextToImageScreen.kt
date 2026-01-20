@@ -325,6 +325,7 @@ fun TextToImageScreen(
                 isExecuting = queueState.isExecuting,
                 isEnabled = uiState.positivePrompt.isNotBlank(),
                 isOfflineMode = isOfflineMode,
+                isFetching = uiState.isFetching,
                 isConnecting = isConnecting,
                 onGenerate = {
                     if (textToImageViewModel.hasValidConfiguration()) {

@@ -178,8 +178,9 @@ data class ImageToVideoUiState(
     // Workflow capabilities (unified flags derived from placeholders)
     override val capabilities: WorkflowCapabilities = WorkflowCapabilities(),
 
-    // Upload state
-    val isUploading: Boolean = false
+    // Upload/fetch state
+    val isUploading: Boolean = false,
+    val isFetching: Boolean = false
 ) : CommonGenerationState
 
 /**
@@ -1218,12 +1219,15 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
         val context = applicationContext ?: return
         val client = comfyUIClient ?: return
 
+        _uiState.update { it.copy(isFetching = true) }
+
         VideoUtils.fetchVideoFromHistory(
             context = context,
             client = client,
             promptId = promptId,
             filePrefix = VideoUtils.FilePrefix.IMAGE_TO_VIDEO
         ) { uri ->
+            _uiState.update { it.copy(isFetching = false) }
             if (uri != null) {
                 // Clear preview bitmap so video player takes display precedence
                 _uiState.value = _uiState.value.copy(currentVideoUri = uri, previewBitmap = null)
