@@ -769,7 +769,7 @@ class TextToVideoViewModel : BaseGenerationViewModel<TextToVideoUiState, TextToV
             _uiState.update { it.copy(positivePrompt = defaultPrompt) }
 
             // Emit toast event
-            _events.emit(TextToVideoEvent.ShowToast(R.string.prompt_preset_reset_prompt_success))
+            _events.emit(TextToVideoEvent.ShowToast(R.string.msg_prompt_preset_reset_success))
         }
     }
 
@@ -1064,7 +1064,7 @@ class TextToVideoViewModel : BaseGenerationViewModel<TextToVideoUiState, TextToV
             }
             is GenerationEvent.ConnectionLostDuringGeneration -> {
                 viewModelScope.launch {
-                    val message = applicationContext?.getString(R.string.connection_lost_generation_may_continue)
+                    val message = applicationContext?.getString(R.string.msg_connection_lost_generation_may_continue)
                         ?: "Connection lost. Will check for completion when reconnected."
                     _events.emit(TextToVideoEvent.ShowToastMessage(message))
                 }

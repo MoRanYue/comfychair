@@ -105,7 +105,7 @@ fun <T : WorkflowItemBase> GenericWorkflowDropdown(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.EditNote,
-                    contentDescription = stringResource(R.string.view_workflow)
+                    contentDescription = stringResource(R.string.button_view_workflow)
                 )
             }
         }

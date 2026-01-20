@@ -1,50 +1,50 @@
 <resources>
     <!-- Language settings -->
-    <string name="settings_language_title">Idioma</string>
-    <string name="settings_language_description">Elige tu idioma preferido para la aplicación</string>
+    <string name="title_settings_language">Idioma</string>
+    <string name="desc_settings_language">Elige tu idioma preferido para la aplicación</string>
     <string name="language_system_default">Predeterminado del sistema</string>
-    <string name="language_label">Idioma de la aplicación</string>
+    <string name="label_language">Idioma de la aplicación</string>
 
     <!-- Login screen strings -->
-    <string name="hostname_hint">Nombre de host</string>
-    <string name="port_hint">Puerto</string>
+    <string name="hint_hostname">Nombre de host</string>
+    <string name="hint_port">Puerto</string>
 
     <!-- Server management strings -->
-    <string name="server_add_title">Añadir servidor</string>
-    <string name="server_edit_title">Editar servidor</string>
-    <string name="server_name_label">Nombre del servidor</string>
-    <string name="server_name_placeholder">Mi servidor</string>
-    <string name="server_hostname_placeholder">192.168.1.100</string>
-    <string name="server_name_taken_error">Este nombre ya está en uso</string>
-    <string name="server_select_placeholder">Seleccionar un servidor</string>
-    <string name="server_edit_button">Editar servidor</string>
-    <string name="server_add_button">Añadir servidor</string>
-    <string name="server_delete_button">Eliminar servidor</string>
-    <string name="server_delete_title">Eliminar servidor</string>
-    <string name="server_delete_message">¿Seguro que desea eliminar \"%s\"? Esto también eliminará todas las preferencias guardadas para este servidor.</string>
-    <string name="server_deleted_success">Servidor eliminado</string>
+    <string name="title_server_add">Añadir servidor</string>
+    <string name="title_server_edit">Editar servidor</string>
+    <string name="label_server_name">Nombre del servidor</string>
+    <string name="placeholder_server_name">Mi servidor</string>
+    <string name="placeholder_server_hostname">192.168.1.100</string>
+    <string name="error_server_name_taken">Este nombre ya está en uso</string>
+    <string name="placeholder_server_select">Seleccionar un servidor</string>
+    <string name="button_server_edit">Editar servidor</string>
+    <string name="button_server_add">Añadir servidor</string>
+    <string name="button_server_delete">Eliminar servidor</string>
+    <string name="title_server_delete">Eliminar servidor</string>
+    <string name="msg_server_delete">¿Seguro que desea eliminar \"%s\"? Esto también eliminará todas las preferencias guardadas para este servidor.</string>
+    <string name="msg_server_deleted_success">Servidor eliminado</string>
 
     <!-- Authentication strings -->
-    <string name="auth_type_label">Autenticación</string>
-    <string name="auth_type_none">Ninguna</string>
-    <string name="auth_type_basic">Básica</string>
-    <string name="auth_type_bearer">Clave API</string>
-    <string name="auth_username_label">Usuario</string>
-    <string name="auth_password_label">Contraseña</string>
-    <string name="auth_token_label">Clave API / token</string>
-    <string name="auth_error_unauthorized">Error de autenticación. Por favor verifique sus credenciales.</string>
+    <string name="label_auth_type">Autenticación</string>
+    <string name="option_auth_type_none">Ninguna</string>
+    <string name="option_auth_type_basic">Básica</string>
+    <string name="option_auth_type_bearer">Clave API</string>
+    <string name="label_auth_username">Usuario</string>
+    <string name="label_auth_password">Contraseña</string>
+    <string name="label_auth_token">Clave API / token</string>
+    <string name="error_auth_unauthorized">Error de autenticación. Por favor verifique sus credenciales.</string>
 
     <!-- Connection alert dialog -->
-    <string name="connection_lost_title">Conexión perdida</string>
-    <string name="connection_lost_message">No se pudo conectar al servidor después de varios intentos.</string>
-    <string name="session_expired_title">Sesión expirada</string>
-    <string name="session_expired_message">Su sesión ha expirado. Por favor inicie sesión de nuevo.</string>
-    <string name="transfer_stalled_title">Transferencia detenida</string>
-    <string name="transfer_stalled_message">No se transfirieron datos durante 30 segundos. Esto podría indicar un problema de conexión.</string>
+    <string name="title_connection_lost">Conexión perdida</string>
+    <string name="msg_connection_lost">No se pudo conectar al servidor después de varios intentos.</string>
+    <string name="title_session_expired">Sesión expirada</string>
+    <string name="msg_session_expired">Su sesión ha expirado. Por favor inicie sesión de nuevo.</string>
+    <string name="title_transfer_stalled">Transferencia detenida</string>
+    <string name="msg_transfer_stalled">No se transfirieron datos durante 30 segundos. Esto podría indicar un problema de conexión.</string>
     <string name="error_upload_stalled">Carga detenida</string>
     <string name="action_reconnect">Reconectar</string>
     <string name="action_reconnecting">Reconectando…</string>
-    <string name="toast_reconnect_failed">No se pudo reconectar</string>
+    <string name="msg_reconnect_failed">No se pudo reconectar</string>
     <string name="action_go_offline">Modo sin conexión</string>
     <string name="action_return_to_login">Volver al inicio</string>
 
@@ -58,30 +58,30 @@
 
     <!-- Offline mode strings -->
     <string name="error_no_offline_cache">No hay datos en caché disponibles para este servidor</string>
-    <string name="offline_prompt_title">Servidor inaccesible</string>
-    <string name="offline_prompt_message">No se puede conectar al servidor. ¿Desea continuar en modo sin conexión usando datos en caché?</string>
-    <string name="offline_prompt_confirm">Modo sin conexión</string>
-    <string name="offline_prompt_dismiss">Cancelar</string>
+    <string name="title_offline_prompt">Servidor inaccesible</string>
+    <string name="msg_offline_prompt">No se puede conectar al servidor. ¿Desea continuar en modo sin conexión usando datos en caché?</string>
+    <string name="button_offline_prompt_confirm">Modo sin conexión</string>
+    <string name="button_offline_prompt_dismiss">Cancelar</string>
     <string name="content_description_not_cached">No disponible sin conexión</string>
-    <string name="offline_mode_label">Modo sin conexión</string>
-    <string name="offline_mode_description">Explorar datos en caché sin conexión de red</string>
-    <string name="offline_mode_requires_disk_cache">Desactivar \"Caché en memoria primero\" para habilitar el modo sin conexión</string>
-    <string name="cannot_go_online">No se puede conectar - servidor inalcanzable</string>
+    <string name="label_offline_mode">Modo sin conexión</string>
+    <string name="desc_offline_mode">Explorar datos en caché sin conexión de red</string>
+    <string name="msg_offline_mode_requires_disk_cache">Desactivar \"Caché en memoria primero\" para habilitar el modo sin conexión</string>
+    <string name="msg_cannot_go_online">No se puede conectar - servidor inalcanzable</string>
 
     <!-- Settings section titles -->
-    <string name="settings_connection_title">Conexión</string>
-    <string name="settings_connection_description">Comportamiento de conexión al servidor</string>
-    <string name="settings_generation_title">Generación</string>
-    <string name="settings_generation_description">Configuración de la experiencia de generación</string>
-    <string name="settings_workflow_editor_title">Editor de flujos</string>
-    <string name="settings_workflow_editor_description">Personalizar la apariencia del editor de flujos</string>
-    <string name="edge_style_label">Estilo de conexión</string>
-    <string name="edge_router_bezier">Curva de Bézier</string>
-    <string name="edge_router_hermite">Spline de Hermite</string>
-    <string name="settings_cache_title">Caché y almacenamiento</string>
-    <string name="settings_cache_description">Configuración del caché de medios</string>
-    <string name="settings_reset_title">Restablecer</string>
-    <string name="settings_reset_description">Restablecer datos y configuración de la aplicación</string>
+    <string name="title_settings_connection">Conexión</string>
+    <string name="desc_settings_connection">Comportamiento de conexión al servidor</string>
+    <string name="title_settings_generation">Generación</string>
+    <string name="desc_settings_generation">Configuración de la experiencia de generación</string>
+    <string name="title_settings_workflow_editor">Editor de flujos</string>
+    <string name="desc_settings_workflow_editor">Personalizar la apariencia del editor de flujos</string>
+    <string name="label_edge_style">Estilo de conexión</string>
+    <string name="option_edge_router_bezier">Curva de Bézier</string>
+    <string name="option_edge_router_hermite">Spline de Hermite</string>
+    <string name="title_settings_cache">Caché y almacenamiento</string>
+    <string name="desc_settings_cache">Configuración del caché de medios</string>
+    <string name="title_settings_reset">Restablecer</string>
+    <string name="desc_settings_reset">Restablecer datos y configuración de la aplicación</string>
 
     <!-- Validation error messages -->
     <string name="error_required">Requerido</string>
@@ -93,15 +93,15 @@
     <string name="warning_unknown_ca">Emisor de certificado desconocido, conectando de todos modos</string>
 
     <!-- Query screen strings -->
-    <string name="prompt_hint">Prompt</string>
-    <string name="negative_prompt_hint">Prompt negativo</string>
+    <string name="hint_prompt">Prompt</string>
+    <string name="hint_negative_prompt">Prompt negativo</string>
     <string name="button_generate">Generar</string>
 
     <!-- Configuration panel strings -->
 
     <!-- Gallery screen strings -->
-    <string name="gallery_title">Galería</string>
-    <string name="gallery_thumbnail_description">Miniatura de imagen generada</string>
+    <string name="title_gallery">Galería</string>
+    <string name="content_description_gallery_thumbnail">Miniatura de imagen generada</string>
 
     <!-- Navigation strings -->
     <string name="nav_text_to_image">Texto a imagen</string>
@@ -109,83 +109,83 @@
     <string name="nav_gallery">Galería</string>
 
     <!-- Configuration fragment strings -->
-    <string name="server_info_title">Información del servidor</string>
-    <string name="hostname_label">Nombre de host:</string>
-    <string name="port_label">Puerto:</string>
-    <string name="server_management_title">Gestión del servidor</string>
-    <string name="clear_queue_button">Vaciar cola</string>
-    <string name="clear_history_button">Borrar historial</string>
-    <string name="refresh_models_button">Actualizar modelos</string>
-    <string name="models_refreshed_success">Modelos actualizados correctamente</string>
-    <string name="models_refreshed_failed">Error al actualizar modelos</string>
+    <string name="title_server_info">Información del servidor</string>
+    <string name="label_hostname">Nombre de host:</string>
+    <string name="label_port">Puerto:</string>
+    <string name="title_server_management">Gestión del servidor</string>
+    <string name="button_clear_queue">Vaciar cola</string>
+    <string name="button_clear_history">Borrar historial</string>
+    <string name="button_refresh_models">Actualizar modelos</string>
+    <string name="msg_models_refreshed_success">Modelos actualizados correctamente</string>
+    <string name="error_models_refresh">Error al actualizar modelos</string>
 
     <!-- Resource usage strings -->
-    <string name="ram_usage_title">RAM</string>
-    <string name="gpu_usage_title">GPU</string>
+    <string name="title_ram_usage">RAM</string>
+    <string name="title_gpu_usage">GPU</string>
     <string name="resource_usage_format">%1$.2f GB / %2$.2f GB usados</string>
 
     <!-- Server info labels -->
-    <string name="server_info_label_os">OS:</string>
-    <string name="server_info_label_comfyui">ComfyUI:</string>
-    <string name="server_info_label_python">Python:</string>
-    <string name="server_info_label_pytorch">PyTorch:</string>
+    <string name="label_server_info_os">OS:</string>
+    <string name="label_server_info_comfyui">ComfyUI:</string>
+    <string name="label_server_info_python">Python:</string>
+    <string name="label_server_info_pytorch">PyTorch:</string>
 
     <!-- Toast messages -->
-    <string name="queue_cleared_success">Cola vaciada correctamente</string>
-    <string name="queue_cleared_failed">Error al vaciar la cola</string>
-    <string name="history_cleared_success">Historial borrado correctamente</string>
-    <string name="history_cleared_failed">Error al borrar el historial</string>
-    <string name="history_item_deleted_success">Elemento eliminado correctamente</string>
-    <string name="history_item_deleted_failed">Error al eliminar el elemento</string>
-    <string name="cache_cleared_success">Caché vaciada correctamente</string>
-    <string name="defaults_restored_success">Valores predeterminados restaurados correctamente</string>
-    <string name="gallery_refresh_success">Galería actualizada</string>
-    <string name="gallery_refresh_failed">Error al actualizar la galería</string>
+    <string name="msg_queue_cleared_success">Cola vaciada correctamente</string>
+    <string name="error_queue_clear">Error al vaciar la cola</string>
+    <string name="msg_history_cleared_success">Historial borrado correctamente</string>
+    <string name="error_history_clear">Error al borrar el historial</string>
+    <string name="msg_history_item_deleted_success">Elemento eliminado correctamente</string>
+    <string name="error_history_item_delete">Error al eliminar el elemento</string>
+    <string name="msg_cache_cleared_success">Caché vaciada correctamente</string>
+    <string name="msg_defaults_restored_success">Valores predeterminados restaurados correctamente</string>
+    <string name="msg_gallery_refresh_success">Galería actualizada</string>
+    <string name="error_gallery_refresh">Error al actualizar la galería</string>
 
     <!-- App settings strings -->
-    <string name="live_preview_label">Mostrar vista previa en vivo</string>
-    <string name="live_preview_description">Mostrar imágenes intermedias durante la generación</string>
-    <string name="memory_first_cache_label">Caché en memoria primero</string>
-    <string name="memory_first_cache_description">Acceso rápido, mayor uso de memoria. Desactivar para redes lentas o dispositivos con poca memoria.</string>
-    <string name="memory_first_cache_warning">Las vistas previas pueden perderse si la app se cierra inesperadamente.</string>
-    <string name="disable_media_cache_label">Desactivar caché de medios</string>
-    <string name="disable_media_cache_description">No guardar imágenes de vista previa ni videos en disco</string>
-    <string name="auto_connect_label">Conexión automática</string>
-    <string name="auto_connect_description">Conectar automáticamente al último servidor al iniciar la app</string>
-    <string name="show_built_in_workflows_label">Mostrar workflows integrados</string>
-    <string name="show_built_in_workflows_description">Mostrar los workflows predeterminados incluidos con la app</string>
-    <string name="reset_prompts_and_library_button">Restablecer prompts y biblioteca</string>
-    <string name="reset_prompts_and_library_success">Prompts y biblioteca restablecidos</string>
-    <string name="clear_cache_button">Vaciar caché</string>
-    <string name="restore_defaults_button">Restaurar valores predeterminados</string>
+    <string name="label_live_preview">Mostrar vista previa en vivo</string>
+    <string name="desc_live_preview">Mostrar imágenes intermedias durante la generación</string>
+    <string name="label_memory_first_cache">Caché en memoria primero</string>
+    <string name="desc_memory_first_cache">Acceso rápido, mayor uso de memoria. Desactivar para redes lentas o dispositivos con poca memoria.</string>
+    <string name="desc_memory_first_cache_warning">Las vistas previas pueden perderse si la app se cierra inesperadamente.</string>
+    <string name="label_disable_media_cache">Desactivar caché de medios</string>
+    <string name="desc_disable_media_cache">No guardar imágenes de vista previa ni videos en disco</string>
+    <string name="label_auto_connect">Conexión automática</string>
+    <string name="desc_auto_connect">Conectar automáticamente al último servidor al iniciar la app</string>
+    <string name="label_show_built_in_workflows">Mostrar workflows integrados</string>
+    <string name="desc_show_built_in_workflows">Mostrar los workflows predeterminados incluidos con la app</string>
+    <string name="button_reset_prompts_and_library">Restablecer prompts y biblioteca</string>
+    <string name="msg_reset_prompts_and_library_success">Prompts y biblioteca restablecidos</string>
+    <string name="button_clear_cache">Vaciar caché</string>
+    <string name="button_restore_defaults">Restaurar valores predeterminados</string>
 
     <!-- Gallery item strings -->
-    <string name="delete_history_item">Eliminar del historial</string>
-    <string name="gallery_video_thumbnail_description">Miniatura de vídeo generado</string>
+    <string name="button_delete_history_item">Eliminar del historial</string>
+    <string name="content_description_gallery_video_thumbnail">Miniatura de vídeo generado</string>
 
     <!-- Text to Video fragment strings -->
-    <string name="text_to_video_title">Texto a vídeo</string>
+    <string name="title_text_to_video">Texto a vídeo</string>
     <string name="nav_text_to_video">Texto a vídeo</string>
 
     <!-- Image to Video fragment strings -->
-    <string name="image_to_video_title">Imagen a vídeo</string>
+    <string name="title_image_to_video">Imagen a vídeo</string>
     <string name="nav_image_to_video">Imagen a vídeo</string>
-    <string name="highnoise_unet_label">UNET de ruido alto</string>
-    <string name="lownoise_unet_label">UNET de ruido bajo</string>
-    <string name="highnoise_lora_label">LoRA de ruido alto</string>
-    <string name="lownoise_lora_label">LoRA de ruido bajo</string>
-    <string name="length_label">Duración</string>
-    <string name="placeholder_video_description">El vídeo generado aparecerá aquí</string>
+    <string name="label_highnoise_unet">UNET de ruido alto</string>
+    <string name="label_lownoise_unet">UNET de ruido bajo</string>
+    <string name="label_highnoise_lora">LoRA de ruido alto</string>
+    <string name="label_lownoise_lora">LoRA de ruido bajo</string>
+    <string name="label_length">Duración</string>
+    <string name="placeholder_video">El vídeo generado aparecerá aquí</string>
 
     <!-- Image-to-image fragment strings -->
-    <string name="image_to_image_title">Imagen a imagen</string>
-    <string name="source_image_tab">Imagen origen</string>
-    <string name="preview_tab">Vista previa</string>
-    <string name="megapixels_label">Megapíxeles</string>
-    <string name="upload_source_image">Subir imagen origen</string>
-    <string name="edit_mask">Editar máscara</string>
-    <string name="clear_mask">Borrar máscara</string>
-    <string name="no_source_image">No hay imagen origen seleccionada</string>
+    <string name="title_image_to_image">Imagen a imagen</string>
+    <string name="tab_source_image">Imagen origen</string>
+    <string name="tab_preview">Vista previa</string>
+    <string name="label_megapixels">Megapíxeles</string>
+    <string name="button_upload_source_image">Subir imagen origen</string>
+    <string name="button_edit_mask">Editar máscara</string>
+    <string name="button_clear_mask">Borrar máscara</string>
+    <string name="msg_no_source_image">No hay imagen origen seleccionada</string>
 
     <!-- Generation button states -->
     <string name="button_add_to_queue">Añadir a la cola (%d)</string>
@@ -203,51 +203,51 @@
     <string name="error_invalid_server_response">Respuesta del servidor inválida</string>
     <string name="error_failed_load_workflow">Error al cargar el workflow</string>
     <string name="error_generation_failed">La generación falló</string>
-    <string name="connection_lost_generation_may_continue">Conexión perdida. Se verificará la finalización al reconectarse.</string>
+    <string name="msg_connection_lost_generation_may_continue">Conexión perdida. Se verificará la finalización al reconectarse.</string>
     <string name="error_no_connection">Sin conexión al servidor</string>
     <string name="error_workflow_not_found">Workflow no encontrado</string>
     <string name="error_no_workflow_specified">No se especificó ningún workflow</string>
     <string name="error_client_not_initialized">Cliente no inicializado</string>
 
     <!-- Save/share messages -->
-    <string name="image_saved_to_gallery">Imagen guardada en la galería</string>
-    <string name="video_saved_to_gallery">Vídeo guardado en la galería</string>
-    <string name="failed_save_image">Error al guardar la imagen</string>
-    <string name="failed_save_video">Error al guardar el vídeo</string>
-    <string name="failed_share_image">Error al compartir la imagen</string>
-    <string name="failed_share_video">Error al compartir el vídeo</string>
+    <string name="msg_image_saved_to_gallery">Imagen guardada en la galería</string>
+    <string name="msg_video_saved_to_gallery">Vídeo guardado en la galería</string>
+    <string name="error_save_image">Error al guardar la imagen</string>
+    <string name="error_save_video">Error al guardar el vídeo</string>
+    <string name="error_share_image">Error al compartir la imagen</string>
+    <string name="error_share_video">Error al compartir el vídeo</string>
 
     <!-- Share chooser titles -->
     <string name="share_image">Compartir imagen</string>
     <string name="share_video">Compartir vídeo</string>
 
     <!-- Image-to-image messages -->
-    <string name="paint_mask_hint">Por favor, pinta un área de máscara para inpainting</string>
+    <string name="hint_paint_mask">Por favor, pinta un área de máscara para inpainting</string>
 
     <!-- Image/Video parameters section -->
 
     <!-- Save options -->
-    <string name="save_to_gallery">Guardar en galería</string>
-    <string name="share">Compartir…</string>
-    <string name="save_image">Guardar</string>
+    <string name="button_save_to_gallery">Guardar en galería</string>
+    <string name="button_share">Compartir…</string>
+    <string name="button_save_image">Guardar</string>
 
     <!-- Gallery selection mode strings -->
     <string name="gallery_selected_count">%d seleccionado(s)</string>
-    <string name="gallery_enter_selection_mode">Seleccionar elementos</string>
-    <string name="cancel_selection">Cancelar selección</string>
-    <string name="item_selected">Seleccionado</string>
-    <string name="items_saved_to_gallery">Elementos guardados en galería</string>
-    <string name="some_items_failed_to_save">Algunos elementos no se pudieron guardar</string>
-    <string name="failed_share_items">Error al compartir elementos</string>
-    <string name="items_deleted_success">Elementos eliminados correctamente</string>
-    <string name="some_items_failed_to_delete">Algunos elementos no se pudieron eliminar</string>
+    <string name="button_gallery_select">Seleccionar elementos</string>
+    <string name="button_cancel_selection">Cancelar selección</string>
+    <string name="label_item_selected">Seleccionado</string>
+    <string name="msg_items_saved_to_gallery">Elementos guardados en galería</string>
+    <string name="msg_some_items_failed_to_save">Algunos elementos no se pudieron guardar</string>
+    <string name="error_share_items">Error al compartir elementos</string>
+    <string name="msg_items_deleted_success">Elementos eliminados correctamente</string>
+    <string name="msg_some_items_failed_to_delete">Algunos elementos no se pudieron eliminar</string>
 
     <!-- Mask editor strings -->
-    <string name="invert_mask">Invertir máscara</string>
-    <string name="paint_mode">Pintar</string>
-    <string name="eraser_mode">Borrador</string>
-    <string name="brush_size">Tamaño del pincel</string>
-    <string name="more_options">Más opciones</string>
+    <string name="button_invert_mask">Invertir máscara</string>
+    <string name="option_paint_mode">Pintar</string>
+    <string name="option_eraser_mode">Borrador</string>
+    <string name="label_brush_size">Tamaño del pincel</string>
+    <string name="button_more_options">Más opciones</string>
 
     <!-- Top app bar menu strings -->
     <string name="menu_generation">Generación</string>
@@ -256,8 +256,8 @@
     <string name="button_options">Opciones</string>
 
     <!-- Configuration bottom sheet labels -->
-    <string name="mode_inpainting">Inpainting</string>
-    <string name="mode_editing">Edición</string>
+    <string name="option_mode_inpainting">Inpainting</string>
+    <string name="option_mode_editing">Edición</string>
     <string name="label_workflow">Workflow</string>
     <string name="label_width">Ancho</string>
     <string name="label_height">Alto</string>
@@ -290,17 +290,17 @@
     <string name="node_editor_range_max">Máx: %1$s</string>
     <string name="node_editor_ui_field_prefix">IU: %1$s</string>
     <string name="node_editor_image_load_error">Error al cargar imagen</string>
-    <string name="node_editor_rename_title">Renombrar nodo</string>
-    <string name="node_editor_rename_label">Nombre del nodo</string>
+    <string name="title_node_editor_rename">Renombrar nodo</string>
+    <string name="label_node_editor_rename">Nombre del nodo</string>
     <string name="node_editor_bypass">Omitir</string>
 
     <!-- Settings screen strings -->
     <string name="nav_application_settings">Aplicación</string>
     <string name="nav_server_settings">Servidor</string>
     <string name="nav_workflows_settings">Workflows</string>
-    <string name="application_settings_title">Configuración de la aplicación</string>
-    <string name="server_settings_title">Configuración del servidor</string>
-    <string name="workflows_settings_title">Workflows</string>
+    <string name="title_application_settings">Configuración de la aplicación</string>
+    <string name="title_server_settings">Configuración del servidor</string>
+    <string name="title_workflows_settings">Workflows</string>
 
     <!-- Workflow management strings -->
     <string name="workflow_section_tti">Texto a imagen</string>
@@ -309,36 +309,36 @@
     <string name="workflow_section_ttv">Texto a vídeo</string>
     <string name="workflow_section_itv">Imagen a vídeo</string>
     <string name="workflow_section_empty">Sin workflows</string>
-    <string name="workflow_built_in_label">Integrado</string>
-    <string name="workflow_name_label">Nombre</string>
-    <string name="workflow_description_label">Descripción</string>
-    <string name="import_workflow_title">Importar workflow</string>
-    <string name="edit_workflow_title">Editar workflow</string>
-    <string name="delete_workflow_title">Eliminar workflow</string>
-    <string name="delete_workflow_message">¿Está seguro de que desea eliminar \"%s\"?</string>
+    <string name="label_workflow_built_in">Integrado</string>
+    <string name="label_workflow_name">Nombre</string>
+    <string name="label_workflow_description">Descripción</string>
+    <string name="title_import_workflow">Importar workflow</string>
+    <string name="title_edit_workflow">Editar workflow</string>
+    <string name="title_delete_workflow">Eliminar workflow</string>
+    <string name="msg_delete_workflow">¿Está seguro de que desea eliminar \"%s\"?</string>
     <string name="button_import">Importar</string>
     <string name="button_save">Guardar</string>
     <string name="button_delete">Eliminar</string>
     <string name="button_cancel">Cancelar</string>
     <string name="error_cannot_edit_builtin">Los workflows integrados no se pueden editar</string>
-    <string name="workflow_error_invalid_json">Formato JSON inválido</string>
-    <string name="workflow_import_success">Workflow importado</string>
-    <string name="workflow_import_failed">Error al importar el workflow</string>
-    <string name="workflow_delete_success">Workflow eliminado</string>
-    <string name="workflow_delete_failed">Error al eliminar el workflow</string>
-    <string name="workflow_update_success">Workflow actualizado</string>
-    <string name="workflow_update_failed">Error al actualizar el workflow</string>
-    <string name="workflow_duplicate_success">Workflow duplicado</string>
+    <string name="error_workflow_invalid_json">Formato JSON inválido</string>
+    <string name="msg_workflow_import_success">Workflow importado</string>
+    <string name="error_workflow_import">Error al importar el workflow</string>
+    <string name="msg_workflow_delete_success">Workflow eliminado</string>
+    <string name="error_workflow_delete">Error al eliminar el workflow</string>
+    <string name="msg_workflow_update_success">Workflow actualizado</string>
+    <string name="error_workflow_update">Error al actualizar el workflow</string>
+    <string name="msg_workflow_duplicate_success">Workflow duplicado</string>
     <string name="workflow_menu_edit_structure">Editar workflow</string>
     <string name="workflow_menu_rename">Renombrar</string>
     <string name="workflow_menu_duplicate">Duplicar</string>
     <string name="workflow_menu_delete">Eliminar</string>
     <string name="workflow_menu_export">Exportar</string>
     <string name="workflow_menu_export_api">Exportar (Formato API)</string>
-    <string name="duplicate_workflow_title">Duplicar workflow</string>
-    <string name="workflow_export_success">Workflow exportado</string>
-    <string name="workflow_export_failed">Error al exportar workflow</string>
-    <string name="litegraph_conversion_notes">Conversión completada con %d nota(s)</string>
+    <string name="title_duplicate_workflow">Duplicar workflow</string>
+    <string name="msg_workflow_export_success">Workflow exportado</string>
+    <string name="error_workflow_export">Error al exportar workflow</string>
+    <string name="msg_litegraph_conversion_notes">Conversión completada con %d nota(s)</string>
 
     <!-- Content descriptions for accessibility -->
     <string name="content_description_menu">Menú</string>
@@ -355,10 +355,10 @@
     <string name="content_description_increase">Aumentar valor</string>
 
     <!-- Empty state messages -->
-    <string name="gallery_empty">Sin imágenes aún</string>
+    <string name="msg_gallery_empty">Sin imágenes aún</string>
 
     <!-- Section titles -->
-    <string name="model_selection_title">Selección de modelo</string>
+    <string name="title_model_selection">Selección de modelo</string>
 
     <!-- Media viewer action buttons -->
     <string name="media_viewer_delete">Eliminar</string>
@@ -374,43 +374,43 @@
     <string name="workflow_editor_error_loading">Error al cargar el workflow</string>
 
     <!-- Workflow import dialog strings -->
-    <string name="workflow_type_label">Tipo de workflow</string>
+    <string name="label_workflow_type">Tipo de workflow</string>
     <string name="button_continue">Continuar</string>
     <string name="button_dismiss">Cerrar</string>
     <string name="button_confirm">Confirmar</string>
     <string name="button_apply">Aplicar</string>
     <string name="button_done">Hecho</string>
     <string name="button_ok">OK</string>
-    <string name="validating_workflow">Validando workflow…</string>
+    <string name="msg_validating_workflow">Validando workflow…</string>
 
     <!-- Workflow validation error dialogs -->
-    <string name="missing_nodes_title">Nodos faltantes</string>
-    <string name="missing_nodes_message">Los siguientes nodos no están disponibles en su servidor ComfyUI:</string>
-    <string name="missing_fields_title">Campos requeridos faltantes</string>
-    <string name="missing_fields_message">El workflow no contiene estos campos requeridos para el tipo seleccionado:</string>
+    <string name="title_missing_nodes">Nodos faltantes</string>
+    <string name="msg_missing_nodes">Los siguientes nodos no están disponibles en su servidor ComfyUI:</string>
+    <string name="title_missing_fields">Campos requeridos faltantes</string>
+    <string name="msg_missing_fields">El workflow no contiene estos campos requeridos para el tipo seleccionado:</string>
     <string name="list_item_bullet">- %s</string>
-    <string name="duplicate_name_title">Nombre ya existente</string>
-    <string name="duplicate_name_message">Ya existe un workflow con este nombre. Por favor, elija otro nombre.</string>
+    <string name="title_duplicate_name">Nombre ya existente</string>
+    <string name="msg_duplicate_name">Ya existe un workflow con este nombre. Por favor, elija otro nombre.</string>
 
     <!-- Field mapping UI strings -->
-    <string name="field_mapping_title">Mapear campos</string>
-    <string name="clear_all_mapping">Borrar todo</string>
+    <string name="title_field_mapping">Mapear campos</string>
+    <string name="button_clear_all_mapping">Borrar todo</string>
     <string name="section_necessary">Necesario</string>
     <string name="section_optional">Opcional</string>
-    <string name="tap_node_to_change">Toque un nodo resaltado para cambiar el mapeo</string>
-    <string name="no_matching_nodes">No se encontraron nodos coincidentes</string>
-    <string name="needs_remapping">Seleccionar un nodo</string>
+    <string name="hint_tap_node_to_change">Toque un nodo resaltado para cambiar el mapeo</string>
+    <string name="msg_no_matching_nodes">No se encontraron nodos coincidentes</string>
+    <string name="msg_needs_remapping">Seleccionar un nodo</string>
 
     <!-- Workflow validation errors -->
-    <string name="workflow_error_fetch_nodes_failed">Error al obtener los nodos del servidor</string>
-    <string name="workflow_name_error_too_long">El nombre debe tener 40 caracteres o menos</string>
-    <string name="workflow_description_error_too_long">La descripción debe tener 120 caracteres o menos</string>
+    <string name="error_workflow_fetch_nodes_failed">Error al obtener los nodos del servidor</string>
+    <string name="error_workflow_name_too_long">El nombre debe tener 40 caracteres o menos</string>
+    <string name="error_workflow_description_too_long">La descripción debe tener 120 caracteres o menos</string>
 
     <!-- Metadata viewer strings -->
-    <string name="show_metadata">Info</string>
-    <string name="generation_parameters">Parámetros de generación</string>
-    <string name="copied_to_clipboard">Copiado al portapapeles</string>
-    <string name="copy_to_clipboard">Copiar al portapapeles</string>
+    <string name="button_show_metadata">Info</string>
+    <string name="title_generation_parameters">Parámetros de generación</string>
+    <string name="msg_copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="button_copy_to_clipboard">Copiar al portapapeles</string>
     <string name="metadata_positive_prompt">Prompt positivo</string>
     <string name="metadata_negative_prompt">Prompt negativo</string>
     <string name="metadata_model">Modelo</string>
@@ -423,57 +423,57 @@
     <string name="metadata_loading">Cargando metadatos…</string>
 
     <!-- LoRA chain editor strings -->
-    <string name="lora_chain_title">Cadena LoRA (opcional)</string>
-    <string name="highnoise_lora_chain_title">LoRAs de alto ruido (opcional)</string>
-    <string name="lownoise_lora_chain_title">LoRAs de bajo ruido (opcional)</string>
-    <string name="add_lora_button">Añadir LoRA</string>
-    <string name="lora_strength_label">Fuerza:</string>
-    <string name="lora_empty_state">Sin LoRAs añadidos</string>
-    <string name="remove_lora">Eliminar LoRA</string>
+    <string name="title_lora_chain">Cadena LoRA (opcional)</string>
+    <string name="title_highnoise_lora_chain">LoRAs de alto ruido (opcional)</string>
+    <string name="title_lownoise_lora_chain">LoRAs de bajo ruido (opcional)</string>
+    <string name="button_add_lora">Añadir LoRA</string>
+    <string name="label_lora_strength">Fuerza:</string>
+    <string name="msg_lora_empty">Sin LoRAs añadidos</string>
+    <string name="button_remove_lora">Eliminar LoRA</string>
 
     <!-- Backup and restore strings -->
-    <string name="backup_restore_title">Copia de seguridad y restauración</string>
-    <string name="backup_restore_description">Exportar o importar la configuración de la aplicación</string>
-    <string name="backup_create_button">Crear copia de seguridad</string>
-    <string name="backup_restore_button">Restaurar desde copia de seguridad</string>
-    <string name="backup_created_success">Copia de seguridad creada correctamente</string>
-    <string name="backup_created_failed">Error al crear la copia de seguridad</string>
-    <string name="backup_restore_success">Configuración restaurada correctamente</string>
-    <string name="backup_restore_partial">Configuración parcialmente restaurada. Algunos workflows fueron omitidos.</string>
-    <string name="backup_restore_failed">Error al restaurar la copia de seguridad</string>
-    <string name="backup_error_invalid_json">Formato de archivo de copia de seguridad inválido</string>
-    <string name="backup_error_unsupported_version">Versión de copia de seguridad no compatible</string>
-    <string name="backup_error_no_servers">No se encontraron servidores en la copia de seguridad</string>
-    <string name="backup_restore_confirm_title">¿Restaurar configuración?</string>
-    <string name="backup_restore_confirm_message">Esto reemplazará su configuración actual. Esta acción no se puede deshacer.</string>
-    <string name="backup_restore_confirm_button">Restaurar</string>
+    <string name="title_backup_restore">Copia de seguridad y restauración</string>
+    <string name="desc_backup_restore">Exportar o importar la configuración de la aplicación</string>
+    <string name="button_backup_create">Crear copia de seguridad</string>
+    <string name="button_backup_restore">Restaurar desde copia de seguridad</string>
+    <string name="msg_backup_created_success">Copia de seguridad creada correctamente</string>
+    <string name="error_backup_create">Error al crear la copia de seguridad</string>
+    <string name="msg_backup_restore_success">Configuración restaurada correctamente</string>
+    <string name="msg_backup_restore_partial">Configuración parcialmente restaurada. Algunos workflows fueron omitidos.</string>
+    <string name="error_backup_restore">Error al restaurar la copia de seguridad</string>
+    <string name="error_backup_invalid_json">Formato de archivo de copia de seguridad inválido</string>
+    <string name="error_backup_unsupported_version">Versión de copia de seguridad no compatible</string>
+    <string name="error_backup_no_servers">No se encontraron servidores en la copia de seguridad</string>
+    <string name="title_backup_restore_confirm">¿Restaurar configuración?</string>
+    <string name="msg_backup_restore_confirm">Esto reemplazará su configuración actual. Esta acción no se puede deshacer.</string>
+    <string name="button_backup_restore_confirm">Restaurar</string>
 
     <!-- About screen strings -->
     <string name="nav_about_settings">Acerca de</string>
-    <string name="about_settings_title">Acerca de</string>
-    <string name="about_version">Versión %1$s</string>
-    <string name="about_license_title">Licencia</string>
-    <string name="about_license_name">GNU General Public License v3.0 (GPL-3.0)</string>
-    <string name="about_source_title">Código fuente</string>
+    <string name="title_about_settings">Acerca de</string>
+    <string name="label_about_version">Versión %1$s</string>
+    <string name="title_about_license">Licencia</string>
+    <string name="label_about_license_name">GNU General Public License v3.0 (GPL-3.0)</string>
+    <string name="title_about_source">Código fuente</string>
 
     <!-- Debug Logging strings -->
-    <string name="debug_logging_title">Registro de depuración</string>
-    <string name="debug_logging_description">Capturar registros operacionales para solución de problemas</string>
-    <string name="debug_logging_enable_label">Habilitar registro</string>
-    <string name="debug_logging_enable_description">Los registros se mantienen solo en memoria</string>
-    <string name="debug_logging_view_button">Ver registros</string>
-    <string name="debug_log_title">Registro de depuración</string>
-    <string name="debug_log_empty">Sin entradas de registro</string>
+    <string name="title_debug_logging">Registro de depuración</string>
+    <string name="desc_debug_logging">Capturar registros operacionales para solución de problemas</string>
+    <string name="label_debug_logging_enable">Habilitar registro</string>
+    <string name="desc_debug_logging_enable">Los registros se mantienen solo en memoria</string>
+    <string name="button_debug_logging_view">Ver registros</string>
+    <string name="title_debug_log">Registro de depuración</string>
+    <string name="msg_debug_log_empty">Sin entradas de registro</string>
     <string name="debug_log_save">Save</string>
     <string name="debug_log_follow">Seguir</string>
-    <string name="debug_log_saved">Registro guardado correctamente</string>
-    <string name="debug_log_save_failed">Error al guardar el registro</string>
+    <string name="msg_debug_log_saved">Registro guardado correctamente</string>
+    <string name="error_debug_log_save">Error al guardar el registro</string>
 
     <!-- Missing translations -->
-    <string name="view_workflow">Ver flujo de trabajo</string>
+    <string name="button_view_workflow">Ver flujo de trabajo</string>
     <string name="button_discard">Descartar</string>
     <string name="button_new_workflow">Nuevo flujo de trabajo</string>
-    <string name="save_workflow_title">Guardar nuevo flujo de trabajo</string>
+    <string name="title_save_workflow">Guardar nuevo flujo de trabajo</string>
     <string name="error_invalid_integer">Debe ser un número entero</string>
     <string name="error_invalid_option">Opción no válida</string>
     <string name="error_string_too_long">Longitud máxima: %1$d</string>
@@ -488,7 +488,7 @@
     <string name="error_value_max_float">Máximo: %1$.2f</string>
     <string name="node_editor_range_min_max">%1$s – %2$s</string>
     <string name="node_browser_title">Agregar nodo</string>
-    <string name="node_browser_search_placeholder">Buscar nodos…</string>
+    <string name="placeholder_node_browser_search">Buscar nodos…</string>
     <string name="node_browser_no_results">No se encontraron nodos coincidentes</string>
     <string name="node_browser_io_info">%1$d entradas, %2$d salidas</string>
     <string name="node_browser_deprecated">Obsoleto</string>
@@ -498,7 +498,7 @@
     <string name="node_browser_filter_group">Grupo</string>
     <string name="node_browser_accepts_input">Acepta entrada %1$s</string>
     <string name="node_browser_provides_output">Proporciona salida %1$s</string>
-    <string name="clear_search">Borrar búsqueda</string>
+    <string name="button_clear_search">Borrar búsqueda</string>
     <string name="workflow_editor_enter_edit_mode">Editar gráfico</string>
     <string name="workflow_editor_exit_edit_mode">Salir del modo edición</string>
     <string name="workflow_editor_delete_node">Eliminar seleccionado</string>
@@ -508,19 +508,19 @@
     <string name="workflow_editor_cleanup">Limpiar</string>
     <string name="workflow_editor_group">Agrupar</string>
     <string name="workflow_editor_ungroup">Desagrupar</string>
-    <string name="workflow_editor_rename_group_title">Renombrar grupo</string>
-    <string name="workflow_editor_rename_group_label">Nombre del grupo</string>
+    <string name="title_workflow_editor_rename_group">Renombrar grupo</string>
+    <string name="label_workflow_editor_rename_group">Nombre del grupo</string>
     <string name="workflow_editor_add_note">Agregar nota</string>
-    <string name="workflow_editor_rename_note_label">Título de la nota</string>
+    <string name="label_workflow_editor_rename_note">Título de la nota</string>
     <string name="workflow_editor_edit_note_content">Editar nota</string>
-    <string name="workflow_editor_note_content_label">Contenido (Markdown)</string>
+    <string name="label_workflow_editor_note_content">Contenido (Markdown)</string>
     <string name="workflow_editor_done">Listo</string>
-    <string name="workflow_editor_discard_title">¿Descartar flujo de trabajo?</string>
-    <string name="workflow_editor_discard_message">Tiene cambios sin guardar. ¿Está seguro de que desea descartar este flujo de trabajo?</string>
-    <string name="workflow_editor_select_input_title">Conectar a entrada</string>
-    <string name="workflow_editor_select_input_message">Selecciona qué entrada de %1$s conectar:</string>
-    <string name="workflow_editor_select_output_title">Conectar desde salida</string>
-    <string name="workflow_editor_select_output_message">Selecciona qué salida de %1$s conectar:</string>
+    <string name="title_workflow_editor_discard">¿Descartar flujo de trabajo?</string>
+    <string name="msg_workflow_editor_discard">Tiene cambios sin guardar. ¿Está seguro de que desea descartar este flujo de trabajo?</string>
+    <string name="title_workflow_editor_select_input">Conectar a entrada</string>
+    <string name="msg_workflow_editor_select_input">Selecciona qué entrada de %1$s conectar:</string>
+    <string name="title_workflow_editor_select_output">Conectar desde salida</string>
+    <string name="msg_workflow_editor_select_output">Selecciona qué salida de %1$s conectar:</string>
     <string name="workflow_editor_edit_mode_hint">Toca el conector para conectar, mantén para explorador</string>
 
     <!-- Field display names for workflow editor -->
@@ -567,31 +567,31 @@
     <string name="content_description_show_help">Mostrar ayuda</string>
 
     <!-- Prompt Presets -->
-    <string name="prompt_presets_button">Plantillas de prompt</string>
+    <string name="button_prompt_presets">Plantillas de prompt</string>
     <string name="prompt_presets_open_library">Abrir biblioteca de prompts</string>
     <string name="prompt_presets_save_current">Guardar prompt actual</string>
     <string name="prompt_preset_reset_prompt">Restablecer prompt</string>
-    <string name="prompt_preset_reset_prompt_success">Prompt restablecido por defecto</string>
-    <string name="prompt_library_title">Biblioteca de prompts</string>
-    <string name="prompt_library_search_placeholder">Buscar prompts…</string>
-    <string name="prompt_library_empty">Sin prompts guardados</string>
+    <string name="msg_prompt_preset_reset_success">Prompt restablecido por defecto</string>
+    <string name="title_prompt_library">Biblioteca de prompts</string>
+    <string name="placeholder_prompt_library_search">Buscar prompts…</string>
+    <string name="msg_prompt_library_empty">Sin prompts guardados</string>
     <string name="prompt_preset_toggle_favorite">Alternar favorito</string>
     <string name="prompt_preset_edit">Editar</string>
     <string name="prompt_preset_duplicate">Duplicar</string>
     <string name="prompt_preset_delete">Eliminar</string>
-    <string name="prompt_preset_save_title">Guardar prompt</string>
-    <string name="prompt_preset_edit_title">Editar prompt</string>
-    <string name="prompt_preset_name_label">Nombre</string>
-    <string name="prompt_preset_name_taken">Este nombre ya está en uso</string>
-    <string name="prompt_preset_tags_label">Etiquetas</string>
-    <string name="prompt_preset_add_tag_hint">Añadir etiqueta (coma para confirmar)</string>
+    <string name="title_prompt_preset_save">Guardar prompt</string>
+    <string name="title_prompt_preset_edit">Editar prompt</string>
+    <string name="label_prompt_preset_name">Nombre</string>
+    <string name="error_prompt_preset_name_taken">Este nombre ya está en uso</string>
+    <string name="label_prompt_preset_tags">Etiquetas</string>
+    <string name="hint_prompt_preset_add_tag">Añadir etiqueta (coma para confirmar)</string>
     <string name="prompt_preset_remove_tag">Eliminar etiqueta</string>
     <string name="prompt_preset_suggested_tags">Etiquetas sugeridas:</string>
     <string name="prompt_preset_max_favorites">Máximo de 8 favoritos alcanzado</string>
-    <string name="prompt_preset_saved">Prompt guardado</string>
-    <string name="prompt_preset_duplicated">Prompt duplicado</string>
-    <string name="prompt_preset_deleted">Prompt eliminado</string>
-    <string name="prompt_preset_screen_type_label">Guardar para</string>
+    <string name="msg_prompt_preset_saved">Prompt guardado</string>
+    <string name="msg_prompt_preset_duplicated">Prompt duplicado</string>
+    <string name="msg_prompt_preset_deleted">Prompt eliminado</string>
+    <string name="label_prompt_preset_screen_type">Guardar para</string>
 
     <!-- Screen type display names -->
     <string name="screen_type_text_to_image">Texto a imagen</string>

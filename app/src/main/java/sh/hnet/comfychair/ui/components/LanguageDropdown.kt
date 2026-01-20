@@ -60,7 +60,7 @@ fun LanguageDropdown(
             value = displayText,
             onValueChange = {},
             readOnly = true,
-            label = { Text(stringResource(R.string.language_label)) },
+            label = { Text(stringResource(R.string.label_language)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)

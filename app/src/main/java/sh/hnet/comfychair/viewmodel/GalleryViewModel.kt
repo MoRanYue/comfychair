@@ -138,10 +138,10 @@ class GalleryViewModel : ViewModel() {
             viewModelScope.launch {
                 if (success) {
                     DebugLogger.d(TAG, "Refresh successful")
-                    _events.emit(GalleryEvent.ShowToast(R.string.gallery_refresh_success))
+                    _events.emit(GalleryEvent.ShowToast(R.string.msg_gallery_refresh_success))
                 } else {
                     DebugLogger.w(TAG, "Refresh failed")
-                    _events.emit(GalleryEvent.ShowToast(R.string.gallery_refresh_failed))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_gallery_refresh))
                 }
             }
         }
@@ -162,10 +162,10 @@ class GalleryViewModel : ViewModel() {
             val success = repository.deleteItem(item)
             if (success) {
                 DebugLogger.d(TAG, "Delete successful")
-                _events.emit(GalleryEvent.ShowToast(R.string.history_item_deleted_success))
+                _events.emit(GalleryEvent.ShowToast(R.string.msg_history_item_deleted_success))
             } else {
                 DebugLogger.w(TAG, "Delete failed")
-                _events.emit(GalleryEvent.ShowToast(R.string.history_item_deleted_failed))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_history_item_delete))
             }
         }
     }
@@ -178,7 +178,7 @@ class GalleryViewModel : ViewModel() {
                     ?: MediaCache.fetchImage(key, item.subfolder, item.type)
 
                 if (bitmap == null) {
-                    _events.emit(GalleryEvent.ShowToast(R.string.failed_save_image))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_save_image))
                     return@withContext
                 }
 
@@ -198,9 +198,9 @@ class GalleryViewModel : ViewModel() {
                         }
                     }
 
-                    _events.emit(GalleryEvent.ShowToast(R.string.image_saved_to_gallery))
+                    _events.emit(GalleryEvent.ShowToast(R.string.msg_image_saved_to_gallery))
                 } catch (e: Exception) {
-                    _events.emit(GalleryEvent.ShowToast(R.string.failed_save_image))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_save_image))
                 }
             }
         }
@@ -214,7 +214,7 @@ class GalleryViewModel : ViewModel() {
                     ?: MediaCache.fetchVideoBytes(key, item.subfolder, item.type)
 
                 if (videoBytes == null) {
-                    _events.emit(GalleryEvent.ShowToast(R.string.failed_save_video))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_save_video))
                     return@withContext
                 }
 
@@ -234,9 +234,9 @@ class GalleryViewModel : ViewModel() {
                         }
                     }
 
-                    _events.emit(GalleryEvent.ShowToast(R.string.video_saved_to_gallery))
+                    _events.emit(GalleryEvent.ShowToast(R.string.msg_video_saved_to_gallery))
                 } catch (e: Exception) {
-                    _events.emit(GalleryEvent.ShowToast(R.string.failed_save_video))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_save_video))
                 }
             }
         }
@@ -271,7 +271,7 @@ class GalleryViewModel : ViewModel() {
                 ?: MediaCache.fetchImage(key, item.subfolder, item.type)
 
             if (bitmap == null) {
-                _events.emit(GalleryEvent.ShowToast(R.string.failed_share_image))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_share_image))
                 return@launch
             }
 
@@ -304,7 +304,7 @@ class GalleryViewModel : ViewModel() {
                     )
                 )
             } catch (e: Exception) {
-                _events.emit(GalleryEvent.ShowToast(R.string.failed_share_image))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_share_image))
             }
         }
     }
@@ -316,7 +316,7 @@ class GalleryViewModel : ViewModel() {
                 ?: MediaCache.fetchVideoBytes(key, item.subfolder, item.type)
 
             if (videoBytes == null) {
-                _events.emit(GalleryEvent.ShowToast(R.string.failed_share_video))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_share_video))
                 return@launch
             }
 
@@ -346,7 +346,7 @@ class GalleryViewModel : ViewModel() {
                     )
                 )
             } catch (e: Exception) {
-                _events.emit(GalleryEvent.ShowToast(R.string.failed_share_video))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_share_video))
             }
         }
     }
@@ -394,9 +394,9 @@ class GalleryViewModel : ViewModel() {
 
             // Show result toast
             if (failCount == 0) {
-                _events.emit(GalleryEvent.ShowToast(R.string.items_deleted_success))
+                _events.emit(GalleryEvent.ShowToast(R.string.msg_items_deleted_success))
             } else {
-                _events.emit(GalleryEvent.ShowToast(R.string.some_items_failed_to_delete))
+                _events.emit(GalleryEvent.ShowToast(R.string.msg_some_items_failed_to_delete))
             }
 
             // Clear selection after delete
@@ -428,9 +428,9 @@ class GalleryViewModel : ViewModel() {
 
             // Show result toast
             if (failCount == 0) {
-                _events.emit(GalleryEvent.ShowToast(R.string.items_saved_to_gallery))
+                _events.emit(GalleryEvent.ShowToast(R.string.msg_items_saved_to_gallery))
             } else {
-                _events.emit(GalleryEvent.ShowToast(R.string.some_items_failed_to_save))
+                _events.emit(GalleryEvent.ShowToast(R.string.msg_some_items_failed_to_save))
             }
 
             // Clear selection after save
@@ -516,7 +516,7 @@ class GalleryViewModel : ViewModel() {
                 }
 
                 if (uris.isEmpty()) {
-                    _events.emit(GalleryEvent.ShowToast(R.string.failed_share_items))
+                    _events.emit(GalleryEvent.ShowToast(R.string.error_share_items))
                     return@launch
                 }
 
@@ -532,14 +532,14 @@ class GalleryViewModel : ViewModel() {
                 context.startActivity(
                     android.content.Intent.createChooser(
                         shareIntent,
-                        context.getString(R.string.share)
+                        context.getString(R.string.button_share)
                     )
                 )
 
                 // Clear selection after share
                 clearSelection()
             } catch (e: Exception) {
-                _events.emit(GalleryEvent.ShowToast(R.string.failed_share_items))
+                _events.emit(GalleryEvent.ShowToast(R.string.error_share_items))
             }
         }
     }

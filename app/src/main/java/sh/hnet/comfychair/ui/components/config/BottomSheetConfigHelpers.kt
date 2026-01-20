@@ -247,7 +247,7 @@ internal fun buildCommonLoraConfig(
         ) else null,
 
         primaryChain = if (caps.hasLora) LoraChainField(
-            title = R.string.lora_chain_title,
+            title = R.string.title_lora_chain,
             chain = state.loraChain,
             availableLoras = state.availableLoras,
             onAdd = callbacks.onAddLora ?: noOpUnit,

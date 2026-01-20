@@ -267,9 +267,9 @@ class SettingsViewModel : ViewModel() {
             _serverSettingsState.value = _serverSettingsState.value.copy(isClearingHistory = false)
 
             val messageResId = if (success) {
-                sh.hnet.comfychair.R.string.history_cleared_success
+                sh.hnet.comfychair.R.string.msg_history_cleared_success
             } else {
-                sh.hnet.comfychair.R.string.history_cleared_failed
+                sh.hnet.comfychair.R.string.error_history_clear
             }
             _events.emit(SettingsEvent.ShowToast(messageResId))
         }
@@ -297,9 +297,9 @@ class SettingsViewModel : ViewModel() {
             _serverSettingsState.value = _serverSettingsState.value.copy(isRefreshingModels = false)
 
             val messageResId = if (success) {
-                R.string.models_refreshed_success
+                R.string.msg_models_refreshed_success
             } else {
-                R.string.models_refreshed_failed
+                R.string.error_models_refresh
             }
             _events.emit(SettingsEvent.ShowToast(messageResId))
         }
@@ -334,7 +334,7 @@ class SettingsViewModel : ViewModel() {
             MediaCache.clearAll()
             MediaStateHolder.clearAll()
 
-            _events.emit(SettingsEvent.ShowToast(sh.hnet.comfychair.R.string.cache_cleared_success))
+            _events.emit(SettingsEvent.ShowToast(sh.hnet.comfychair.R.string.msg_cache_cleared_success))
             _events.emit(SettingsEvent.RefreshNeeded)
         }
     }
@@ -364,7 +364,7 @@ class SettingsViewModel : ViewModel() {
                 }
             }
 
-            _events.emit(SettingsEvent.ShowToast(sh.hnet.comfychair.R.string.defaults_restored_success))
+            _events.emit(SettingsEvent.ShowToast(sh.hnet.comfychair.R.string.msg_defaults_restored_success))
             _events.emit(SettingsEvent.RefreshNeeded)
         }
     }
@@ -406,7 +406,7 @@ class SettingsViewModel : ViewModel() {
                 promptPresetStorage.clearAll()
             }
 
-            _events.emit(SettingsEvent.ShowToast(R.string.reset_prompts_and_library_success))
+            _events.emit(SettingsEvent.ShowToast(R.string.msg_reset_prompts_and_library_success))
             _events.emit(SettingsEvent.RefreshNeeded)
         }
     }
@@ -525,7 +525,7 @@ class SettingsViewModel : ViewModel() {
                     _events.emit(SettingsEvent.RefreshNeeded)
                 } else {
                     // Server unreachable, keep offline mode enabled
-                    _events.emit(SettingsEvent.ShowToast(R.string.cannot_go_online))
+                    _events.emit(SettingsEvent.ShowToast(R.string.msg_cannot_go_online))
                 }
             }
         }
@@ -594,12 +594,12 @@ class SettingsViewModel : ViewModel() {
                 }
 
                 if (writeSuccess) {
-                    _events.emit(SettingsEvent.ShowToast(R.string.backup_created_success))
+                    _events.emit(SettingsEvent.ShowToast(R.string.msg_backup_created_success))
                 } else {
-                    _events.emit(SettingsEvent.ShowToast(R.string.backup_created_failed))
+                    _events.emit(SettingsEvent.ShowToast(R.string.error_backup_create))
                 }
             }.onFailure {
-                _events.emit(SettingsEvent.ShowToast(R.string.backup_created_failed))
+                _events.emit(SettingsEvent.ShowToast(R.string.error_backup_create))
             }
         }
     }
@@ -636,7 +636,7 @@ class SettingsViewModel : ViewModel() {
 
             if (json == null) {
                 DebugLogger.e(TAG, "Backup file read returned null")
-                _events.emit(SettingsEvent.ShowToast(R.string.backup_restore_failed))
+                _events.emit(SettingsEvent.ShowToast(R.string.error_backup_restore))
                 return@launch
             }
 
@@ -667,9 +667,9 @@ class SettingsViewModel : ViewModel() {
                     reloadAppSettings(context, preserveDebugLogging = wasDebugLoggingEnabled)
 
                     if (result.skippedWorkflows > 0) {
-                        _events.emit(SettingsEvent.ShowToast(R.string.backup_restore_partial))
+                        _events.emit(SettingsEvent.ShowToast(R.string.msg_backup_restore_partial))
                     } else {
-                        _events.emit(SettingsEvent.ShowToast(R.string.backup_restore_success))
+                        _events.emit(SettingsEvent.ShowToast(R.string.msg_backup_restore_success))
                     }
                     _events.emit(SettingsEvent.RefreshNeeded)
                     if (result.serversChanged) {

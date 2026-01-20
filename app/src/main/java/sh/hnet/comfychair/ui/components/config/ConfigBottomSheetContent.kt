@@ -97,7 +97,7 @@ private fun NegativePromptSection(prompts: PromptConfig) {
     OutlinedTextField(
         value = prompts.negativePrompt,
         onValueChange = prompts.onNegativePromptChange,
-        label = { Text(stringResource(R.string.negative_prompt_hint)) },
+        label = { Text(stringResource(R.string.hint_negative_prompt)) },
         modifier = Modifier.fillMaxWidth(),
         minLines = 2,
         maxLines = 4
@@ -142,12 +142,12 @@ private fun ModeSelector(itiConfig: ItiConfig) {
             selected = itiConfig.mode == ImageToImageMode.EDITING,
             onClick = { itiConfig.onModeChange(ImageToImageMode.EDITING) },
             shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
-        ) { Text(stringResource(R.string.mode_editing)) }
+        ) { Text(stringResource(R.string.option_mode_editing)) }
         SegmentedButton(
             selected = itiConfig.mode == ImageToImageMode.INPAINTING,
             onClick = { itiConfig.onModeChange(ImageToImageMode.INPAINTING) },
             shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
-        ) { Text(stringResource(R.string.mode_inpainting)) }
+        ) { Text(stringResource(R.string.option_mode_inpainting)) }
     }
 }
 
@@ -186,7 +186,7 @@ private fun ModelSelectionSection(models: ModelConfig) {
 
     // Section title
     Text(
-        text = stringResource(R.string.model_selection_title),
+        text = stringResource(R.string.title_model_selection),
         style = MaterialTheme.typography.labelLarge,
         modifier = Modifier.padding(vertical = 8.dp)
     )

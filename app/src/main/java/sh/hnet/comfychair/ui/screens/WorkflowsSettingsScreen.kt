@@ -186,7 +186,7 @@ fun WorkflowsSettingsScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Top App Bar
         TopAppBar(
-            title = { Text(stringResource(R.string.workflows_settings_title)) },
+            title = { Text(stringResource(R.string.title_workflows_settings)) },
             windowInsets = WindowInsets(0, 0, 0, 0),
             actions = {
                 // New workflow button
@@ -510,7 +510,7 @@ private fun WorkflowListItemContent(
             }
             if (workflow.isBuiltIn) {
                 Text(
-                    text = stringResource(R.string.workflow_built_in_label),
+                    text = stringResource(R.string.label_workflow_built_in),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -645,12 +645,12 @@ private fun ImportWorkflowDialog(
 
     AlertDialog(
         onDismissRequest = { if (!isValidating) onDismiss() },
-        title = { Text(stringResource(R.string.import_workflow_title)) },
+        title = { Text(stringResource(R.string.title_import_workflow)) },
         text = {
             Column {
                 // Type dropdown
                 Text(
-                    text = stringResource(R.string.workflow_type_label),
+                    text = stringResource(R.string.label_workflow_type),
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
@@ -689,7 +689,7 @@ private fun ImportWorkflowDialog(
                 OutlinedTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = { Text(stringResource(R.string.workflow_name_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_name)) },
                     singleLine = true,
                     isError = nameError != null,
                     supportingText = nameError?.let { { Text(it) } },
@@ -703,7 +703,7 @@ private fun ImportWorkflowDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(stringResource(R.string.workflow_description_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_description)) },
                     maxLines = 3,
                     isError = descriptionError != null,
                     supportingText = descriptionError?.let { { Text(it) } },
@@ -720,7 +720,7 @@ private fun ImportWorkflowDialog(
                     ) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.validating_workflow))
+                        Text(stringResource(R.string.msg_validating_workflow))
                     }
                 }
             }
@@ -748,10 +748,10 @@ private fun MissingNodesDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.missing_nodes_title)) },
+        title = { Text(stringResource(R.string.title_missing_nodes)) },
         text = {
             Column {
-                Text(stringResource(R.string.missing_nodes_message))
+                Text(stringResource(R.string.msg_missing_nodes))
                 Spacer(modifier = Modifier.height(8.dp))
                 NoOverscrollContainer(modifier = Modifier.heightIn(max = 200.dp)) {
                     LazyColumn {
@@ -781,10 +781,10 @@ private fun MissingFieldsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.missing_fields_title)) },
+        title = { Text(stringResource(R.string.title_missing_fields)) },
         text = {
             Column {
-                Text(stringResource(R.string.missing_fields_message))
+                Text(stringResource(R.string.msg_missing_fields))
                 Spacer(modifier = Modifier.height(8.dp))
                 missingFields.forEach { field ->
                     key(field) {
@@ -811,8 +811,8 @@ private fun DuplicateNameDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.duplicate_name_title)) },
-        text = { Text(stringResource(R.string.duplicate_name_message)) },
+        title = { Text(stringResource(R.string.title_duplicate_name)) },
+        text = { Text(stringResource(R.string.msg_duplicate_name)) },
         confirmButton = {
             Button(onClick = onDismiss) {
                 Text(stringResource(R.string.button_ok))
@@ -834,13 +834,13 @@ private fun EditWorkflowDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.edit_workflow_title)) },
+        title = { Text(stringResource(R.string.title_edit_workflow)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = { Text(stringResource(R.string.workflow_name_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_name)) },
                     singleLine = true,
                     isError = nameError != null || name.isBlank(),
                     supportingText = nameError?.let { { Text(it) } },
@@ -850,7 +850,7 @@ private fun EditWorkflowDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(stringResource(R.string.workflow_description_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_description)) },
                     maxLines = 3,
                     isError = descriptionError != null,
                     supportingText = descriptionError?.let { { Text(it) } },
@@ -882,9 +882,9 @@ private fun DeleteWorkflowDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.delete_workflow_title)) },
+        title = { Text(stringResource(R.string.title_delete_workflow)) },
         text = {
-            Text(stringResource(R.string.delete_workflow_message, workflowName))
+            Text(stringResource(R.string.msg_delete_workflow, workflowName))
         },
         confirmButton = {
             Button(
@@ -917,13 +917,13 @@ private fun DuplicateWorkflowDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.duplicate_workflow_title)) },
+        title = { Text(stringResource(R.string.title_duplicate_workflow)) },
         text = {
             Column {
                 OutlinedTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = { Text(stringResource(R.string.workflow_name_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_name)) },
                     singleLine = true,
                     isError = nameError != null,
                     supportingText = nameError?.let { { Text(it) } },
@@ -933,7 +933,7 @@ private fun DuplicateWorkflowDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(stringResource(R.string.workflow_description_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_description)) },
                     maxLines = 3,
                     isError = descriptionError != null,
                     supportingText = descriptionError?.let { { Text(it) } },

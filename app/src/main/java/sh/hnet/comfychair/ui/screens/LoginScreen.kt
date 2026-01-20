@@ -336,8 +336,8 @@ fun LoginScreen() {
     if (showDeleteConfirmation && selectedServer != null) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
-            title = { Text(stringResource(R.string.server_delete_title)) },
-            text = { Text(stringResource(R.string.server_delete_message, selectedServer!!.name)) },
+            title = { Text(stringResource(R.string.title_server_delete)) },
+            text = { Text(stringResource(R.string.msg_server_delete, selectedServer!!.name)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -354,13 +354,13 @@ fun LoginScreen() {
                         selectedServer?.let { serverStorage.setSelectedServerId(it.id) }
 
                         showDeleteConfirmation = false
-                        Toast.makeText(context, R.string.server_deleted_success, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.msg_server_deleted_success, Toast.LENGTH_SHORT).show()
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(R.string.server_delete_button))
+                    Text(stringResource(R.string.button_server_delete))
                 }
             },
             dismissButton = {
@@ -375,8 +375,8 @@ fun LoginScreen() {
     if (showOfflinePrompt && offlinePromptServer != null) {
         AlertDialog(
             onDismissRequest = { showOfflinePrompt = false },
-            title = { Text(stringResource(R.string.offline_prompt_title)) },
-            text = { Text(stringResource(R.string.offline_prompt_message)) },
+            title = { Text(stringResource(R.string.title_offline_prompt)) },
+            text = { Text(stringResource(R.string.msg_offline_prompt)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -389,12 +389,12 @@ fun LoginScreen() {
                         }
                     }
                 ) {
-                    Text(stringResource(R.string.offline_prompt_confirm))
+                    Text(stringResource(R.string.button_offline_prompt_confirm))
                 }
             },
             dismissButton = {
                 OutlinedButton(onClick = { showOfflinePrompt = false }) {
-                    Text(stringResource(R.string.offline_prompt_dismiss))
+                    Text(stringResource(R.string.button_offline_prompt_dismiss))
                 }
             }
         )

@@ -39,7 +39,7 @@ fun LengthFpsRow(
 
     StepperInputRow(
         value1 = length,
-        label1 = stringResource(R.string.length_label),
+        label1 = stringResource(R.string.label_length),
         onValue1Change = onLengthChange,
         error1 = lengthError,
         showField1 = showLength,
@@ -48,7 +48,7 @@ fun LengthFpsRow(
         step1 = lengthConstraints.step,
         decimalPlaces1 = lengthConstraints.decimalPlaces,
         value2 = fps,
-        label2 = stringResource(R.string.fps_label),
+        label2 = stringResource(R.string.label_fps),
         onValue2Change = onFpsChange,
         error2 = fpsError,
         showField2 = showFps,

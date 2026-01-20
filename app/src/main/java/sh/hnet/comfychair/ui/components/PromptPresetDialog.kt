@@ -101,7 +101,7 @@ fun PromptPresetDialog(
 
     // String resources for validation
     val errorRequired = stringResource(R.string.error_required)
-    val errorNameTaken = stringResource(R.string.prompt_preset_name_taken)
+    val errorNameTaken = stringResource(R.string.error_prompt_preset_name_taken)
 
     fun validate(): Boolean {
         nameError = null
@@ -141,8 +141,8 @@ fun PromptPresetDialog(
         title = {
             Text(
                 text = stringResource(
-                    if (isEditMode) R.string.prompt_preset_edit_title
-                    else R.string.prompt_preset_save_title
+                    if (isEditMode) R.string.title_prompt_preset_edit
+                    else R.string.title_prompt_preset_save
                 )
             )
         },
@@ -163,7 +163,7 @@ fun PromptPresetDialog(
                             value = selectedScreenType.displayName(),
                             onValueChange = { },
                             readOnly = true,
-                            label = { Text(stringResource(R.string.prompt_preset_screen_type_label)) },
+                            label = { Text(stringResource(R.string.label_prompt_preset_screen_type)) },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = screenTypeExpanded)
                             },
@@ -196,7 +196,7 @@ fun PromptPresetDialog(
                         name = it
                         nameError = null
                     },
-                    label = { Text(stringResource(R.string.prompt_preset_name_label)) },
+                    label = { Text(stringResource(R.string.label_prompt_preset_name)) },
                     isError = nameError != null,
                     supportingText = nameError?.let { { Text(it) } },
                     singleLine = true,
@@ -209,7 +209,7 @@ fun PromptPresetDialog(
                 OutlinedTextField(
                     value = prompt,
                     onValueChange = { prompt = it },
-                    label = { Text(stringResource(R.string.prompt_hint)) },
+                    label = { Text(stringResource(R.string.hint_prompt)) },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 3,
                     maxLines = 5
@@ -217,7 +217,7 @@ fun PromptPresetDialog(
 
                 // Tags section
                 Text(
-                    text = stringResource(R.string.prompt_preset_tags_label),
+                    text = stringResource(R.string.label_prompt_preset_tags),
                     style = MaterialTheme.typography.labelMedium
                 )
 
@@ -231,7 +231,7 @@ fun PromptPresetDialog(
                             tagInput = newValue
                         }
                     },
-                    label = { Text(stringResource(R.string.prompt_preset_add_tag_hint)) },
+                    label = { Text(stringResource(R.string.hint_prompt_preset_add_tag)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(

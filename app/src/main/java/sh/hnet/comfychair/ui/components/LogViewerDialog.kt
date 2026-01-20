@@ -122,7 +122,7 @@ fun LogViewerDialog(
             ) {
                 // Header
                 TopAppBar(
-                    title = { Text(stringResource(R.string.debug_log_title)) },
+                    title = { Text(stringResource(R.string.title_debug_log)) },
                     navigationIcon = {
                         IconButton(onClick = onDismiss) {
                             Icon(
@@ -171,7 +171,7 @@ fun LogViewerDialog(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.debug_log_empty),
+                            text = stringResource(R.string.msg_debug_log_empty),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

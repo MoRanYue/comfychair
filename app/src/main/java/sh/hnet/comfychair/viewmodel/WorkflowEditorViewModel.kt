@@ -885,7 +885,7 @@ class WorkflowEditorViewModel : ViewModel() {
                     DebugLogger.e(TAG, "proceedWithSave: Failed to fetch available nodes")
                     _uiState.value = _uiState.value.copy(
                         isSaveValidating = false,
-                        saveDialogNameError = context.getString(R.string.workflow_error_fetch_nodes_failed)
+                        saveDialogNameError = context.getString(R.string.error_workflow_fetch_nodes_failed)
                     )
                     return@launch
                 }

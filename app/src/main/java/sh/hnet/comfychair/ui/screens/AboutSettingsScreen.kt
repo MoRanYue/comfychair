@@ -38,7 +38,7 @@ fun AboutSettingsScreen(
 
     // UI composition
     SettingsScreenScaffold(
-        title = stringResource(R.string.about_settings_title),
+        title = stringResource(R.string.title_about_settings),
         onNavigateToGeneration = onNavigateToGeneration,
         onLogout = onLogout,
         horizontalPadding = 0.dp
@@ -66,7 +66,7 @@ fun AboutSettingsScreen(
 
             // Version
             Text(
-                text = stringResource(R.string.about_version, BuildConfig.VERSION_NAME),
+                text = stringResource(R.string.label_about_version, BuildConfig.VERSION_NAME),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -85,12 +85,12 @@ fun AboutSettingsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.about_license_title),
+                        text = stringResource(R.string.title_about_license),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = stringResource(R.string.about_license_name),
+                        text = stringResource(R.string.label_about_license_name),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -124,7 +124,7 @@ fun AboutSettingsScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = stringResource(R.string.about_source_title),
+                            text = stringResource(R.string.title_about_source),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(

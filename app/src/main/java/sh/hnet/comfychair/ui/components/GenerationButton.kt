@@ -158,7 +158,7 @@ fun GenerationButton(
                 )
                 // Clear queue
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.clear_queue_button)) },
+                    text = { Text(stringResource(R.string.button_clear_queue)) },
                     onClick = {
                         showMenu = false
                         onClearQueue()

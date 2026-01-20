@@ -119,7 +119,7 @@ fun PromptLibraryDialog(
             ) {
                 // Title
                 Text(
-                    text = stringResource(R.string.prompt_library_title),
+                    text = stringResource(R.string.title_prompt_library),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -140,7 +140,7 @@ fun PromptLibraryDialog(
                                 onSearch = { },
                                 expanded = false,
                                 onExpandedChange = { },
-                                placeholder = { Text(stringResource(R.string.prompt_library_search_placeholder)) },
+                                placeholder = { Text(stringResource(R.string.placeholder_prompt_library_search)) },
                                 leadingIcon = {
                                     Icon(Icons.Default.Search, contentDescription = null)
                                 },
@@ -149,7 +149,7 @@ fun PromptLibraryDialog(
                                         IconButton(onClick = { onSearchQueryChange("") }) {
                                             Icon(
                                                 Icons.Default.Clear,
-                                                contentDescription = stringResource(R.string.clear_search)
+                                                contentDescription = stringResource(R.string.button_clear_search)
                                             )
                                         }
                                     }
@@ -278,7 +278,7 @@ fun PromptLibraryDialog(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(R.string.prompt_library_empty),
+                            text = stringResource(R.string.msg_prompt_library_empty),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -417,7 +417,7 @@ private fun PresetListItem(
                 IconButton(onClick = { showMenu = true }) {
                     Icon(
                         Icons.Default.MoreVert,
-                        contentDescription = stringResource(R.string.more_options)
+                        contentDescription = stringResource(R.string.button_more_options)
                     )
                 }
                 DropdownMenu(

@@ -214,7 +214,7 @@ fun TextToVideoScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Top App Bar with save/share actions
         TopAppBar(
-            title = { Text(stringResource(R.string.text_to_video_title)) },
+            title = { Text(stringResource(R.string.title_text_to_video)) },
             windowInsets = WindowInsets(0, 0, 0, 0),
             actions = {
                 // Save to gallery button (only when video exists)
@@ -224,13 +224,13 @@ fun TextToVideoScreen(
                             VideoUtils.saveVideoToGallery(context, videoUri, VideoUtils.GalleryPrefix.TEXT_TO_VIDEO)
                         }
                     }) {
-                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save_to_gallery))
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.button_save_to_gallery))
                     }
                     // Share button
                     IconButton(onClick = {
                         VideoUtils.shareVideo(context, videoUri)
                     }) {
-                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.button_share))
                     }
                 }
                 // Menu button
@@ -293,7 +293,7 @@ fun TextToVideoScreen(
                 else -> {
                     Image(
                         painter = painterResource(R.drawable.ic_comfychair_foreground),
-                        contentDescription = stringResource(R.string.placeholder_video_description),
+                        contentDescription = stringResource(R.string.placeholder_video),
                         modifier = Modifier.size(Dimensions.PlaceholderLogoSize),
                         contentScale = ContentScale.Fit
                     )
@@ -308,7 +308,7 @@ fun TextToVideoScreen(
                 textToVideoViewModel.onPositivePromptChange(it)
                 presetViewModel.clearActivePreset()
             },
-            label = { Text(stringResource(R.string.prompt_hint)) },
+            label = { Text(stringResource(R.string.hint_prompt)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -402,8 +402,8 @@ fun TextToVideoScreen(
                 },
                 onClearQueue = {
                     generationViewModel.getClient()?.clearQueue { success ->
-                        val messageRes = if (success) R.string.queue_cleared_success
-                                       else R.string.queue_cleared_failed
+                        val messageRes = if (success) R.string.msg_queue_cleared_success
+                                       else R.string.error_queue_clear
                         android.os.Handler(android.os.Looper.getMainLooper()).post {
                             Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                         }

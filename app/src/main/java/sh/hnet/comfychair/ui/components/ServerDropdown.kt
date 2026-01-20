@@ -51,7 +51,7 @@ fun ServerDropdown(
             value = displayText,
             onValueChange = {},
             readOnly = true,
-            label = { Text(stringResource(R.string.server_select_placeholder)) },
+            label = { Text(stringResource(R.string.placeholder_server_select)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)

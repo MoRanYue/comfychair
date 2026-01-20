@@ -75,14 +75,14 @@ fun LoraChainEditor(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(stringResource(R.string.add_lora_button))
+                Text(stringResource(R.string.button_add_lora))
             }
         }
 
         if (loraChain.isEmpty()) {
             // Empty state
             Text(
-                text = stringResource(R.string.lora_empty_state),
+                text = stringResource(R.string.msg_lora_empty),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -172,7 +172,7 @@ private fun LoraEntryItem(
             IconButton(onClick = onRemove) {
                 Icon(
                     imageVector = Icons.Default.Close,
-                    contentDescription = stringResource(R.string.remove_lora)
+                    contentDescription = stringResource(R.string.button_remove_lora)
                 )
             }
         }
@@ -185,7 +185,7 @@ private fun LoraEntryItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.lora_strength_label),
+                text = stringResource(R.string.label_lora_strength),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.width(64.dp)
             )

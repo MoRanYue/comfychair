@@ -110,20 +110,20 @@ class BackupManager(private val context: Context) {
             JSONObject(jsonString)
         } catch (e: Exception) {
             DebugLogger.e(TAG, "Failed to parse backup JSON: ${e.message}")
-            return RestoreResult.Failure(R.string.backup_error_invalid_json)
+            return RestoreResult.Failure(R.string.error_backup_invalid_json)
         }
 
         // Validate basic structure
         if (!validator.validateStructure(json)) {
             DebugLogger.e(TAG, "Backup structure validation failed")
-            return RestoreResult.Failure(R.string.backup_error_invalid_json)
+            return RestoreResult.Failure(R.string.error_backup_invalid_json)
         }
 
         // Check version - v4 and v5 are supported
         val version = json.optInt("version", -1)
         if (version !in 4..BACKUP_VERSION) {
             DebugLogger.e(TAG, "Unsupported backup version: $version (required: 4-$BACKUP_VERSION)")
-            return RestoreResult.Failure(R.string.backup_error_unsupported_version)
+            return RestoreResult.Failure(R.string.error_backup_unsupported_version)
         }
 
         // Clear cached media files before restoring
@@ -140,7 +140,7 @@ class BackupManager(private val context: Context) {
         val serversArray = json.optJSONArray("servers")
         if (serversArray == null || serversArray.length() == 0) {
             DebugLogger.e(TAG, "No servers array in backup")
-            return RestoreResult.Failure(R.string.backup_error_no_servers)
+            return RestoreResult.Failure(R.string.error_backup_no_servers)
         }
 
         val existingServers = serverStorage.getServers()

@@ -1028,7 +1028,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     _uiState.value = _uiState.value.copy(referenceImage1 = bitmap)
                 }
             } catch (e: Exception) {
-                _events.emit(ImageToImageEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToImageEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
@@ -1046,7 +1046,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     _uiState.value = _uiState.value.copy(referenceImage2 = bitmap)
                 }
             } catch (e: Exception) {
-                _events.emit(ImageToImageEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToImageEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
@@ -1085,7 +1085,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     )
                 }
             } catch (e: Exception) {
-                _events.emit(ImageToImageEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToImageEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
@@ -1353,7 +1353,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
             _uiState.update { it.copy(positivePrompt = defaultPrompt) }
 
             // Emit toast event
-            _events.emit(ImageToImageEvent.ShowToast(R.string.prompt_preset_reset_prompt_success))
+            _events.emit(ImageToImageEvent.ShowToast(R.string.msg_prompt_preset_reset_success))
         }
     }
 
@@ -1844,7 +1844,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     ConnectionManager.showConnectionAlert(ctx, sourceResult.failureType)
                 }
             } else {
-                _events.emit(ImageToImageEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToImageEvent.ShowToast(R.string.error_save_image))
             }
             return null
         }
@@ -1946,7 +1946,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
         // Generate mask
         val maskBitmap = generateMaskBitmap()
         if (maskBitmap == null) {
-            _events.emit(ImageToImageEvent.ShowToast(R.string.paint_mask_hint))
+            _events.emit(ImageToImageEvent.ShowToast(R.string.hint_paint_mask))
             return null
         }
 
@@ -1981,7 +1981,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
                     ConnectionManager.showConnectionAlert(ctx, uploadResult.failureType)
                 }
             } else {
-                _events.emit(ImageToImageEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToImageEvent.ShowToast(R.string.error_save_image))
             }
             return null
         }
@@ -2207,7 +2207,7 @@ class ImageToImageViewModel : BaseGenerationViewModel<ImageToImageUiState, Image
             is GenerationEvent.ConnectionLostDuringGeneration -> {
                 DebugLogger.w(TAG, "ConnectionLostDuringGeneration")
                 viewModelScope.launch {
-                    val message = applicationContext?.getString(R.string.connection_lost_generation_may_continue)
+                    val message = applicationContext?.getString(R.string.msg_connection_lost_generation_may_continue)
                         ?: "Connection lost. Will check for completion when reconnected."
                     _events.emit(ImageToImageEvent.ShowToastMessage(message))
                 }

@@ -226,14 +226,14 @@ fun GalleryScreen(
                 if (uiState.isSelectionMode) {
                     Text(stringResource(R.string.gallery_selected_count, uiState.selectedItems.size))
                 } else {
-                    Text(stringResource(R.string.gallery_title))
+                    Text(stringResource(R.string.title_gallery))
                 }
             },
             windowInsets = WindowInsets(0, 0, 0, 0),
             navigationIcon = {
                 if (uiState.isSelectionMode) {
                     IconButton(onClick = { galleryViewModel.clearSelection() }) {
-                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.cancel_selection))
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.button_cancel_selection))
                     }
                 }
             },
@@ -243,20 +243,20 @@ fun GalleryScreen(
                     IconButton(onClick = { galleryViewModel.deleteSelected() }) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = stringResource(R.string.delete_history_item),
+                            contentDescription = stringResource(R.string.button_delete_history_item),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }
                     IconButton(onClick = { galleryViewModel.saveSelectedToGallery(context) }) {
-                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save_image))
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.button_save_image))
                     }
                     IconButton(onClick = { galleryViewModel.shareSelected(context) }) {
-                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.button_share))
                     }
                 } else {
                     // Normal mode actions: Select and Menu
                     IconButton(onClick = { galleryViewModel.enterSelectionMode() }) {
-                        Icon(Icons.Default.Checklist, contentDescription = stringResource(R.string.gallery_enter_selection_mode))
+                        Icon(Icons.Default.Checklist, contentDescription = stringResource(R.string.button_gallery_select))
                     }
                     AppMenuDropdown(
                         onSettings = onNavigateToSettings,
@@ -310,7 +310,7 @@ fun GalleryScreen(
                                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                                 )
                                 Text(
-                                    text = stringResource(R.string.gallery_empty),
+                                    text = stringResource(R.string.msg_gallery_empty),
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -396,9 +396,9 @@ private fun GalleryItemCard(
                     Image(
                         bitmap = bitmap!!.asImageBitmap(),
                         contentDescription = if (item.isVideo) {
-                            stringResource(R.string.gallery_video_thumbnail_description)
+                            stringResource(R.string.content_description_gallery_video_thumbnail)
                         } else {
-                            stringResource(R.string.gallery_thumbnail_description)
+                            stringResource(R.string.content_description_gallery_thumbnail)
                         },
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
@@ -458,7 +458,7 @@ private fun GalleryItemCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
-                        contentDescription = stringResource(R.string.item_selected),
+                        contentDescription = stringResource(R.string.label_item_selected),
                         tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(20.dp)
                     )

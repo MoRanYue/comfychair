@@ -224,12 +224,12 @@ fun ImageToImageScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Top App Bar with image options
         TopAppBar(
-            title = { Text(stringResource(R.string.image_to_image_title)) },
+            title = { Text(stringResource(R.string.title_image_to_image)) },
             windowInsets = WindowInsets(0, 0, 0, 0),
             actions = {
                 // Upload image button
                 IconButton(onClick = { imagePickerLauncher.launch("image/*") }) {
-                    Icon(Icons.Default.AddPhotoAlternate, contentDescription = stringResource(R.string.upload_source_image))
+                    Icon(Icons.Default.AddPhotoAlternate, contentDescription = stringResource(R.string.button_upload_source_image))
                 }
                 // Edit mask button (only in inpainting mode when source image exists)
                 if (uiState.sourceImage != null && uiState.mode == ImageToImageMode.INPAINTING) {
@@ -258,11 +258,11 @@ fun ImageToImageScreen(
                         )
                         context.startActivity(MaskEditorActivity.createIntent(context))
                     }) {
-                        Icon(Icons.Default.Brush, contentDescription = stringResource(R.string.edit_mask))
+                        Icon(Icons.Default.Brush, contentDescription = stringResource(R.string.button_edit_mask))
                     }
                     // Clear mask button
                     IconButton(onClick = { imageToImageViewModel.clearMask() }) {
-                        Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.clear_mask))
+                        Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.button_clear_mask))
                     }
                 }
                 // Menu button
@@ -354,7 +354,7 @@ fun ImageToImageScreen(
                                 contentScale = ContentScale.Fit
                             )
                             Text(
-                                text = stringResource(R.string.no_source_image),
+                                text = stringResource(R.string.msg_no_source_image),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -394,14 +394,14 @@ fun ImageToImageScreen(
                 onClick = { imageToImageViewModel.onViewModeChange(ImageToImageViewMode.SOURCE) },
                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
             ) {
-                Text(stringResource(R.string.source_image_tab))
+                Text(stringResource(R.string.tab_source_image))
             }
             SegmentedButton(
                 selected = uiState.viewMode == ImageToImageViewMode.PREVIEW,
                 onClick = { imageToImageViewModel.onViewModeChange(ImageToImageViewMode.PREVIEW) },
                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
             ) {
-                Text(stringResource(R.string.preview_tab))
+                Text(stringResource(R.string.tab_preview))
             }
         }
 
@@ -412,7 +412,7 @@ fun ImageToImageScreen(
                 imageToImageViewModel.onPositivePromptChange(it)
                 presetViewModel.clearActivePreset()
             },
-            label = { Text(stringResource(R.string.prompt_hint)) },
+            label = { Text(stringResource(R.string.hint_prompt)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -460,7 +460,7 @@ fun ImageToImageScreen(
                         if (uiState.mode == ImageToImageMode.INPAINTING && !imageToImageViewModel.hasMask()) {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.paint_mask_hint),
+                                context.getString(R.string.hint_paint_mask),
                                 Toast.LENGTH_SHORT
                             ).show()
                             return@launch
@@ -495,7 +495,7 @@ fun ImageToImageScreen(
                         if (uiState.mode == ImageToImageMode.INPAINTING && !imageToImageViewModel.hasMask()) {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.paint_mask_hint),
+                                context.getString(R.string.hint_paint_mask),
                                 Toast.LENGTH_SHORT
                             ).show()
                             return@launch
@@ -526,8 +526,8 @@ fun ImageToImageScreen(
                 },
                 onClearQueue = {
                     generationViewModel.getClient()?.clearQueue { success ->
-                        val messageRes = if (success) R.string.queue_cleared_success
-                                       else R.string.queue_cleared_failed
+                        val messageRes = if (success) R.string.msg_queue_cleared_success
+                                       else R.string.error_queue_clear
                         android.os.Handler(android.os.Looper.getMainLooper()).post {
                             Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                         }

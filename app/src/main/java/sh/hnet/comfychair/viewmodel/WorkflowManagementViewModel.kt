@@ -195,7 +195,7 @@ class WorkflowManagementViewModel : ViewModel() {
                 try {
                     JSONObject(jsonContent)
                 } catch (e: Exception) {
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_error_invalid_json))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_invalid_json))
                     _uiState.value = _uiState.value.copy(isLoading = false)
                     return@launch
                 }
@@ -215,7 +215,7 @@ class WorkflowManagementViewModel : ViewModel() {
                     importDescriptionError = null
                 )
             } catch (e: Exception) {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_import_failed))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_import))
                 _uiState.value = _uiState.value.copy(isLoading = false)
             }
         }
@@ -236,7 +236,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onImportNameChange(name: String) {
         val error = if (name.length > ValidationUtils.MAX_WORKFLOW_NAME_LENGTH) {
-            applicationContext?.getString(R.string.workflow_name_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_name_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             importName = ValidationUtils.truncateWorkflowName(name),
@@ -246,7 +246,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onImportDescriptionChange(description: String) {
         val error = if (description.length > ValidationUtils.MAX_WORKFLOW_DESCRIPTION_LENGTH) {
-            applicationContext?.getString(R.string.workflow_description_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_description_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             importDescription = ValidationUtils.truncateWorkflowDescription(description),
@@ -291,7 +291,7 @@ class WorkflowManagementViewModel : ViewModel() {
         comfyUIClient.fetchAllNodeTypes { availableNodes ->
             viewModelScope.launch {
                 if (availableNodes == null) {
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_error_fetch_nodes_failed))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_fetch_nodes_failed))
                     _uiState.value = _uiState.value.copy(isValidatingNodes = false)
                     return@launch
                 }
@@ -315,7 +315,7 @@ class WorkflowManagementViewModel : ViewModel() {
                     }
                 } catch (e: Exception) {
                     DebugLogger.e(TAG, "Import failed: ${e.message}")
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_error_invalid_json))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_invalid_json))
                     _uiState.value = _uiState.value.copy(isValidatingNodes = false)
                     return@launch
                 }
@@ -328,7 +328,7 @@ class WorkflowManagementViewModel : ViewModel() {
                 // Extract class types from workflow
                 val classTypesResult = WorkflowManager.extractClassTypes(jsonContent)
                 if (classTypesResult.isFailure) {
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_error_invalid_json))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_invalid_json))
                     _uiState.value = _uiState.value.copy(isValidatingNodes = false)
                     return@launch
                 }
@@ -742,11 +742,11 @@ class WorkflowManagementViewModel : ViewModel() {
             )
 
             if (result.isSuccess) {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_import_success))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.msg_workflow_import_success))
                 // Show conversion warnings if any
                 if (warnings.isNotEmpty()) {
                     val warningMessage = applicationContext?.getString(
-                        R.string.litegraph_conversion_notes,
+                        R.string.msg_litegraph_conversion_notes,
                         warnings.size
                     ) ?: "Conversion completed with ${warnings.size} note(s)"
                     _events.emit(WorkflowManagementEvent.ShowToastMessage(warningMessage))
@@ -790,7 +790,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onEditNameChange(name: String) {
         val error = if (name.length > ValidationUtils.MAX_WORKFLOW_NAME_LENGTH) {
-            applicationContext?.getString(R.string.workflow_name_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_name_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             editName = ValidationUtils.truncateWorkflowName(name),
@@ -800,7 +800,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onEditDescriptionChange(description: String) {
         val error = if (description.length > ValidationUtils.MAX_WORKFLOW_DESCRIPTION_LENGTH) {
-            applicationContext?.getString(R.string.workflow_description_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_description_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             editDescription = ValidationUtils.truncateWorkflowDescription(description),
@@ -832,7 +832,7 @@ class WorkflowManagementViewModel : ViewModel() {
         // Check for duplicate name (excluding current workflow)
         if (WorkflowManager.isWorkflowNameTaken(name, excludeWorkflowId = workflow.id)) {
             _uiState.value = _uiState.value.copy(
-                editNameError = applicationContext?.getString(R.string.duplicate_name_message)
+                editNameError = applicationContext?.getString(R.string.msg_duplicate_name)
             )
             return
         }
@@ -845,11 +845,11 @@ class WorkflowManagementViewModel : ViewModel() {
             )
 
             if (success) {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_update_success))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.msg_workflow_update_success))
                 _events.emit(WorkflowManagementEvent.WorkflowsChanged)
                 loadWorkflows()
             } else {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_update_failed))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_update))
             }
 
             _uiState.value = _uiState.value.copy(
@@ -893,11 +893,11 @@ class WorkflowManagementViewModel : ViewModel() {
             val success = WorkflowManager.deleteUserWorkflow(workflow.id)
 
             if (success) {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_delete_success))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.msg_workflow_delete_success))
                 _events.emit(WorkflowManagementEvent.WorkflowsChanged)
                 loadWorkflows()
             } else {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_delete_failed))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_delete))
             }
 
             _uiState.value = _uiState.value.copy(
@@ -931,7 +931,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onDuplicateNameChange(name: String) {
         val error = if (name.length > ValidationUtils.MAX_WORKFLOW_NAME_LENGTH) {
-            applicationContext?.getString(R.string.workflow_name_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_name_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             duplicateName = ValidationUtils.truncateWorkflowName(name),
@@ -941,7 +941,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
     fun onDuplicateDescriptionChange(description: String) {
         val error = if (description.length > ValidationUtils.MAX_WORKFLOW_DESCRIPTION_LENGTH) {
-            applicationContext?.getString(R.string.workflow_description_error_too_long)
+            applicationContext?.getString(R.string.error_workflow_description_too_long)
         } else null
         _uiState.value = _uiState.value.copy(
             duplicateDescription = ValidationUtils.truncateWorkflowDescription(description),
@@ -972,7 +972,7 @@ class WorkflowManagementViewModel : ViewModel() {
 
         // Check for duplicate name
         if (WorkflowManager.isWorkflowNameTaken(name)) {
-            _uiState.value = _uiState.value.copy(duplicateNameError = applicationContext?.getString(R.string.duplicate_name_message))
+            _uiState.value = _uiState.value.copy(duplicateNameError = applicationContext?.getString(R.string.msg_duplicate_name))
             return
         }
 
@@ -984,7 +984,7 @@ class WorkflowManagementViewModel : ViewModel() {
             )
 
             if (result.isSuccess) {
-                _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_duplicate_success))
+                _events.emit(WorkflowManagementEvent.ShowToast(R.string.msg_workflow_duplicate_success))
                 _events.emit(WorkflowManagementEvent.WorkflowsChanged)
                 loadWorkflows()
             } else {
@@ -1054,9 +1054,9 @@ class WorkflowManagementViewModel : ViewModel() {
                 }
 
                 if (writeSuccess) {
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_export_success))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.msg_workflow_export_success))
                 } else {
-                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.workflow_export_failed))
+                    _events.emit(WorkflowManagementEvent.ShowToast(R.string.error_workflow_export))
                 }
             } else {
                 _events.emit(WorkflowManagementEvent.ShowToastMessage(

@@ -80,7 +80,7 @@ fun ServerSettingsScreen(
 
     // UI composition
     SettingsScreenScaffold(
-        title = stringResource(R.string.server_settings_title),
+        title = stringResource(R.string.title_server_settings),
         onNavigateToGeneration = onNavigateToGeneration,
         onLogout = onLogout
     ) {
@@ -95,7 +95,7 @@ fun ServerSettingsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.server_info_title),
+                        text = stringResource(R.string.title_server_info),
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -104,7 +104,7 @@ fun ServerSettingsScreen(
                     // Hostname
                     Row {
                         Text(
-                            text = stringResource(R.string.hostname_label),
+                            text = stringResource(R.string.label_hostname),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -120,7 +120,7 @@ fun ServerSettingsScreen(
                     // Port
                     Row {
                         Text(
-                            text = stringResource(R.string.port_label),
+                            text = stringResource(R.string.label_port),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -139,19 +139,19 @@ fun ServerSettingsScreen(
                     } else {
                         uiState.systemStats?.let { stats ->
                             Text(
-                                text = "${stringResource(R.string.server_info_label_os)} ${stats.os}",
+                                text = "${stringResource(R.string.label_server_info_os)} ${stats.os}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                             Text(
-                                text = "${stringResource(R.string.server_info_label_comfyui)} ${stats.comfyuiVersion}",
+                                text = "${stringResource(R.string.label_server_info_comfyui)} ${stats.comfyuiVersion}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                             Text(
-                                text = "${stringResource(R.string.server_info_label_python)} ${stats.pythonVersion}",
+                                text = "${stringResource(R.string.label_server_info_python)} ${stats.pythonVersion}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                             Text(
-                                text = "${stringResource(R.string.server_info_label_pytorch)} ${stats.pytorchVersion}",
+                                text = "${stringResource(R.string.label_server_info_pytorch)} ${stats.pytorchVersion}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -173,7 +173,7 @@ fun ServerSettingsScreen(
                                 .padding(16.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.ram_usage_title),
+                                text = stringResource(R.string.title_ram_usage),
                                 style = MaterialTheme.typography.titleMedium
                             )
 
@@ -232,7 +232,7 @@ fun ServerSettingsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.server_management_title),
+                        text = stringResource(R.string.title_server_management),
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -252,7 +252,7 @@ fun ServerSettingsScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                         }
-                        Text(stringResource(R.string.refresh_models_button))
+                        Text(stringResource(R.string.button_refresh_models))
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -266,7 +266,7 @@ fun ServerSettingsScreen(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
-                        Text(stringResource(R.string.clear_history_button))
+                        Text(stringResource(R.string.button_clear_history))
                     }
                 }
             }
@@ -291,9 +291,9 @@ private fun GpuUsageCard(
                 .padding(16.dp)
         ) {
             val title = if (showIndex) {
-                "${stringResource(R.string.gpu_usage_title)} $index"
+                "${stringResource(R.string.title_gpu_usage)} $index"
             } else {
-                stringResource(R.string.gpu_usage_title)
+                stringResource(R.string.title_gpu_usage)
             }
 
             Text(

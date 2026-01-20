@@ -148,7 +148,7 @@ fun ConnectionSplitButton(
             ) {
                 // Add server
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.server_add_button)) },
+                    text = { Text(stringResource(R.string.button_server_add)) },
                     onClick = {
                         showMenu = false
                         onAddServer()
@@ -162,7 +162,7 @@ fun ConnectionSplitButton(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            stringResource(R.string.server_edit_button),
+                            stringResource(R.string.button_server_edit),
                             color = if (hasSelectedServer)
                                 MenuDefaults.itemColors().textColor
                             else
@@ -196,7 +196,7 @@ fun ConnectionSplitButton(
                     MenuDefaults.itemColors().disabledTextColor
                 }
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.server_delete_button), color = removeColor) },
+                    text = { Text(stringResource(R.string.button_server_delete), color = removeColor) },
                     onClick = {
                         showMenu = false
                         onRemoveServer()

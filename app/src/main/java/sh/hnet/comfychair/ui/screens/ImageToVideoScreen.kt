@@ -230,12 +230,12 @@ fun ImageToVideoScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Top App Bar with upload and save/share actions
         TopAppBar(
-            title = { Text(stringResource(R.string.image_to_video_title)) },
+            title = { Text(stringResource(R.string.title_image_to_video)) },
             windowInsets = WindowInsets(0, 0, 0, 0),
             actions = {
                 // Upload image button
                 IconButton(onClick = { imagePickerLauncher.launch("image/*") }) {
-                    Icon(Icons.Default.AddPhotoAlternate, contentDescription = stringResource(R.string.upload_source_image))
+                    Icon(Icons.Default.AddPhotoAlternate, contentDescription = stringResource(R.string.button_upload_source_image))
                 }
                 // Save to gallery button (only when video exists)
                 if (videoUri != null && uiState.viewMode == ImageToVideoViewMode.PREVIEW) {
@@ -244,13 +244,13 @@ fun ImageToVideoScreen(
                             VideoUtils.saveVideoToGallery(context, videoUri, VideoUtils.GalleryPrefix.IMAGE_TO_VIDEO)
                         }
                     }) {
-                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save_to_gallery))
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.button_save_to_gallery))
                     }
                     // Share button
                     IconButton(onClick = {
                         VideoUtils.shareVideo(context, videoUri)
                     }) {
-                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.button_share))
                     }
                 }
                 // Menu button
@@ -310,7 +310,7 @@ fun ImageToVideoScreen(
                     if (uiState.sourceImage != null) {
                         Image(
                             bitmap = uiState.sourceImage!!.asImageBitmap(),
-                            contentDescription = stringResource(R.string.source_image_tab),
+                            contentDescription = stringResource(R.string.tab_source_image),
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
                         )
@@ -327,7 +327,7 @@ fun ImageToVideoScreen(
                                 contentScale = ContentScale.Fit
                             )
                             Text(
-                                text = stringResource(R.string.no_source_image),
+                                text = stringResource(R.string.msg_no_source_image),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -357,7 +357,7 @@ fun ImageToVideoScreen(
                         else -> {
                             Image(
                                 painter = painterResource(R.drawable.ic_comfychair_foreground),
-                                contentDescription = stringResource(R.string.placeholder_video_description),
+                                contentDescription = stringResource(R.string.placeholder_video),
                                 modifier = Modifier.size(Dimensions.PlaceholderLogoSize),
                                 contentScale = ContentScale.Fit
                             )
@@ -379,14 +379,14 @@ fun ImageToVideoScreen(
                 onClick = { imageToVideoViewModel.onViewModeChange(ImageToVideoViewMode.SOURCE) },
                 shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
             ) {
-                Text(stringResource(R.string.source_image_tab))
+                Text(stringResource(R.string.tab_source_image))
             }
             SegmentedButton(
                 selected = uiState.viewMode == ImageToVideoViewMode.PREVIEW,
                 onClick = { imageToVideoViewModel.onViewModeChange(ImageToVideoViewMode.PREVIEW) },
                 shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
             ) {
-                Text(stringResource(R.string.preview_tab))
+                Text(stringResource(R.string.tab_preview))
             }
         }
 
@@ -397,7 +397,7 @@ fun ImageToVideoScreen(
                 imageToVideoViewModel.onPositivePromptChange(it)
                 presetViewModel.clearActivePreset()
             },
-            label = { Text(stringResource(R.string.prompt_hint)) },
+            label = { Text(stringResource(R.string.hint_prompt)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -496,8 +496,8 @@ fun ImageToVideoScreen(
                 },
                 onClearQueue = {
                     generationViewModel.getClient()?.clearQueue { success ->
-                        val messageRes = if (success) R.string.queue_cleared_success
-                                       else R.string.queue_cleared_failed
+                        val messageRes = if (success) R.string.msg_queue_cleared_success
+                                       else R.string.error_queue_clear
                         android.os.Handler(android.os.Looper.getMainLooper()).post {
                             Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                         }

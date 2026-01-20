@@ -255,7 +255,7 @@ fun NodeBrowserBottomSheet(
                         onSearch = { },
                         expanded = false,
                         onExpandedChange = { },
-                        placeholder = { Text(stringResource(R.string.node_browser_search_placeholder)) },
+                        placeholder = { Text(stringResource(R.string.placeholder_node_browser_search)) },
                         leadingIcon = {
                             Icon(Icons.Default.Search, contentDescription = null)
                         },
@@ -264,7 +264,7 @@ fun NodeBrowserBottomSheet(
                                 IconButton(onClick = { searchQuery = "" }) {
                                     Icon(
                                         Icons.Default.Clear,
-                                        contentDescription = stringResource(R.string.clear_search)
+                                        contentDescription = stringResource(R.string.button_clear_search)
                                     )
                                 }
                             }

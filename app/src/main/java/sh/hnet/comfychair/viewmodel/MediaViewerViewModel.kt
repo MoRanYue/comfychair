@@ -490,7 +490,7 @@ class MediaViewerViewModel : ViewModel() {
             }
 
             if (success) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.history_item_deleted_success))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.msg_history_item_deleted_success))
 
                 // Mark that items were deleted (for result reporting)
                 _hasDeletedItems.value = true
@@ -537,7 +537,7 @@ class MediaViewerViewModel : ViewModel() {
                     loadCurrentItem()
                 }
             } else {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.history_item_deleted_failed))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_history_item_delete))
             }
         }
     }
@@ -568,7 +568,7 @@ class MediaViewerViewModel : ViewModel() {
 
     private suspend fun saveBitmapToGallery(context: Context, bitmap: Bitmap?) {
         if (bitmap == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_image))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_image))
             return
         }
 
@@ -589,16 +589,16 @@ class MediaViewerViewModel : ViewModel() {
                     }
                 }
 
-                _events.emit(MediaViewerEvent.ShowToast(R.string.image_saved_to_gallery))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.msg_image_saved_to_gallery))
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
 
     private suspend fun saveVideoFromUri(context: Context, videoUri: Uri?) {
         if (videoUri == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_video))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_video))
             return
         }
 
@@ -607,7 +607,7 @@ class MediaViewerViewModel : ViewModel() {
                 val videoBytes = context.contentResolver.openInputStream(videoUri)?.use {
                     it.readBytes()
                 } ?: run {
-                    _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_video))
+                    _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_video))
                     return@withContext
                 }
 
@@ -626,9 +626,9 @@ class MediaViewerViewModel : ViewModel() {
                     }
                 }
 
-                _events.emit(MediaViewerEvent.ShowToast(R.string.video_saved_to_gallery))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.msg_video_saved_to_gallery))
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_video))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_video))
             }
         }
     }
@@ -642,7 +642,7 @@ class MediaViewerViewModel : ViewModel() {
                 ?: MediaCache.fetchImage(key, item.subfolder, item.type)
 
             if (bitmap == null) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_image))
                 return@withContext
             }
 
@@ -662,9 +662,9 @@ class MediaViewerViewModel : ViewModel() {
                     }
                 }
 
-                _events.emit(MediaViewerEvent.ShowToast(R.string.image_saved_to_gallery))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.msg_image_saved_to_gallery))
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
@@ -678,7 +678,7 @@ class MediaViewerViewModel : ViewModel() {
                 ?: MediaCache.fetchVideoBytes(key, item.subfolder, item.type)
 
             if (videoBytes == null) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_video))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_video))
                 return@withContext
             }
 
@@ -698,9 +698,9 @@ class MediaViewerViewModel : ViewModel() {
                     }
                 }
 
-                _events.emit(MediaViewerEvent.ShowToast(R.string.video_saved_to_gallery))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.msg_video_saved_to_gallery))
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_save_video))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_save_video))
             }
         }
     }
@@ -729,7 +729,7 @@ class MediaViewerViewModel : ViewModel() {
 
     private suspend fun shareBitmap(context: Context, bitmap: Bitmap?) {
         if (bitmap == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_image))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_image))
             return
         }
 
@@ -760,14 +760,14 @@ class MediaViewerViewModel : ViewModel() {
                     )
                 }
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_image))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_image))
             }
         }
     }
 
     private suspend fun shareVideoFromUri(context: Context, videoUri: Uri?) {
         if (videoUri == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_video))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_video))
             return
         }
 
@@ -785,7 +785,7 @@ class MediaViewerViewModel : ViewModel() {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_video))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_video))
             }
         }
     }
@@ -798,7 +798,7 @@ class MediaViewerViewModel : ViewModel() {
             ?: MediaCache.fetchImage(key, item.subfolder, item.type)
 
         if (bitmap == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_image))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_image))
             return
         }
 
@@ -813,7 +813,7 @@ class MediaViewerViewModel : ViewModel() {
             ?: MediaCache.fetchVideoBytes(key, item.subfolder, item.type)
 
         if (videoBytes == null) {
-            _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_video))
+            _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_video))
             return
         }
 
@@ -842,7 +842,7 @@ class MediaViewerViewModel : ViewModel() {
                     )
                 }
             } catch (e: Exception) {
-                _events.emit(MediaViewerEvent.ShowToast(R.string.failed_share_video))
+                _events.emit(MediaViewerEvent.ShowToast(R.string.error_share_video))
             }
         }
     }

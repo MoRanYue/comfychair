@@ -405,7 +405,7 @@ private fun MediaViewerFloatingToolbar(
                 IconButton(onClick = onInfo) {
                     Icon(
                         Icons.Outlined.Info,
-                        contentDescription = stringResource(R.string.show_metadata)
+                        contentDescription = stringResource(R.string.button_show_metadata)
                     )
                 }
             }

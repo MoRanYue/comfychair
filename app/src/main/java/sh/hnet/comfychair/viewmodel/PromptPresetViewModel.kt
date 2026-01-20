@@ -214,7 +214,7 @@ class PromptPresetViewModel : ViewModel() {
         refreshPresets()
 
         viewModelScope.launch {
-            _events.emit(PromptPresetEvent.ShowToast(R.string.prompt_preset_saved))
+            _events.emit(PromptPresetEvent.ShowToast(R.string.msg_prompt_preset_saved))
         }
     }
 
@@ -236,7 +236,7 @@ class PromptPresetViewModel : ViewModel() {
         refreshPresets()
 
         viewModelScope.launch {
-            _events.emit(PromptPresetEvent.ShowToast(R.string.prompt_preset_duplicated))
+            _events.emit(PromptPresetEvent.ShowToast(R.string.msg_prompt_preset_duplicated))
         }
     }
 
@@ -271,7 +271,7 @@ class PromptPresetViewModel : ViewModel() {
         refreshPresets()
 
         viewModelScope.launch {
-            _events.emit(PromptPresetEvent.ShowToast(R.string.prompt_preset_deleted))
+            _events.emit(PromptPresetEvent.ShowToast(R.string.msg_prompt_preset_deleted))
         }
     }
 

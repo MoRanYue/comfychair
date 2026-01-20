@@ -241,7 +241,7 @@ class ComfyUIClient(
                             DebugLogger.w(TAG, "Authentication failed (protocol: $protocol, code: $code)")
                             callback(
                                 false,
-                                context?.getString(R.string.auth_error_unauthorized)
+                                context?.getString(R.string.error_auth_unauthorized)
                                     ?: "Authentication failed. Please check your credentials.",
                                 SelfSignedCertHelper.certificateIssue,
                                 ConnectionFailure.AUTHENTICATION
@@ -836,7 +836,7 @@ class ComfyUIClient(
                         // Handle authentication errors with clean messages (avoid raw HTML)
                         if (response.code == 401 || response.code == 403) {
                             DebugLogger.e(TAG, "Authentication error ${response.code}")
-                            callback(false, null, context?.getString(R.string.auth_error_unauthorized)
+                            callback(false, null, context?.getString(R.string.error_auth_unauthorized)
                                 ?: "Authentication failed", ConnectionFailure.AUTHENTICATION)
                         } else {
                             // Try to extract error details from response body
@@ -1498,7 +1498,7 @@ class ComfyUIClient(
                         // Handle authentication errors with clean messages
                         if (response.code == 401 || response.code == 403) {
                             DebugLogger.e(TAG, "Upload auth error: ${response.code}")
-                            callback(false, null, context?.getString(R.string.auth_error_unauthorized)
+                            callback(false, null, context?.getString(R.string.error_auth_unauthorized)
                                 ?: "Authentication failed", ConnectionFailure.AUTHENTICATION)
                         } else {
                             DebugLogger.e(TAG, "Upload error: ${response.code}")

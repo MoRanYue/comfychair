@@ -457,7 +457,7 @@ object ConnectionManager {
         val client = _client ?: run {
             DebugLogger.w(TAG, "retrySingleAttempt: aborting - client is null")
             _isReconnecting.value = false
-            Toast.makeText(context, R.string.toast_reconnect_failed, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.msg_reconnect_failed, Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -491,7 +491,7 @@ object ConnectionManager {
                         clearConnectionAlert()
                     } else {
                         DebugLogger.w(TAG, "WebSocket failed to connect after successful HTTP test")
-                        Toast.makeText(context, R.string.toast_reconnect_failed, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.msg_reconnect_failed, Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     _isReconnecting.value = false
@@ -500,7 +500,7 @@ object ConnectionManager {
                         reason = errorMessage,
                         failureType = failureType
                     )
-                    Toast.makeText(context, R.string.toast_reconnect_failed, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.msg_reconnect_failed, Toast.LENGTH_SHORT).show()
                 }
             }
         }

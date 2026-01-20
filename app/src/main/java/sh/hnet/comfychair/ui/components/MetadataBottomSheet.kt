@@ -81,7 +81,7 @@ fun MetadataBottomSheet(
             ) {
                 // Title
                 Text(
-                    text = stringResource(R.string.generation_parameters),
+                    text = stringResource(R.string.title_generation_parameters),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -162,7 +162,7 @@ fun MetadataBottomSheet(
                 val preset = PromptPreset.create(screenType, name, prompt, tags)
                 storage.addPreset(preset)
                 showSavePromptDialog = false
-                Toast.makeText(context, R.string.prompt_preset_saved, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.msg_prompt_preset_saved, Toast.LENGTH_SHORT).show()
             }
         )
     }
@@ -227,7 +227,7 @@ private fun MetadataRow(
             ) {
                 Icon(
                     imageVector = Icons.Outlined.ContentCopy,
-                    contentDescription = stringResource(R.string.copy_to_clipboard),
+                    contentDescription = stringResource(R.string.button_copy_to_clipboard),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -316,5 +316,5 @@ private fun copyToClipboard(context: Context, text: String) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("metadata", text)
     clipboard.setPrimaryClip(clip)
-    Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, R.string.msg_copied_to_clipboard, Toast.LENGTH_SHORT).show()
 }

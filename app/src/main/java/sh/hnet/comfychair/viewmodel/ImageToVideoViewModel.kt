@@ -592,7 +592,7 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
                     _uiState.value = _uiState.value.copy(sourceImage = bitmap)
                 }
             } catch (e: Exception) {
-                _events.emit(ImageToVideoEvent.ShowToast(R.string.failed_save_image))
+                _events.emit(ImageToVideoEvent.ShowToast(R.string.error_save_image))
             }
         }
     }
@@ -820,7 +820,7 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
             _uiState.update { it.copy(positivePrompt = defaultPrompt) }
 
             // Emit toast event
-            _events.emit(ImageToVideoEvent.ShowToast(R.string.prompt_preset_reset_prompt_success))
+            _events.emit(ImageToVideoEvent.ShowToast(R.string.msg_prompt_preset_reset_success))
         }
     }
 
@@ -973,7 +973,7 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
 
         val sourceImage = state.sourceImage
         if (sourceImage == null) {
-            _events.emit(ImageToVideoEvent.ShowToast(R.string.no_source_image))
+            _events.emit(ImageToVideoEvent.ShowToast(R.string.msg_no_source_image))
             return null
         }
 
@@ -1024,7 +1024,7 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
                         ConnectionManager.showConnectionAlert(ctx, uploadResult.failureType)
                     }
                 } else {
-                    _events.emit(ImageToVideoEvent.ShowToast(R.string.failed_save_image))
+                    _events.emit(ImageToVideoEvent.ShowToast(R.string.error_save_image))
                 }
                 return null
             }
@@ -1190,7 +1190,7 @@ class ImageToVideoViewModel : BaseGenerationViewModel<ImageToVideoUiState, Image
             }
             is GenerationEvent.ConnectionLostDuringGeneration -> {
                 viewModelScope.launch {
-                    val message = applicationContext?.getString(R.string.connection_lost_generation_may_continue)
+                    val message = applicationContext?.getString(R.string.msg_connection_lost_generation_may_continue)
                         ?: "Connection lost. Will check for completion when reconnected."
                     _events.emit(ImageToVideoEvent.ShowToastMessage(message))
                 }

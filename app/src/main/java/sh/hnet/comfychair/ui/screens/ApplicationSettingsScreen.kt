@@ -103,9 +103,9 @@ fun ApplicationSettingsScreen(
                 context.contentResolver.openOutputStream(saveUri)?.use { outputStream ->
                     outputStream.write(DebugLogger.exportToString().toByteArray(Charsets.UTF_8))
                 }
-                Toast.makeText(context, R.string.debug_log_saved, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.msg_debug_log_saved, Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
-                Toast.makeText(context, R.string.debug_log_save_failed, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.error_debug_log_save, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -138,8 +138,8 @@ fun ApplicationSettingsScreen(
                 showRestoreDialog = false
                 pendingRestoreUri = null
             },
-            title = { Text(stringResource(R.string.backup_restore_confirm_title)) },
-            text = { Text(stringResource(R.string.backup_restore_confirm_message)) },
+            title = { Text(stringResource(R.string.title_backup_restore_confirm)) },
+            text = { Text(stringResource(R.string.msg_backup_restore_confirm)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -148,7 +148,7 @@ fun ApplicationSettingsScreen(
                         pendingRestoreUri = null
                     }
                 ) {
-                    Text(stringResource(R.string.backup_restore_confirm_button))
+                    Text(stringResource(R.string.button_backup_restore_confirm))
                 }
             },
             dismissButton = {
@@ -187,7 +187,7 @@ fun ApplicationSettingsScreen(
     }
 
     SettingsScreenScaffold(
-        title = stringResource(R.string.application_settings_title),
+        title = stringResource(R.string.title_application_settings),
         onNavigateToGeneration = onNavigateToGeneration,
         onLogout = onLogout
     ) {
@@ -203,14 +203,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_language_title),
+                    text = stringResource(R.string.title_settings_language),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_language_description),
+                    text = stringResource(R.string.desc_settings_language),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -246,14 +246,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_connection_title),
+                    text = stringResource(R.string.title_settings_connection),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_connection_description),
+                    text = stringResource(R.string.desc_settings_connection),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -268,11 +268,11 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.auto_connect_label),
+                            text = stringResource(R.string.label_auto_connect),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = stringResource(R.string.auto_connect_description),
+                            text = stringResource(R.string.desc_auto_connect),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -293,7 +293,7 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.offline_mode_label),
+                            text = stringResource(R.string.label_offline_mode),
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (!isMemoryFirstCache)
                                 MaterialTheme.colorScheme.onSurface
@@ -302,8 +302,8 @@ fun ApplicationSettingsScreen(
                         )
                         Text(
                             text = stringResource(
-                                if (isMemoryFirstCache) R.string.offline_mode_requires_disk_cache
-                                else R.string.offline_mode_description
+                                if (isMemoryFirstCache) R.string.msg_offline_mode_requires_disk_cache
+                                else R.string.desc_offline_mode
                             ),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (!isMemoryFirstCache)
@@ -333,14 +333,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_generation_title),
+                    text = stringResource(R.string.title_settings_generation),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_generation_description),
+                    text = stringResource(R.string.desc_settings_generation),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -355,11 +355,11 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.live_preview_label),
+                            text = stringResource(R.string.label_live_preview),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = stringResource(R.string.live_preview_description),
+                            text = stringResource(R.string.desc_live_preview),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -380,11 +380,11 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.show_built_in_workflows_label),
+                            text = stringResource(R.string.label_show_built_in_workflows),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = stringResource(R.string.show_built_in_workflows_description),
+                            text = stringResource(R.string.desc_show_built_in_workflows),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -409,14 +409,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_workflow_editor_title),
+                    text = stringResource(R.string.title_settings_workflow_editor),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_workflow_editor_description),
+                    text = stringResource(R.string.desc_settings_workflow_editor),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -425,7 +425,7 @@ fun ApplicationSettingsScreen(
 
                 // Edge style label
                 Text(
-                    text = stringResource(R.string.edge_style_label),
+                    text = stringResource(R.string.label_edge_style),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -445,7 +445,7 @@ fun ApplicationSettingsScreen(
                         modifier = Modifier.weight(1f),
                         shapes = ButtonGroupDefaults.connectedLeadingButtonShapes()
                     ) {
-                        Text(stringResource(R.string.edge_router_hermite))
+                        Text(stringResource(R.string.option_edge_router_hermite))
                     }
                     ToggleButton(
                         checked = edgeRouterId == "bezier",
@@ -455,7 +455,7 @@ fun ApplicationSettingsScreen(
                         modifier = Modifier.weight(1f),
                         shapes = ButtonGroupDefaults.connectedTrailingButtonShapes()
                     ) {
-                        Text(stringResource(R.string.edge_router_bezier))
+                        Text(stringResource(R.string.option_edge_router_bezier))
                     }
                 }
             }
@@ -473,14 +473,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_cache_title),
+                    text = stringResource(R.string.title_settings_cache),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_cache_description),
+                    text = stringResource(R.string.desc_settings_cache),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -495,17 +495,17 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.memory_first_cache_label),
+                            text = stringResource(R.string.label_memory_first_cache),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = stringResource(R.string.memory_first_cache_description),
+                            text = stringResource(R.string.desc_memory_first_cache),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (isMemoryFirstCache) {
                             Text(
-                                text = stringResource(R.string.memory_first_cache_warning),
+                                text = stringResource(R.string.desc_memory_first_cache_warning),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.error
                             )
@@ -527,7 +527,7 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.disable_media_cache_label),
+                            text = stringResource(R.string.label_disable_media_cache),
                             style = MaterialTheme.typography.bodyMedium,
                             color = if (isMemoryFirstCache)
                                 MaterialTheme.colorScheme.onSurface
@@ -535,7 +535,7 @@ fun ApplicationSettingsScreen(
                                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                         )
                         Text(
-                            text = stringResource(R.string.disable_media_cache_description),
+                            text = stringResource(R.string.desc_disable_media_cache),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (isMemoryFirstCache)
                                 MaterialTheme.colorScheme.onSurfaceVariant
@@ -560,7 +560,7 @@ fun ApplicationSettingsScreen(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(R.string.clear_cache_button))
+                    Text(stringResource(R.string.button_clear_cache))
                 }
             }
         }
@@ -577,14 +577,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.backup_restore_title),
+                    text = stringResource(R.string.title_backup_restore),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.backup_restore_description),
+                    text = stringResource(R.string.desc_backup_restore),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -598,7 +598,7 @@ fun ApplicationSettingsScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.backup_create_button))
+                    Text(stringResource(R.string.button_backup_create))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -612,7 +612,7 @@ fun ApplicationSettingsScreen(
                         containerColor = MaterialTheme.colorScheme.secondary
                     )
                 ) {
-                    Text(stringResource(R.string.backup_restore_button))
+                    Text(stringResource(R.string.button_backup_restore))
                 }
             }
         }
@@ -629,14 +629,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.settings_reset_title),
+                    text = stringResource(R.string.title_settings_reset),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.settings_reset_description),
+                    text = stringResource(R.string.desc_settings_reset),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -651,7 +651,7 @@ fun ApplicationSettingsScreen(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(R.string.reset_prompts_and_library_button))
+                    Text(stringResource(R.string.button_reset_prompts_and_library))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -664,7 +664,7 @@ fun ApplicationSettingsScreen(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(R.string.restore_defaults_button))
+                    Text(stringResource(R.string.button_restore_defaults))
                 }
             }
         }
@@ -681,14 +681,14 @@ fun ApplicationSettingsScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.debug_logging_title),
+                    text = stringResource(R.string.title_debug_logging),
                     style = MaterialTheme.typography.titleMedium
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = stringResource(R.string.debug_logging_description),
+                    text = stringResource(R.string.desc_debug_logging),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -703,11 +703,11 @@ fun ApplicationSettingsScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = stringResource(R.string.debug_logging_enable_label),
+                            text = stringResource(R.string.label_debug_logging_enable),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Text(
-                            text = stringResource(R.string.debug_logging_enable_description),
+                            text = stringResource(R.string.desc_debug_logging_enable),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -728,7 +728,7 @@ fun ApplicationSettingsScreen(
                 ) {
                     Icon(Icons.Default.BugReport, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.debug_logging_view_button))
+                    Text(stringResource(R.string.button_debug_logging_view))
                 }
             }
         }

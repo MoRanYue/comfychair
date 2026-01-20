@@ -54,7 +54,7 @@ fun PromptPresetDropdown(
                 } else {
                     Icons.Outlined.BookmarkBorder
                 },
-                contentDescription = stringResource(R.string.prompt_presets_button),
+                contentDescription = stringResource(R.string.button_prompt_presets),
                 tint = if (activePresetId != null) {
                     MaterialTheme.colorScheme.primary
                 } else {

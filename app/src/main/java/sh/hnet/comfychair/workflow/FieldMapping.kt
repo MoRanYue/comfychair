@@ -255,7 +255,7 @@ object FieldDisplayRegistry {
         // Dimension fields
         "width" to Pair(R.string.label_width, R.string.field_desc_width),
         "height" to Pair(R.string.label_height, R.string.field_desc_height),
-        "megapixels" to Pair(R.string.megapixels_label, R.string.field_desc_megapixels),
+        "megapixels" to Pair(R.string.label_megapixels, R.string.field_desc_megapixels),
         // Sampling fields
         "steps" to Pair(R.string.label_steps, R.string.field_desc_steps),
         "cfg" to Pair(R.string.field_cfg_scale, R.string.field_desc_cfg),
@@ -264,12 +264,12 @@ object FieldDisplayRegistry {
         // LoRA fields
         "lora_name" to Pair(R.string.label_lora, R.string.field_desc_lora),
         // High/Low noise model variants (for video workflows)
-        "highnoise_unet_name" to Pair(R.string.highnoise_unet_label, R.string.field_desc_unet),
-        "lownoise_unet_name" to Pair(R.string.lownoise_unet_label, R.string.field_desc_unet),
-        "highnoise_lora_name" to Pair(R.string.highnoise_lora_label, R.string.field_desc_lora),
-        "lownoise_lora_name" to Pair(R.string.lownoise_lora_label, R.string.field_desc_lora),
+        "highnoise_unet_name" to Pair(R.string.label_highnoise_unet, R.string.field_desc_unet),
+        "lownoise_unet_name" to Pair(R.string.label_lownoise_unet, R.string.field_desc_unet),
+        "highnoise_lora_name" to Pair(R.string.label_highnoise_lora, R.string.field_desc_lora),
+        "lownoise_lora_name" to Pair(R.string.label_lownoise_lora, R.string.field_desc_lora),
         // Video fields
-        "length" to Pair(R.string.length_label, R.string.field_desc_length),
+        "length" to Pair(R.string.label_length, R.string.field_desc_length),
         "frame_rate" to Pair(R.string.field_frame_rate, R.string.field_desc_frame_rate),
         "fps" to Pair(R.string.field_frame_rate, R.string.field_desc_frame_rate),
         // Image fields
@@ -287,7 +287,7 @@ object FieldDisplayRegistry {
         "text_encoder_name" to Pair(R.string.field_text_encoder, R.string.field_desc_text_encoder),
         "text_encoder" to Pair(R.string.field_text_encoder, R.string.field_desc_text_encoder),
         // ComfyUI field name aliases (map to same display as placeholders)
-        "frames_number" to Pair(R.string.length_label, R.string.field_desc_length)
+        "frames_number" to Pair(R.string.label_length, R.string.field_desc_length)
     )
 
     /**

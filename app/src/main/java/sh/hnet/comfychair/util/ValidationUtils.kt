@@ -367,7 +367,7 @@ object ValidationUtils {
             return context?.getString(R.string.error_required) ?: "Required"
         }
         if (name.length > MAX_WORKFLOW_NAME_LENGTH) {
-            return context?.getString(R.string.workflow_name_error_too_long)
+            return context?.getString(R.string.error_workflow_name_too_long)
                 ?: "Name too long (max $MAX_WORKFLOW_NAME_LENGTH characters)"
         }
         return null
@@ -381,7 +381,7 @@ object ValidationUtils {
      */
     fun validateWorkflowDescription(description: String, context: Context? = null): String? {
         if (description.length > MAX_WORKFLOW_DESCRIPTION_LENGTH) {
-            return context?.getString(R.string.workflow_description_error_too_long)
+            return context?.getString(R.string.error_workflow_description_too_long)
                 ?: "Description too long (max $MAX_WORKFLOW_DESCRIPTION_LENGTH characters)"
         }
         return null

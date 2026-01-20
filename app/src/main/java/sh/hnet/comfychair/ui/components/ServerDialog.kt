@@ -121,7 +121,7 @@ fun ServerDialog(
     val errorRequired = stringResource(R.string.error_required)
     val errorInvalidHostname = stringResource(R.string.error_invalid_hostname)
     val errorInvalidPort = stringResource(R.string.error_invalid_port)
-    val errorNameTaken = stringResource(R.string.server_name_taken_error)
+    val errorNameTaken = stringResource(R.string.error_server_name_taken)
 
     // Validation function
     fun validate(): Boolean {
@@ -210,8 +210,8 @@ fun ServerDialog(
         title = {
             Text(
                 text = stringResource(
-                    if (isEditMode) R.string.server_edit_title
-                    else R.string.server_add_title
+                    if (isEditMode) R.string.title_server_edit
+                    else R.string.title_server_add
                 )
             )
         },
@@ -230,8 +230,8 @@ fun ServerDialog(
                         // Clear error on change
                         nameError = null
                     },
-                    label = { Text(stringResource(R.string.server_name_label)) },
-                    placeholder = { Text(stringResource(R.string.server_name_placeholder)) },
+                    label = { Text(stringResource(R.string.label_server_name)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_server_name)) },
                     isError = nameError != null,
                     supportingText = nameError?.let { { Text(it) } },
                     singleLine = true,
@@ -253,8 +253,8 @@ fun ServerDialog(
                             else -> null
                         }
                     },
-                    label = { Text(stringResource(R.string.hostname_hint)) },
-                    placeholder = { Text(stringResource(R.string.server_hostname_placeholder)) },
+                    label = { Text(stringResource(R.string.hint_hostname)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_server_hostname)) },
                     isError = hostnameError != null,
                     supportingText = hostnameError?.let { { Text(it) } },
                     singleLine = true,
@@ -281,7 +281,7 @@ fun ServerDialog(
                             }
                         }
                     },
-                    label = { Text(stringResource(R.string.port_hint)) },
+                    label = { Text(stringResource(R.string.hint_port)) },
                     isError = portError != null,
                     supportingText = portError?.let { { Text(it) } },
                     singleLine = true,
@@ -293,7 +293,7 @@ fun ServerDialog(
 
                 // Authentication section
                 Text(
-                    text = stringResource(R.string.auth_type_label),
+                    text = stringResource(R.string.label_auth_type),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -318,7 +318,7 @@ fun ServerDialog(
                     ) {
                         Icon(
                             imageVector = Icons.Default.LockOpen,
-                            contentDescription = stringResource(R.string.auth_type_none)
+                            contentDescription = stringResource(R.string.option_auth_type_none)
                         )
                     }
                     ToggleButton(
@@ -334,7 +334,7 @@ fun ServerDialog(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Password,
-                            contentDescription = stringResource(R.string.auth_type_basic)
+                            contentDescription = stringResource(R.string.option_auth_type_basic)
                         )
                     }
                     ToggleButton(
@@ -351,7 +351,7 @@ fun ServerDialog(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Key,
-                            contentDescription = stringResource(R.string.auth_type_bearer)
+                            contentDescription = stringResource(R.string.option_auth_type_bearer)
                         )
                     }
                 }
@@ -368,7 +368,7 @@ fun ServerDialog(
                                 username = newValue
                                 usernameError = null
                             },
-                            label = { Text(stringResource(R.string.auth_username_label)) },
+                            label = { Text(stringResource(R.string.label_auth_username)) },
                             isError = usernameError != null,
                             supportingText = usernameError?.let { { Text(it) } },
                             singleLine = true,
@@ -381,7 +381,7 @@ fun ServerDialog(
                                 password = newValue
                                 passwordError = null
                             },
-                            label = { Text(stringResource(R.string.auth_password_label)) },
+                            label = { Text(stringResource(R.string.label_auth_password)) },
                             isError = passwordError != null,
                             supportingText = passwordError?.let { { Text(it) } },
                             singleLine = true,
@@ -415,7 +415,7 @@ fun ServerDialog(
                             token = newValue
                             tokenError = null
                         },
-                        label = { Text(stringResource(R.string.auth_token_label)) },
+                        label = { Text(stringResource(R.string.label_auth_token)) },
                         isError = tokenError != null,
                         supportingText = tokenError?.let { { Text(it) } },
                         singleLine = true,

@@ -154,7 +154,7 @@ object VideoUtils {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.video_saved_to_gallery),
+                            context.getString(R.string.msg_video_saved_to_gallery),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -163,7 +163,7 @@ object VideoUtils {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.failed_save_video),
+                        context.getString(R.string.error_save_video),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -197,7 +197,7 @@ object VideoUtils {
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                context.getString(R.string.failed_share_video),
+                context.getString(R.string.error_share_video),
                 Toast.LENGTH_SHORT
             ).show()
         }

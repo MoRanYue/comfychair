@@ -84,7 +84,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
         models = commonModels.copy(
             // Add dual-model patterns (e.g., Wan 2.2)
             highnoiseUnet = if (capabilities.hasHighnoiseUnetName) ModelField(
-                label = R.string.highnoise_unet_label,
+                label = R.string.label_highnoise_unet,
                 selectedValue = selectedHighnoiseUnet,
                 options = availableUnets,
                 filteredOptions = filteredUnets,
@@ -92,7 +92,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
                 isVisible = true
             ) else null,
             lownoiseUnet = if (capabilities.hasLownoiseUnetName) ModelField(
-                label = R.string.lownoise_unet_label,
+                label = R.string.label_lownoise_unet,
                 selectedValue = selectedLownoiseUnet,
                 options = availableUnets,
                 filteredOptions = filteredUnets,
@@ -100,7 +100,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
                 isVisible = true
             ) else null,
             highnoiseLora = if (capabilities.hasHighnoiseLoraName) ModelField(
-                label = R.string.highnoise_lora_label,
+                label = R.string.label_highnoise_lora,
                 selectedValue = selectedHighnoiseLora,
                 options = availableLoras,
                 filteredOptions = filteredLoras,
@@ -108,7 +108,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
                 isVisible = true
             ) else null,
             lownoiseLora = if (capabilities.hasLownoiseLoraName) ModelField(
-                label = R.string.lownoise_lora_label,
+                label = R.string.label_lownoise_lora,
                 selectedValue = selectedLownoiseLora,
                 options = availableLoras,
                 filteredOptions = filteredLoras,
@@ -161,7 +161,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
             ) else null,
             // Primary LoRA chain for single-model workflows (e.g., LTX 2.0)
             primaryChain = if (capabilities.hasLora) LoraChainField(
-                title = R.string.lora_chain_title,
+                title = R.string.title_lora_chain,
                 chain = loraChain,
                 availableLoras = availableLoras,
                 onAdd = callbacks.onAddLora ?: {},
@@ -172,7 +172,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
             ) else null,
             // Dual-model LoRA chains (for Wan 2.2 style workflows)
             highnoiseChain = buildVideoLoraChain(
-                titleResId = R.string.highnoise_lora_chain_title,
+                titleResId = R.string.title_highnoise_lora_chain,
                 chain = highnoiseLoraChain,
                 availableLoras = availableLoras,
                 isVisible = capabilities.hasHighnoiseLora,
@@ -182,7 +182,7 @@ fun TextToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): BottomS
                 onStrengthChange = callbacks.onHighnoiseLoraStrengthChange
             ),
             lownoiseChain = buildVideoLoraChain(
-                titleResId = R.string.lownoise_lora_chain_title,
+                titleResId = R.string.title_lownoise_lora_chain,
                 chain = lownoiseLoraChain,
                 availableLoras = availableLoras,
                 isVisible = capabilities.hasLownoiseLora,
@@ -220,7 +220,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
         models = commonModels.copy(
             // Add dual-model patterns (e.g., Wan 2.2)
             highnoiseUnet = if (capabilities.hasHighnoiseUnetName) ModelField(
-                label = R.string.highnoise_unet_label,
+                label = R.string.label_highnoise_unet,
                 selectedValue = selectedHighnoiseUnet,
                 options = availableUnets,
                 filteredOptions = filteredUnets,
@@ -228,7 +228,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
                 isVisible = true
             ) else null,
             lownoiseUnet = if (capabilities.hasLownoiseUnetName) ModelField(
-                label = R.string.lownoise_unet_label,
+                label = R.string.label_lownoise_unet,
                 selectedValue = selectedLownoiseUnet,
                 options = availableUnets,
                 filteredOptions = filteredUnets,
@@ -236,7 +236,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
                 isVisible = true
             ) else null,
             highnoiseLora = if (capabilities.hasHighnoiseLoraName) ModelField(
-                label = R.string.highnoise_lora_label,
+                label = R.string.label_highnoise_lora,
                 selectedValue = selectedHighnoiseLora,
                 options = availableLoras,
                 filteredOptions = filteredLoras,
@@ -244,7 +244,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
                 isVisible = true
             ) else null,
             lownoiseLora = if (capabilities.hasLownoiseLoraName) ModelField(
-                label = R.string.lownoise_lora_label,
+                label = R.string.label_lownoise_lora,
                 selectedValue = selectedLownoiseLora,
                 options = availableLoras,
                 filteredOptions = filteredLoras,
@@ -297,7 +297,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
             ) else null,
             // Primary LoRA chain for single-model workflows (e.g., LTX 2.0)
             primaryChain = if (capabilities.hasLora) LoraChainField(
-                title = R.string.lora_chain_title,
+                title = R.string.title_lora_chain,
                 chain = loraChain,
                 availableLoras = availableLoras,
                 onAdd = callbacks.onAddLora ?: {},
@@ -308,7 +308,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
             ) else null,
             // Dual-model LoRA chains (for Wan 2.2 style workflows)
             highnoiseChain = buildVideoLoraChain(
-                titleResId = R.string.highnoise_lora_chain_title,
+                titleResId = R.string.title_highnoise_lora_chain,
                 chain = highnoiseLoraChain,
                 availableLoras = availableLoras,
                 isVisible = capabilities.hasHighnoiseLora,
@@ -318,7 +318,7 @@ fun ImageToVideoUiState.toBottomSheetConfig(callbacks: UnifiedCallbacks): Bottom
                 onStrengthChange = callbacks.onHighnoiseLoraStrengthChange
             ),
             lownoiseChain = buildVideoLoraChain(
-                titleResId = R.string.lownoise_lora_chain_title,
+                titleResId = R.string.title_lownoise_lora_chain,
                 chain = lownoiseLoraChain,
                 availableLoras = availableLoras,
                 isVisible = capabilities.hasLownoiseLora,
@@ -494,7 +494,7 @@ private fun buildEditingModeModelConfig(
         ) else null,
         // Dual-model patterns (for video-style workflows in editing mode)
         highnoiseUnet = if (caps.hasHighnoiseUnetName) ModelField(
-            label = R.string.highnoise_unet_label,
+            label = R.string.label_highnoise_unet,
             selectedValue = state.selectedEditingHighnoiseUnet,
             options = state.availableUnets,
             filteredOptions = null,
@@ -502,7 +502,7 @@ private fun buildEditingModeModelConfig(
             isVisible = true
         ) else null,
         lownoiseUnet = if (caps.hasLownoiseUnetName) ModelField(
-            label = R.string.lownoise_unet_label,
+            label = R.string.label_lownoise_unet,
             selectedValue = state.selectedEditingLownoiseUnet,
             options = state.availableUnets,
             filteredOptions = null,
@@ -510,7 +510,7 @@ private fun buildEditingModeModelConfig(
             isVisible = true
         ) else null,
         highnoiseLora = if (caps.hasHighnoiseLoraName) ModelField(
-            label = R.string.highnoise_lora_label,
+            label = R.string.label_highnoise_lora,
             selectedValue = state.selectedEditingHighnoiseLora,
             options = state.availableLoras,
             filteredOptions = null,
@@ -518,7 +518,7 @@ private fun buildEditingModeModelConfig(
             isVisible = true
         ) else null,
         lownoiseLora = if (caps.hasLownoiseLoraName) ModelField(
-            label = R.string.lownoise_lora_label,
+            label = R.string.label_lownoise_lora,
             selectedValue = state.selectedEditingLownoiseLora,
             options = state.availableLoras,
             filteredOptions = null,
@@ -632,7 +632,7 @@ private fun buildEditingModeLoraConfig(
             isVisible = true
         ) else null,
         primaryChain = if (caps.hasLora) LoraChainField(
-            title = R.string.lora_chain_title,
+            title = R.string.title_lora_chain,
             chain = state.editingLoraChain,
             availableLoras = state.availableLoras,
             onAdd = callbacks.onAddEditingLora ?: noOpUnit,
@@ -643,7 +643,7 @@ private fun buildEditingModeLoraConfig(
         ) else null,
         // Dual LoRA chains (for video-style workflows in editing mode)
         highnoiseChain = if (caps.hasHighnoiseLora) LoraChainField(
-            title = R.string.highnoise_lora_chain_title,
+            title = R.string.title_highnoise_lora_chain,
             chain = state.editingHighnoiseLoraChain,
             availableLoras = state.availableLoras,
             onAdd = callbacks.onAddEditingHighnoiseLora ?: noOpUnit,
@@ -653,7 +653,7 @@ private fun buildEditingModeLoraConfig(
             isVisible = true
         ) else null,
         lownoiseChain = if (caps.hasLownoiseLora) LoraChainField(
-            title = R.string.lownoise_lora_chain_title,
+            title = R.string.title_lownoise_lora_chain,
             chain = state.editingLownoiseLoraChain,
             availableLoras = state.availableLoras,
             onAdd = callbacks.onAddEditingLownoiseLora ?: noOpUnit,

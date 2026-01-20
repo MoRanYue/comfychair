@@ -112,7 +112,7 @@ fun MaskEditorScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Brush,
-                            contentDescription = stringResource(R.string.paint_mode)
+                            contentDescription = stringResource(R.string.option_paint_mode)
                         )
                     }
 
@@ -129,7 +129,7 @@ fun MaskEditorScreen(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ink_eraser_24px),
-                            contentDescription = stringResource(R.string.eraser_mode)
+                            contentDescription = stringResource(R.string.option_eraser_mode)
                         )
                     }
                 }
@@ -139,7 +139,7 @@ fun MaskEditorScreen(
                     IconButton(onClick = { showBrushSizePopup = true }) {
                         Icon(
                             imageVector = Icons.Default.LineWeight,
-                            contentDescription = stringResource(R.string.brush_size)
+                            contentDescription = stringResource(R.string.label_brush_size)
                         )
                     }
 
@@ -149,7 +149,7 @@ fun MaskEditorScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp).width(200.dp)) {
                             Text(
-                                text = "${stringResource(R.string.brush_size)}: ${brushSize.toInt()}",
+                                text = "${stringResource(R.string.label_brush_size)}: ${brushSize.toInt()}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Slider(
@@ -172,7 +172,7 @@ fun MaskEditorScreen(
                     IconButton(onClick = { showMoreMenu = true }) {
                         Icon(
                             imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options)
+                            contentDescription = stringResource(R.string.button_more_options)
                         )
                     }
 
@@ -181,7 +181,7 @@ fun MaskEditorScreen(
                         onDismissRequest = { showMoreMenu = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.clear_mask)) },
+                            text = { Text(stringResource(R.string.button_clear_mask)) },
                             onClick = {
                                 MaskEditorStateHolder.onClearMask?.invoke()
                                 showMoreMenu = false
@@ -194,7 +194,7 @@ fun MaskEditorScreen(
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text(stringResource(R.string.invert_mask)) },
+                            text = { Text(stringResource(R.string.button_invert_mask)) },
                             onClick = {
                                 MaskEditorStateHolder.onInvertMask?.invoke()
                                 showMoreMenu = false

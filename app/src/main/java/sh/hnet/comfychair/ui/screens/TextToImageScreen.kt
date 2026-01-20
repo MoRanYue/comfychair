@@ -205,11 +205,11 @@ fun TextToImageScreen(
                 if (uiState.previewBitmap != null) {
                     IconButton(onClick = {
                         textToImageViewModel.saveToGallery { success ->
-                            val messageRes = if (success) R.string.image_saved_to_gallery else R.string.failed_save_image
+                            val messageRes = if (success) R.string.msg_image_saved_to_gallery else R.string.error_save_image
                             Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                         }
                     }) {
-                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save_to_gallery))
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.button_save_to_gallery))
                     }
                     // Share button
                     IconButton(onClick = {
@@ -217,7 +217,7 @@ fun TextToImageScreen(
                             context.startActivity(android.content.Intent.createChooser(intent, context.getString(R.string.share_image)))
                         }
                     }) {
-                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.share))
+                        Icon(Icons.Default.Share, contentDescription = stringResource(R.string.button_share))
                     }
                 }
                 // Menu button
@@ -287,7 +287,7 @@ fun TextToImageScreen(
                 textToImageViewModel.onPositivePromptChange(it)
                 presetViewModel.clearActivePreset()
             },
-            label = { Text(stringResource(R.string.prompt_hint)) },
+            label = { Text(stringResource(R.string.hint_prompt)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -380,8 +380,8 @@ fun TextToImageScreen(
                 },
                 onClearQueue = {
                     generationViewModel.getClient()?.clearQueue { success ->
-                        val messageRes = if (success) R.string.queue_cleared_success
-                                       else R.string.queue_cleared_failed
+                        val messageRes = if (success) R.string.msg_queue_cleared_success
+                                       else R.string.error_queue_clear
                         android.os.Handler(android.os.Looper.getMainLooper()).post {
                             Toast.makeText(context, context.getString(messageRes), Toast.LENGTH_SHORT).show()
                         }

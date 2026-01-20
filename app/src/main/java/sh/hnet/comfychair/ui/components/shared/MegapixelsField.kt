@@ -36,7 +36,7 @@ fun MegapixelsField(
     NumericStepperField(
         value = value,
         onValueChange = onValueChange,
-        label = stringResource(R.string.megapixels_label),
+        label = stringResource(R.string.label_megapixels),
         min = constraints.min,
         max = constraints.max,
         step = constraints.step,

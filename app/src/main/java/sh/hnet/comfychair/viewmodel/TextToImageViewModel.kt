@@ -370,7 +370,7 @@ class TextToImageViewModel : BaseGenerationViewModel<TextToImageUiState, TextToI
             _uiState.update { it.copy(positivePrompt = defaultPrompt) }
 
             // Emit toast event
-            _events.emit(TextToImageEvent.ShowToast(R.string.prompt_preset_reset_prompt_success))
+            _events.emit(TextToImageEvent.ShowToast(R.string.msg_prompt_preset_reset_success))
         }
     }
 
@@ -672,7 +672,7 @@ class TextToImageViewModel : BaseGenerationViewModel<TextToImageUiState, TextToI
             is GenerationEvent.ConnectionLostDuringGeneration -> {
                 DebugLogger.w(TAG, "ConnectionLostDuringGeneration")
                 viewModelScope.launch {
-                    val message = applicationContext?.getString(R.string.connection_lost_generation_may_continue)
+                    val message = applicationContext?.getString(R.string.msg_connection_lost_generation_may_continue)
                         ?: "Connection lost. Will check for completion when reconnected."
                     _events.emit(TextToImageEvent.ShowToastMessage(message))
                 }

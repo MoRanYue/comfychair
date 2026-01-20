@@ -721,12 +721,12 @@ fun WorkflowEditorScreen(
                     showRenameDialog = false
                     renamingNodeId = null
                 },
-                title = { Text(stringResource(R.string.node_editor_rename_title)) },
+                title = { Text(stringResource(R.string.title_node_editor_rename)) },
                 text = {
                     OutlinedTextField(
                         value = renameDialogText,
                         onValueChange = { renameDialogText = it },
-                        label = { Text(stringResource(R.string.node_editor_rename_label)) },
+                        label = { Text(stringResource(R.string.label_node_editor_rename)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -766,12 +766,12 @@ fun WorkflowEditorScreen(
                     showGroupRenameDialog = false
                     renamingGroupId = null
                 },
-                title = { Text(stringResource(R.string.workflow_editor_rename_group_title)) },
+                title = { Text(stringResource(R.string.title_workflow_editor_rename_group)) },
                 text = {
                     OutlinedTextField(
                         value = groupRenameDialogText,
                         onValueChange = { groupRenameDialogText = it },
-                        label = { Text(stringResource(R.string.workflow_editor_rename_group_label)) },
+                        label = { Text(stringResource(R.string.label_workflow_editor_rename_group)) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -819,14 +819,14 @@ fun WorkflowEditorScreen(
                         OutlinedTextField(
                             value = editNoteDialogTitle,
                             onValueChange = { editNoteDialogTitle = it },
-                            label = { Text(stringResource(R.string.workflow_editor_rename_note_label)) },
+                            label = { Text(stringResource(R.string.label_workflow_editor_rename_note)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
                         OutlinedTextField(
                             value = editNoteDialogContent,
                             onValueChange = { editNoteDialogContent = it },
-                            label = { Text(stringResource(R.string.workflow_editor_note_content_label)) },
+                            label = { Text(stringResource(R.string.label_workflow_editor_note_content)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(250.dp),
@@ -1259,13 +1259,13 @@ private fun FieldMappingPanel(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.field_mapping_title),
+                    text = stringResource(R.string.title_field_mapping),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold
                 )
                 TextButton(onClick = onClearAllMappings) {
                     Text(
-                        text = stringResource(R.string.clear_all_mapping),
+                        text = stringResource(R.string.button_clear_all_mapping),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
@@ -1331,7 +1331,7 @@ private fun FieldMappingPanel(
             if (mappingState.fieldMappings.any { it.hasMultipleCandidates }) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.tap_node_to_change),
+                    text = stringResource(R.string.hint_tap_node_to_change),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -1388,7 +1388,7 @@ private fun FieldMappingRow(
                 fieldMapping.candidates.isEmpty() -> {
                     // No candidates available
                     Text(
-                        text = stringResource(R.string.no_matching_nodes),
+                        text = stringResource(R.string.msg_no_matching_nodes),
                         style = MaterialTheme.typography.bodySmall,
                         color = if (fieldMapping.isRequiredField) {
                             MaterialTheme.colorScheme.error
@@ -1400,7 +1400,7 @@ private fun FieldMappingRow(
                 fieldMapping.isRequiredField -> {
                     // Required field not mapped - "Select a node" with error color
                     Text(
-                        text = stringResource(R.string.needs_remapping),
+                        text = stringResource(R.string.msg_needs_remapping),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -1408,7 +1408,7 @@ private fun FieldMappingRow(
                 else -> {
                     // Optional field not mapped - "Select a node" with muted color
                     Text(
-                        text = stringResource(R.string.needs_remapping),
+                        text = stringResource(R.string.msg_needs_remapping),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -1463,8 +1463,8 @@ private fun DiscardConfirmationDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.workflow_editor_discard_title)) },
-        text = { Text(stringResource(R.string.workflow_editor_discard_message)) },
+        title = { Text(stringResource(R.string.title_workflow_editor_discard)) },
+        text = { Text(stringResource(R.string.msg_workflow_editor_discard)) },
         confirmButton = {
             Button(
                 onClick = onConfirm,
@@ -1504,12 +1504,12 @@ private fun SaveNewWorkflowDialog(
 
     AlertDialog(
         onDismissRequest = { if (!isValidating) onDismiss() },
-        title = { Text(stringResource(R.string.save_workflow_title)) },
+        title = { Text(stringResource(R.string.title_save_workflow)) },
         text = {
             Column {
                 // Type dropdown
                 Text(
-                    text = stringResource(R.string.workflow_type_label),
+                    text = stringResource(R.string.label_workflow_type),
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
@@ -1548,7 +1548,7 @@ private fun SaveNewWorkflowDialog(
                 OutlinedTextField(
                     value = name,
                     onValueChange = onNameChange,
-                    label = { Text(stringResource(R.string.workflow_name_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_name)) },
                     singleLine = true,
                     isError = nameError != null,
                     supportingText = nameError?.let { { Text(it) } },
@@ -1562,7 +1562,7 @@ private fun SaveNewWorkflowDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = onDescriptionChange,
-                    label = { Text(stringResource(R.string.workflow_description_label)) },
+                    label = { Text(stringResource(R.string.label_workflow_description)) },
                     maxLines = 3,
                     isError = descriptionError != null,
                     supportingText = descriptionError?.let { { Text(it) } },
@@ -1579,7 +1579,7 @@ private fun SaveNewWorkflowDialog(
                     ) {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.validating_workflow))
+                        Text(stringResource(R.string.msg_validating_workflow))
                     }
                 }
             }
@@ -1607,10 +1607,10 @@ private fun MissingNodesDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.missing_nodes_title)) },
+        title = { Text(stringResource(R.string.title_missing_nodes)) },
         text = {
             Column {
-                Text(stringResource(R.string.missing_nodes_message))
+                Text(stringResource(R.string.msg_missing_nodes))
                 Spacer(modifier = Modifier.height(8.dp))
                 NoOverscrollContainer {
                     LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) {
@@ -1640,10 +1640,10 @@ private fun MissingFieldsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.missing_fields_title)) },
+        title = { Text(stringResource(R.string.title_missing_fields)) },
         text = {
             Column {
-                Text(stringResource(R.string.missing_fields_message))
+                Text(stringResource(R.string.msg_missing_fields))
                 Spacer(modifier = Modifier.height(8.dp))
                 missingFields.forEach { field ->
                     key(field) {
@@ -1670,8 +1670,8 @@ private fun DuplicateNameDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.duplicate_name_title)) },
-        text = { Text(stringResource(R.string.duplicate_name_message)) },
+        title = { Text(stringResource(R.string.title_duplicate_name)) },
+        text = { Text(stringResource(R.string.msg_duplicate_name)) },
         confirmButton = {
             Button(onClick = onDismiss) {
                 Text(stringResource(R.string.button_ok))
@@ -1696,12 +1696,12 @@ private fun InputSelectionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.workflow_editor_select_input_title))
+            Text(stringResource(R.string.title_workflow_editor_select_input))
         },
         text = {
             Column {
                 Text(
-                    text = stringResource(R.string.workflow_editor_select_input_message, nodeTypeName),
+                    text = stringResource(R.string.msg_workflow_editor_select_input, nodeTypeName),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -1773,12 +1773,12 @@ private fun OutputSelectionDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.workflow_editor_select_output_title))
+            Text(stringResource(R.string.title_workflow_editor_select_output))
         },
         text = {
             Column {
                 Text(
-                    text = stringResource(R.string.workflow_editor_select_output_message, nodeTypeName),
+                    text = stringResource(R.string.msg_workflow_editor_select_output, nodeTypeName),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(16.dp))

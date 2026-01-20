@@ -51,9 +51,9 @@ fun ConnectionAlertDialog(
             Text(
                 text = stringResource(
                     when {
-                        isAuthFailure -> R.string.session_expired_title
-                        isStallFailure -> R.string.transfer_stalled_title
-                        else -> R.string.connection_lost_title
+                        isAuthFailure -> R.string.title_session_expired
+                        isStallFailure -> R.string.title_transfer_stalled
+                        else -> R.string.title_connection_lost
                     }
                 )
             )
@@ -63,9 +63,9 @@ fun ConnectionAlertDialog(
                 Text(
                     text = stringResource(
                         when {
-                            isAuthFailure -> R.string.session_expired_message
-                            isStallFailure -> R.string.transfer_stalled_message
-                            else -> R.string.connection_lost_message
+                            isAuthFailure -> R.string.msg_session_expired
+                            isStallFailure -> R.string.msg_transfer_stalled
+                            else -> R.string.msg_connection_lost
                         }
                     )
                 )
