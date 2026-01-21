@@ -220,7 +220,24 @@ fun WorkflowGraphCanvas(
     onNoteHeightsChanged: (() -> Unit)? = null,
     longPressSourceSlot: SlotPosition? = null,
     onOutputSlotLongPressed: ((SlotPosition) -> Unit)? = null,
-    onInputSlotLongPressed: ((SlotPosition) -> Unit)? = null
+    onInputSlotLongPressed: ((SlotPosition) -> Unit)? = null,
+    // Manual node placement
+    showGrid: Boolean = false,
+    isManualPlacementEnabled: Boolean = false,
+    draggingNodeId: String? = null,
+    dragOffset: Offset = Offset.Zero,
+    onNodeDragStart: ((String) -> Unit)? = null,
+    onNodeDrag: ((Offset) -> Unit)? = null,
+    onNodeDragEnd: (() -> Unit)? = null,
+    onNodeDragCancel: (() -> Unit)? = null,
+    justDroppedNodeId: String? = null,
+    onJustDroppedNodeRendered: (() -> Unit)? = null,
+    // Manual note placement
+    draggingNoteId: Int? = null,
+    onNoteDragStart: ((Int) -> Unit)? = null,
+    onNoteDragEnd: (() -> Unit)? = null,
+    justDroppedNoteId: Int? = null,
+    onJustDroppedNoteRendered: (() -> Unit)? = null
 ) {
     // Use rememberUpdatedState to always have access to current values in the gesture handler
     val currentScaleState = rememberUpdatedState(scale)
@@ -231,6 +248,15 @@ fun WorkflowGraphCanvas(
     val currentRenderedGroups = rememberUpdatedState(renderedGroups)
     val currentNotes = rememberUpdatedState(notes)
     val currentNodeDefinitions = rememberUpdatedState(nodeDefinitions)
+    val currentOnNodeDragStart = rememberUpdatedState(onNodeDragStart)
+    val currentOnNodeDrag = rememberUpdatedState(onNodeDrag)
+    val currentOnNodeDragEnd = rememberUpdatedState(onNodeDragEnd)
+    val currentOnNodeDragCancel = rememberUpdatedState(onNodeDragCancel)
+    val currentIsManualPlacementEnabled = rememberUpdatedState(isManualPlacementEnabled)
+    val currentDraggingNodeId = rememberUpdatedState(draggingNodeId)
+    val currentOnNoteDragStart = rememberUpdatedState(onNoteDragStart)
+    val currentOnNoteDragEnd = rememberUpdatedState(onNoteDragEnd)
+    val currentDraggingNoteId = rememberUpdatedState(draggingNoteId)
 
     // Calculate selected node IDs from mapping state - only for the currently selected field
     val mappingSelectedNodeIds = remember(mappingState, selectedFieldKey) {
@@ -374,8 +400,26 @@ fun WorkflowGraphCanvas(
         }
     }
 
+    // Node/Note drag scale animation (lift/drop effect)
+    val dragScale = remember { Animatable(1f) }
+    LaunchedEffect(draggingNodeId, draggingNoteId) {
+        if (draggingNodeId != null || draggingNoteId != null) {
+            // Lift animation - scale up
+            dragScale.animateTo(
+                targetValue = 1.08f,
+                animationSpec = tween(150, easing = FastOutSlowInEasing)
+            )
+        } else {
+            // Drop animation - scale back to normal
+            dragScale.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(100, easing = FastOutSlowInEasing)
+            )
+        }
+    }
+
     // Animate nodes when graph changes (position + fade in/out)
-    LaunchedEffect(graph.nodes) {
+    LaunchedEffect(graph.nodes, justDroppedNodeId) {
         val currentNodeIds = graph.nodes.map { it.id }.toSet()
 
         // Handle removed nodes - fade out then remove
@@ -397,10 +441,18 @@ fun WorkflowGraphCanvas(
         graph.nodes.forEach { node ->
             val existing = animatedNodeStates[node.id]
             if (existing != null && !existing.isFadingOut) {
-                // Existing node - animate position, update node data, ensure alpha is 1
+                // Existing node - check if just dropped (skip animation) or animate position
                 if (existing.x.value != node.x || existing.y.value != node.y) {
-                    launch { existing.x.animateTo(node.x, animationSpec) }
-                    launch { existing.y.animateTo(node.y, animationSpec) }
+                    if (node.id == justDroppedNodeId) {
+                        // Just dropped - snap immediately without animation
+                        existing.x.snapTo(node.x)
+                        existing.y.snapTo(node.y)
+                        onJustDroppedNodeRendered?.invoke()
+                    } else {
+                        // Normal animation
+                        launch { existing.x.animateTo(node.x, animationSpec) }
+                        launch { existing.y.animateTo(node.y, animationSpec) }
+                    }
                 }
                 // Update node data for rendering
                 animatedNodeStates[node.id] = existing.copy(nodeData = node)
@@ -424,7 +476,7 @@ fun WorkflowGraphCanvas(
     }
 
     // Animate notes when notes change (position + fade in/out)
-    LaunchedEffect(notes) {
+    LaunchedEffect(notes, justDroppedNoteId) {
         val currentNoteIds = notes.map { it.id }.toSet()
 
         // Handle removed notes - fade out then remove
@@ -445,9 +497,18 @@ fun WorkflowGraphCanvas(
         notes.forEach { note ->
             val existing = animatedNoteStates[note.id]
             if (existing != null && !existing.isFadingOut) {
+                // Existing note - check if just dropped (skip animation) or animate position
                 if (existing.x.value != note.x || existing.y.value != note.y) {
-                    launch { existing.x.animateTo(note.x, animationSpec) }
-                    launch { existing.y.animateTo(note.y, animationSpec) }
+                    if (note.id == justDroppedNoteId) {
+                        // Just dropped - snap immediately without animation
+                        existing.x.snapTo(note.x)
+                        existing.y.snapTo(note.y)
+                        onJustDroppedNoteRendered?.invoke()
+                    } else {
+                        // Normal animation
+                        launch { existing.x.animateTo(note.x, animationSpec) }
+                        launch { existing.y.animateTo(note.y, animationSpec) }
+                    }
                 }
                 animatedNoteStates[note.id] = existing.copy(noteData = note)
                 if (existing.alpha.value != 1f) {
@@ -566,7 +627,14 @@ fun WorkflowGraphCanvas(
             val state = animatedNodeStates[node.id]
             if (state != null && !state.isFadingOut) {
                 val nodeData = state.nodeData ?: node
-                add(NodeWithAlpha(nodeData.copy(x = state.x.value, y = state.y.value), state.alpha.value))
+                // For just-dropped nodes, use actual position to avoid flicker before LaunchedEffect snaps
+                // For dragging nodes, include dragOffset so edges follow the node in real-time
+                val (renderX, renderY) = when {
+                    node.id == justDroppedNodeId -> Pair(node.x, node.y)
+                    node.id == draggingNodeId -> Pair(state.x.value + dragOffset.x, state.y.value + dragOffset.y)
+                    else -> Pair(state.x.value, state.y.value)
+                }
+                add(NodeWithAlpha(nodeData.copy(x = renderX, y = renderY), state.alpha.value))
             }
             // Skip nodes without animation state - wait for LaunchedEffect to initialize
         }
@@ -586,7 +654,14 @@ fun WorkflowGraphCanvas(
             val state = animatedNoteStates[note.id]
             if (state != null && !state.isFadingOut) {
                 val noteData = state.noteData ?: note
-                add(NoteWithAlpha(noteData.copy(x = state.x.value, y = state.y.value), state.alpha.value))
+                // For just-dropped notes, use actual position to avoid flicker before LaunchedEffect snaps
+                // For dragging notes, include dragOffset so the note follows the finger in real-time
+                val (renderX, renderY) = when {
+                    note.id == justDroppedNoteId -> Pair(note.x, note.y)
+                    note.id == draggingNoteId -> Pair(state.x.value + dragOffset.x, state.y.value + dragOffset.y)
+                    else -> Pair(state.x.value, state.y.value)
+                }
+                add(NoteWithAlpha(noteData.copy(x = renderX, y = renderY), state.alpha.value))
             }
             // Skip notes without animation state
         }
@@ -652,6 +727,140 @@ fun WorkflowGraphCanvas(
 
     Canvas(
         modifier = modifier
+            // Node/Note drag gesture handler for manual placement (custom implementation that consumes events)
+            .pointerInput(isEditMode, isManualPlacementEnabled) {
+                if (!isEditMode || !currentIsManualPlacementEnabled.value) {
+                    return@pointerInput
+                }
+
+                val longPressTimeout = 500L
+                val movementTolerance = 20f  // Screen pixels
+
+                awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    val downTime = System.currentTimeMillis()
+
+                    // Transform to graph coordinates
+                    val graphX = (down.position.x - currentOffsetState.value.x) / currentScaleState.value
+                    val graphY = (down.position.y - currentOffsetState.value.y) / currentScaleState.value
+
+                    // Check if touch is on a node (use findLast for z-order - higher IDs on top)
+                    // Nodes have priority over notes since they render on top
+                    val hitNode = currentGraphState.value.nodes.findLast { node ->
+                        graphX >= node.x && graphX <= node.x + node.width &&
+                        graphY >= node.y && graphY <= node.y + node.height
+                    }
+
+                    // If not on a node, check if touch is on a note
+                    val hitNote = if (hitNode == null) {
+                        currentNotes.value.findLast { note ->
+                            graphX >= note.x && graphX <= note.x + note.width &&
+                            graphY >= note.y && graphY <= note.y + note.height
+                        }
+                    } else null
+
+                    if (hitNode == null && hitNote == null) {
+                        // Not on a node or note, let other gestures handle it
+                        return@awaitEachGesture
+                    }
+
+                    // On a node or note - consume events to prevent pan/zoom interference
+                    down.consume()
+
+                    var currentPointer = down
+                    var longPressTriggered = false
+                    var isDragging = false
+                    var localDraggingNodeId: String? = null
+                    var localDraggingNoteId: Int? = null
+
+                    // Wait for long press or cancel
+                    while (!longPressTriggered) {
+                        val event = withTimeoutOrNull(50L) {
+                            awaitPointerEvent(PointerEventPass.Main)
+                        }
+
+                        // Check if long press timeout reached
+                        if (System.currentTimeMillis() - downTime >= longPressTimeout) {
+                            val currentEvent = currentEvent
+                            val stillPressed = currentEvent.changes.any { it.id == currentPointer.id && it.pressed }
+                            if (stillPressed) {
+                                // Long press succeeded - start drag
+                                longPressTriggered = true
+                                isDragging = true
+                                if (hitNode != null) {
+                                    localDraggingNodeId = hitNode.id
+                                    sh.hnet.comfychair.util.DebugLogger.d("NodeDrag", "Long press succeeded, starting drag for node ${hitNode.id}")
+                                    currentOnNodeDragStart.value?.invoke(hitNode.id)
+                                } else if (hitNote != null) {
+                                    localDraggingNoteId = hitNote.id
+                                    sh.hnet.comfychair.util.DebugLogger.d("NoteDrag", "Long press succeeded, starting drag for note ${hitNote.id}")
+                                    currentOnNoteDragStart.value?.invoke(hitNote.id)
+                                }
+                            }
+                            break
+                        }
+
+                        if (event != null) {
+                            val change = event.changes.firstOrNull { it.id == currentPointer.id }
+                            if (change == null || !change.pressed) {
+                                // Released before long press - cancel
+                                sh.hnet.comfychair.util.DebugLogger.d("NodeDrag", "Released before long press")
+                                break
+                            }
+
+                            // Check movement tolerance
+                            val moved = (change.position - down.position).getDistance() > movementTolerance
+                            if (moved) {
+                                // Moved too much - cancel
+                                sh.hnet.comfychair.util.DebugLogger.d("NodeDrag", "Moved too much before long press")
+                                break
+                            }
+
+                            // Consume to prevent pan/zoom
+                            change.consume()
+                            currentPointer = change
+                        }
+                    }
+
+                    // Handle drag if long press was triggered
+                    if (isDragging && (localDraggingNodeId != null || localDraggingNoteId != null)) {
+                        var previousPosition = currentPointer.position
+
+                        // Enter drag loop
+                        while (true) {
+                            val event = awaitPointerEvent(PointerEventPass.Main)
+                            val change = event.changes.firstOrNull { it.id == currentPointer.id }
+
+                            if (change == null || !change.pressed) {
+                                // Released - end drag
+                                if (localDraggingNodeId != null) {
+                                    sh.hnet.comfychair.util.DebugLogger.d("NodeDrag", "Drag ended for node $localDraggingNodeId")
+                                    currentOnNodeDragEnd.value?.invoke()
+                                } else if (localDraggingNoteId != null) {
+                                    sh.hnet.comfychair.util.DebugLogger.d("NoteDrag", "Drag ended for note $localDraggingNoteId")
+                                    currentOnNoteDragEnd.value?.invoke()
+                                }
+                                break
+                            }
+
+                            // Calculate drag delta in screen space, then convert to graph space
+                            val dragAmount = change.position - previousPosition
+                            if (dragAmount != Offset.Zero) {
+                                val deltaGraph = Offset(
+                                    dragAmount.x / currentScaleState.value,
+                                    dragAmount.y / currentScaleState.value
+                                )
+                                // Both node and note drag use the same onNodeDrag callback
+                                // (they share the same dragOffset in the UI state)
+                                currentOnNodeDrag.value?.invoke(deltaGraph)
+                            }
+
+                            previousPosition = change.position
+                            change.consume()
+                        }
+                    }
+                }
+            }
             // Long-press gesture handler for output slots
             .pointerInput(isEditMode, onOutputSlotLongPressed) {
                 if (!isEditMode || onOutputSlotLongPressed == null) return@pointerInput
@@ -965,6 +1174,14 @@ fun WorkflowGraphCanvas(
                         awaitFirstDown(requireUnconsumed = false)
                         do {
                             val event = awaitPointerEvent()
+
+                            // Skip pan/zoom processing if a node drag is in progress
+                            if (currentDraggingNodeId.value != null) {
+                                // Just consume and wait for release
+                                event.changes.forEach { it.consume() }
+                                continue
+                            }
+
                             val zoom = event.calculateZoom()
                             val pan = event.calculatePan()
                             val centroid = event.calculateCentroid()
@@ -1003,6 +1220,42 @@ fun WorkflowGraphCanvas(
             translate(offset.x, offset.y)
             scale(scale, scale, Offset.Zero)
         }) {
+            // Draw grid for manual node placement (behind everything)
+            if (showGrid) {
+                val gridColor = colors.nodeBorder.copy(alpha = 0.12f)
+                val gridSize = WorkflowLayoutEngine.GRID_CELL_SIZE
+
+                // Calculate visible range in graph coordinates
+                val visibleMinX = -offset.x / scale - gridSize
+                val visibleMinY = -offset.y / scale - gridSize
+                val visibleMaxX = (size.width - offset.x) / scale + gridSize
+                val visibleMaxY = (size.height - offset.y) / scale + gridSize
+
+                // Draw vertical lines
+                var x = (visibleMinX / gridSize).toInt() * gridSize
+                while (x <= visibleMaxX) {
+                    drawLine(
+                        color = gridColor,
+                        start = Offset(x, visibleMinY),
+                        end = Offset(x, visibleMaxY),
+                        strokeWidth = 1f
+                    )
+                    x += gridSize
+                }
+
+                // Draw horizontal lines
+                var y = (visibleMinY / gridSize).toInt() * gridSize
+                while (y <= visibleMaxY) {
+                    drawLine(
+                        color = gridColor,
+                        start = Offset(visibleMinX, y),
+                        end = Offset(visibleMaxX, y),
+                        strokeWidth = 1f
+                    )
+                    y += gridSize
+                }
+            }
+
             // Draw groups first (behind everything) with alpha
             animatedGroups.forEach { (group, alpha) ->
                 if (alpha > 0.01f) {
@@ -1029,7 +1282,9 @@ fun WorkflowGraphCanvas(
                         router = edgeRouter,
                         alpha = alpha,
                         selectedNodeIds = selectedNodeIds,
-                        segmentTime = segmentTime.value
+                        segmentTime = segmentTime.value,
+                        draggingNodeId = draggingNodeId,
+                        dragScale = dragScale.value
                     )
                 }
             }
@@ -1044,8 +1299,9 @@ fun WorkflowGraphCanvas(
                 }
             }
 
-            // Draw nodes with alpha
-            animatedNodes.forEach { (node, alpha) ->
+            // Draw nodes with alpha - sort by ID for consistent z-order (higher IDs on top)
+            val sortedAnimatedNodes = animatedNodes.sortedBy { it.node.id }
+            sortedAnimatedNodes.forEach { (node, alpha) ->
                 if (alpha > 0.01f) {
                     val highlightState = when {
                         // Mapping mode selection
@@ -1074,22 +1330,54 @@ fun WorkflowGraphCanvas(
                     // Editable inputs are only highlighted when this node is being edited
                     val highlightEditableInputs = editingNodeId == node.id
 
-                    drawNode(
-                        node = node,
-                        colors = colors,
-                        alpha = alpha,
-                        highlightState = highlightState,
-                        colorPair = colorPair,
-                        nodeEdits = nodeEdits,
-                        nodeDefinition = nodeDefinitions[node.classType],
-                        editableInputNames = if (highlightEditableInputs) editableInputNames else emptySet(),
-                        uiFieldPrefix = uiFieldPrefix,
-                        displayNameResolver = displayNameResolver,
-                        inputWireColors = nodeInputColors[node.id] ?: emptyMap(),
-                        showEditIcon = isEditMode,
-                        editIconDrawable = editIconDrawable,
-                        mappedFields = graph.mappedFields
-                    )
+                    // Check if this node is being dragged (for scale effect)
+                    // Note: Position already includes dragOffset via animatedNodes
+                    val isDraggingThis = draggingNodeId == node.id
+
+                    // Draw with scale transform for dragging node
+                    if (isDraggingThis) {
+                        val nodeCenter = Offset(
+                            node.x + node.width / 2,
+                            node.y + node.height / 2
+                        )
+                        withTransform({
+                            scale(dragScale.value, dragScale.value, nodeCenter)
+                        }) {
+                            drawNode(
+                                node = node,
+                                colors = colors,
+                                alpha = alpha,
+                                highlightState = highlightState,
+                                colorPair = colorPair,
+                                nodeEdits = nodeEdits,
+                                nodeDefinition = nodeDefinitions[node.classType],
+                                editableInputNames = if (highlightEditableInputs) editableInputNames else emptySet(),
+                                uiFieldPrefix = uiFieldPrefix,
+                                displayNameResolver = displayNameResolver,
+                                inputWireColors = nodeInputColors[node.id] ?: emptyMap(),
+                                showEditIcon = isEditMode,
+                                editIconDrawable = editIconDrawable,
+                                mappedFields = graph.mappedFields
+                            )
+                        }
+                    } else {
+                        drawNode(
+                            node = node,
+                            colors = colors,
+                            alpha = alpha,
+                            highlightState = highlightState,
+                            colorPair = colorPair,
+                            nodeEdits = nodeEdits,
+                            nodeDefinition = nodeDefinitions[node.classType],
+                            editableInputNames = if (highlightEditableInputs) editableInputNames else emptySet(),
+                            uiFieldPrefix = uiFieldPrefix,
+                            displayNameResolver = displayNameResolver,
+                            inputWireColors = nodeInputColors[node.id] ?: emptyMap(),
+                            showEditIcon = isEditMode,
+                            editIconDrawable = editIconDrawable,
+                            mappedFields = graph.mappedFields
+                        )
+                    }
                 }
             }
 
@@ -1101,16 +1389,43 @@ fun WorkflowGraphCanvas(
                     val originalNote = originalNotesById[note.id]
                     val heightBefore = originalNote?.height ?: 0f
                     val isSelected = note.id in selectedNoteIds
-                    drawNote(
-                        note = note,
-                        colors = colors,
-                        alpha = alpha,
-                        isSelected = isSelected,
-                        showEditIcon = isEditMode,
-                        editIconDrawable = editIconDrawable,
-                        textMeasurer = textMeasurer,
-                        density = density
-                    )
+
+                    // Check if this note is being dragged (for scale effect)
+                    val isDraggingThis = draggingNoteId == note.id
+
+                    // Draw with scale transform for dragging note
+                    if (isDraggingThis) {
+                        val noteCenter = Offset(
+                            note.x + note.width / 2,
+                            note.y + note.height / 2
+                        )
+                        withTransform({
+                            scale(dragScale.value, dragScale.value, noteCenter)
+                        }) {
+                            drawNote(
+                                note = note,
+                                colors = colors,
+                                alpha = alpha,
+                                isSelected = isSelected,
+                                showEditIcon = isEditMode,
+                                editIconDrawable = editIconDrawable,
+                                textMeasurer = textMeasurer,
+                                density = density
+                            )
+                        }
+                    } else {
+                        drawNote(
+                            note = note,
+                            colors = colors,
+                            alpha = alpha,
+                            isSelected = isSelected,
+                            showEditIcon = isEditMode,
+                            editIconDrawable = editIconDrawable,
+                            textMeasurer = textMeasurer,
+                            density = density
+                        )
+                    }
+
                     // Copy measured height back to original note for layout
                     if (originalNote != null && note.height != heightBefore) {
                         originalNote.height = note.height
@@ -1139,6 +1454,10 @@ fun WorkflowGraphCanvas(
 
                     node.outputs.forEachIndexed { outputIndex, output ->
                         val outputY = node.y + calculateOutputY(node, outputIndex)
+
+                        // Scale socket position and radii for dragging node
+                        val scaledPosition = scaleSocketPosition(node, outputX, outputY, draggingNodeId, dragScale.value)
+                        val scaleMultiplier = if (node.id == draggingNodeId) dragScale.value else 1f
 
                         // Check if this is the source slot in connection mode
                         val isSourceSlot = inConnectionMode &&
@@ -1177,16 +1496,16 @@ fun WorkflowGraphCanvas(
 
                         drawCircle(
                             color = slotColor,
-                            radius = outerRadius,
-                            center = Offset(outputX, outputY)
+                            radius = outerRadius * scaleMultiplier,
+                            center = scaledPosition
                         )
 
                         // Draw inner circle for contrast (not for source/long-press slots)
                         if (!isSourceSlot && !isLongPressSource) {
                             drawCircle(
                                 color = colors.nodeBackground.copy(alpha = nodeAlpha),
-                                radius = innerRadius,
-                                center = Offset(outputX, outputY)
+                                radius = innerRadius * scaleMultiplier,
+                                center = scaledPosition
                             )
                         }
                     }
@@ -1212,6 +1531,10 @@ fun WorkflowGraphCanvas(
                             val inputX = node.x
                             val inputY = node.y + WorkflowLayoutEngine.NODE_HEADER_HEIGHT + 20f +
                                     (inputIndex * WorkflowLayoutEngine.INPUT_ROW_HEIGHT)
+
+                            // Scale socket position and radii for dragging node
+                            val scaledPosition = scaleSocketPosition(node, inputX, inputY, draggingNodeId, dragScale.value)
+                            val scaleMultiplier = if (node.id == draggingNodeId) dragScale.value else 1f
 
                             // Check if this is the source slot in reverse connection mode (INPUT_TO_OUTPUT)
                             val isSourceSlot = inConnectionMode &&
@@ -1260,16 +1583,16 @@ fun WorkflowGraphCanvas(
 
                             drawCircle(
                                 color = slotColor,
-                                radius = outerRadius,
-                                center = Offset(inputX, inputY)
+                                radius = outerRadius * scaleMultiplier,
+                                center = scaledPosition
                             )
 
                             // Draw inner circle for contrast (not for source/long-press slots)
                             if (!isSourceSlot && !isLongPressSource) {
                                 drawCircle(
                                     color = colors.nodeBackground.copy(alpha = nodeAlpha),
-                                    radius = innerRadius,
-                                    center = Offset(inputX, inputY)
+                                    radius = innerRadius * scaleMultiplier,
+                                    center = scaledPosition
                                 )
                             }
                         }
@@ -1772,7 +2095,9 @@ private fun DrawScope.drawEdge(
     router: EdgeRouter,
     alpha: Float = 1f,
     selectedNodeIds: Set<String> = emptySet(),
-    segmentTime: Float = 0f
+    segmentTime: Float = 0f,
+    draggingNodeId: String? = null,
+    dragScale: Float = 1f
 ) {
     val sourceNode = nodesById[edge.sourceNodeId] ?: return
     val targetNode = nodesById[edge.targetNodeId] ?: return
@@ -1781,10 +2106,18 @@ private fun DrawScope.drawEdge(
     fun Color.withAlpha() = this.copy(alpha = this.alpha * alpha)
 
     // Connection points: always exit right side of source, enter left side of target
-    val startX = sourceNode.x + sourceNode.width
-    val startY = sourceNode.y + calculateOutputY(sourceNode, edge.sourceOutputIndex)
-    val endX = targetNode.x
-    val endY = targetNode.y + calculateInputY(targetNode, edge.targetInputName)
+    // Apply scale transform when connected to a dragging node
+    val sourceSocketX = sourceNode.x + sourceNode.width
+    val sourceSocketY = sourceNode.y + calculateOutputY(sourceNode, edge.sourceOutputIndex)
+    val scaledStart = scaleSocketPosition(sourceNode, sourceSocketX, sourceSocketY, draggingNodeId, dragScale)
+    val startX = scaledStart.x
+    val startY = scaledStart.y
+
+    val targetSocketX = targetNode.x
+    val targetSocketY = targetNode.y + calculateInputY(targetNode, edge.targetInputName)
+    val scaledEnd = scaleSocketPosition(targetNode, targetSocketX, targetSocketY, draggingNodeId, dragScale)
+    val endX = scaledEnd.x
+    val endY = scaledEnd.y
 
     // Resolve base color from slot type, fallback to default
     val baseEdgeColor = (edge.slotType?.let { slotType ->
@@ -1931,6 +2264,28 @@ private fun DrawScope.drawGroup(
             }
         }
     }
+}
+
+/**
+ * Scale a socket position around the node's center when the node is being dragged.
+ * Used to ensure socket indicators and edge endpoints scale with the node body.
+ */
+private fun scaleSocketPosition(
+    node: WorkflowNode,
+    socketX: Float,
+    socketY: Float,
+    draggingNodeId: String?,
+    dragScale: Float
+): Offset {
+    if (node.id != draggingNodeId || dragScale == 1f) {
+        return Offset(socketX, socketY)
+    }
+    val cx = node.x + node.width / 2
+    val cy = node.y + node.height / 2
+    return Offset(
+        cx + dragScale * (socketX - cx),
+        cy + dragScale * (socketY - cy)
+    )
 }
 
 /**

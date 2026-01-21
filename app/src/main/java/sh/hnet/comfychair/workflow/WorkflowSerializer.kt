@@ -64,6 +64,11 @@ class WorkflowSerializer {
             rootJson.put("notes", serializeNotes(graph.notes))
         }
 
+        // Serialize manual placement mode flag if enabled
+        if (graph.isManualPlacementMode) {
+            rootJson.put("manual_placement", true)
+        }
+
         val result = rootJson.toString(2)
         DebugLogger.d(TAG, "Serialized workflow with wrapper: ${result.length} chars")
         return result
@@ -136,8 +141,19 @@ class WorkflowSerializer {
             noteJson.put("id", note.id)
             noteJson.put("title", note.title)
             noteJson.put("content", note.content)
+
+            // Serialize position if manually set
+            if (note.hasManualPosition) {
+                val positionArray = JSONArray()
+                positionArray.put(note.x.toDouble())
+                positionArray.put(note.y.toDouble())
+                noteJson.put("position", positionArray)
+                DebugLogger.d(TAG, "serializeNotes: note id=${note.id} '${note.title}' with manual position: (${note.x}, ${note.y})")
+            } else {
+                DebugLogger.d(TAG, "serializeNotes: note id=${note.id} '${note.title}' (${note.content.length} chars)")
+            }
+
             notesArray.put(noteJson)
-            DebugLogger.d(TAG, "serializeNotes: note id=${note.id} '${note.title}' (${note.content.length} chars)")
         }
 
         DebugLogger.i(TAG, "serializeNotes: serialized ${notesArray.length()} notes to JSON")
@@ -220,10 +236,20 @@ class WorkflowSerializer {
         // Class type is required
         nodeJson.put("class_type", node.classType)
 
-        // Add metadata if title differs from class type
-        if (includeMetadata && node.title != node.classType) {
+        // Add metadata if title differs from class type or node has manual position
+        val hasTitleMeta = includeMetadata && node.title != node.classType
+        if (hasTitleMeta || node.hasManualPosition) {
             val metaJson = JSONObject()
-            metaJson.put("title", node.title)
+            if (hasTitleMeta) {
+                metaJson.put("title", node.title)
+            }
+            if (node.hasManualPosition) {
+                val positionArray = JSONArray()
+                positionArray.put(node.x.toDouble())
+                positionArray.put(node.y.toDouble())
+                metaJson.put("position", positionArray)
+                DebugLogger.d(TAG, "Serializing node ${node.id} with manual position: (${node.x}, ${node.y})")
+            }
             nodeJson.put("_meta", metaJson)
         }
 

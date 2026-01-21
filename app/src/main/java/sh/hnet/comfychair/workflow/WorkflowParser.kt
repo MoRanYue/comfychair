@@ -97,6 +97,15 @@ class WorkflowParser {
                 DebugLogger.d(TAG, "Parsed node $nodeId with mode=$mode (${if (mode == 4) "bypassed" else if (mode == 2) "muted" else "unknown"})")
             }
 
+            // Parse manual position from _meta.position array [x, y]
+            val positionArray = meta?.optJSONArray("position")
+            val hasManualPosition = positionArray != null && positionArray.length() >= 2
+            val manualX = if (hasManualPosition) positionArray!!.optDouble(0, 0.0).toFloat() else 0f
+            val manualY = if (hasManualPosition) positionArray!!.optDouble(1, 0.0).toFloat() else 0f
+            if (hasManualPosition) {
+                DebugLogger.d(TAG, "Parsed node $nodeId with manual position: ($manualX, $manualY)")
+            }
+
             nodes.add(
                 WorkflowNode(
                     id = nodeId,
@@ -105,7 +114,10 @@ class WorkflowParser {
                     category = categorizeNode(classType),
                     inputs = sortInputsForLayout(inputs),
                     templateInputKeys = templateKeys,
-                    mode = mode
+                    mode = mode,
+                    x = manualX,
+                    y = manualY,
+                    hasManualPosition = hasManualPosition
                 )
             )
 
@@ -140,6 +152,12 @@ class WorkflowParser {
             emptyList()
         }
 
+        // Parse manual placement mode flag from root level
+        val isManualPlacementMode = json.optBoolean("manual_placement", false)
+        if (isManualPlacementMode) {
+            DebugLogger.d(TAG, "Workflow has manual_placement mode enabled")
+        }
+
         DebugLogger.d(TAG, "Parsed workflow: ${nodes.size} nodes, ${edges.size} edges, ${groups.size} groups, ${notes.size} notes, ${allTemplateVars.size} template vars, ${mappedFields.size} mapped fields")
 
         return WorkflowGraph(
@@ -150,7 +168,8 @@ class WorkflowParser {
             groups = groups,
             notes = notes,
             templateVariables = allTemplateVars,
-            mappedFields = mappedFields
+            mappedFields = mappedFields,
+            isManualPlacementMode = isManualPlacementMode
         )
     }
 
@@ -240,14 +259,27 @@ class WorkflowParser {
             val title = noteJson.optString("title", "Note")
             val content = noteJson.optString("content", "")
 
+            // Parse manual position from position array [x, y]
+            val positionArray = noteJson.optJSONArray("position")
+            val hasManualPosition = positionArray != null && positionArray.length() >= 2
+            val manualX = if (hasManualPosition) positionArray!!.optDouble(0, 0.0).toFloat() else 0f
+            val manualY = if (hasManualPosition) positionArray!!.optDouble(1, 0.0).toFloat() else 0f
+
             result.add(
                 WorkflowNote(
                     id = id,
                     title = title,
-                    content = content
+                    content = content,
+                    x = manualX,
+                    y = manualY,
+                    hasManualPosition = hasManualPosition
                 )
             )
-            DebugLogger.d(TAG, "parseNotes: parsed note id=$id title='$title' (${content.length} chars)")
+            if (hasManualPosition) {
+                DebugLogger.d(TAG, "parseNotes: parsed note id=$id title='$title' with manual position: ($manualX, $manualY)")
+            } else {
+                DebugLogger.d(TAG, "parseNotes: parsed note id=$id title='$title' (${content.length} chars)")
+            }
         }
 
         DebugLogger.i(TAG, "parseNotes: parsed ${result.size} notes out of ${notesArray.length()} entries")

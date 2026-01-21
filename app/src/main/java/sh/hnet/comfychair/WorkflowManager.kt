@@ -732,6 +732,10 @@ object WorkflowManager {
             if (isWrapped && json.has("notes")) {
                 put("notes", json.getJSONArray("notes"))
             }
+            // Include manual_placement if present in original JSON
+            if (isWrapped && json.has("manual_placement")) {
+                put("manual_placement", json.getBoolean("manual_placement"))
+            }
             // Store field mappings for reference
             if (fieldMappings.isNotEmpty()) {
                 put("fieldMappings", JSONObject().apply {
@@ -911,6 +915,10 @@ object WorkflowManager {
             // Include notes if present in original JSON
             if (isWrapped && json.has("notes")) {
                 put("notes", json.getJSONArray("notes"))
+            }
+            // Include manual_placement if present in original JSON
+            if (isWrapped && json.has("manual_placement")) {
+                put("manual_placement", json.getBoolean("manual_placement"))
             }
             if (fieldMappings.isNotEmpty()) {
                 put("fieldMappings", JSONObject().apply {

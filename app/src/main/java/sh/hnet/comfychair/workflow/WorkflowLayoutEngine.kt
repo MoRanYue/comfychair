@@ -6,7 +6,7 @@ package sh.hnet.comfychair.workflow
 class WorkflowLayoutEngine {
 
     companion object {
-        const val NODE_WIDTH = 420f
+        const val NODE_WIDTH = 480f  // 6 grid cells (6 × 80)
         const val NODE_MIN_HEIGHT = 160f
         const val NODE_HEADER_HEIGHT = 64f
         const val NODE_PADDING = 48f
@@ -18,6 +18,19 @@ class WorkflowLayoutEngine {
         const val MAX_NODES_PER_COLUMN = 8
         const val MIN_COLUMNS = 2
         const val ROW_SPACING = 120f
+
+        // Grid constants for manual node placement
+        const val GRID_CELL_SIZE = 80f  // Square grid cells for manual placement
+
+        /**
+         * Snap a position to the nearest grid cell.
+         * Returns a pair of (snappedX, snappedY).
+         */
+        fun snapToGrid(x: Float, y: Float): Pair<Float, Float> {
+            val snappedX = (kotlin.math.round(x / GRID_CELL_SIZE) * GRID_CELL_SIZE).coerceAtLeast(NODE_PADDING)
+            val snappedY = (kotlin.math.round(y / GRID_CELL_SIZE) * GRID_CELL_SIZE).coerceAtLeast(NODE_PADDING)
+            return Pair(snappedX, snappedY)
+        }
 
         // Group constants
         const val GROUP_PADDING_TOP = 32f
@@ -31,16 +44,116 @@ class WorkflowLayoutEngine {
 
         // Virtual note node prefix for layout integration
         const val VIRTUAL_NOTE_PREFIX = "virtual_note_"
+
+        /**
+         * Clear manual position flags from all nodes and notes in a mutable graph.
+         * Called when disabling manual placement mode to prepare for auto-layout.
+         */
+        fun clearManualPositions(graph: MutableWorkflowGraph) {
+            // Clear hasManualPosition for all nodes
+            for (i in graph.nodes.indices) {
+                graph.nodes[i] = graph.nodes[i].copy(hasManualPosition = false)
+            }
+            // Clear hasManualPosition for all notes
+            for (i in graph.notes.indices) {
+                graph.notes[i] = graph.notes[i].copy(hasManualPosition = false)
+            }
+        }
     }
 
     /**
      * Compute positions for all nodes and notes in the graph.
      * Notes are converted to virtual nodes and laid out using the same algorithm as real nodes.
      * Uses group-aware layout when groups are present.
+     *
+     * Layout mode is determined by the workflow's isManualPlacementMode flag:
+     * - Auto mode (false): Full re-layout of all nodes using the layout algorithm
+     * - Manual mode (true): Preserve existing positions, only position new elements
      */
     fun layoutGraph(graph: WorkflowGraph): WorkflowGraph {
         if (graph.nodes.isEmpty() && graph.notes.isEmpty()) return graph
 
+        // Use the workflow's explicit mode setting
+        if (graph.isManualPlacementMode) {
+            return layoutManualMode(graph)
+        }
+
+        // Standard auto-layout mode
+        return layoutAutoMode(graph)
+    }
+
+    /**
+     * Manual placement mode: preserve existing positions, only layout new nodes and notes.
+     * After layout, all nodes and notes are marked as having manual positions.
+     */
+    private fun layoutManualMode(graph: WorkflowGraph): WorkflowGraph {
+        // Separate nodes with and without manual positions
+        val nodesWithPosition = graph.nodes.filter { it.hasManualPosition }
+        val nodesWithoutPosition = graph.nodes.filter { !it.hasManualPosition }
+
+        // Separate notes with and without manual positions
+        val notesWithPosition = graph.notes.filter { it.hasManualPosition }
+        val notesWithoutPosition = graph.notes.filter { !it.hasManualPosition }
+
+        if (nodesWithoutPosition.isEmpty() && notesWithoutPosition.isEmpty()) {
+            // All elements already have positions - just calculate heights if needed
+            val updatedNodes = graph.nodes.map { node ->
+                if (node.height <= 0) {
+                    node.copy(height = calculateNodeHeight(node), width = NODE_WIDTH)
+                } else {
+                    node
+                }
+            }
+            return graph.copy(nodes = updatedNodes)
+        }
+
+        // Find max extent of all positioned elements (both nodes and notes)
+        val maxNodeX = nodesWithPosition.maxOfOrNull { it.x + it.width } ?: NODE_PADDING
+        val maxNoteX = notesWithPosition.maxOfOrNull { it.x + it.width } ?: NODE_PADDING
+        val maxX = maxOf(maxNodeX, maxNoteX)
+
+        val maxNodeY = nodesWithPosition.maxOfOrNull { it.y } ?: NODE_PADDING
+        val maxNoteY = notesWithPosition.maxOfOrNull { it.y } ?: NODE_PADDING
+        var currentY = maxOf(maxNodeY, maxNoteY)
+
+        // Place new nodes starting from currentY, snapped to grid
+        val newlyPositionedNodes = nodesWithoutPosition.map { node ->
+            val height = calculateNodeHeight(node)
+            val (snappedX, snappedY) = snapToGrid(maxX + HORIZONTAL_SPACING, currentY)
+            currentY = snappedY + height + VERTICAL_SPACING
+            node.copy(
+                x = snappedX,
+                y = snappedY,
+                width = NODE_WIDTH,
+                height = height,
+                hasManualPosition = true
+            )
+        }
+
+        // Place new notes after nodes, snapped to grid
+        val newlyPositionedNotes = notesWithoutPosition.map { note ->
+            val height = if (note.height > 0) note.height else calculateNoteHeight(note)
+            val (snappedX, snappedY) = snapToGrid(maxX + HORIZONTAL_SPACING, currentY)
+            currentY = snappedY + height + VERTICAL_SPACING
+            note.copy(
+                x = snappedX,
+                y = snappedY,
+                height = height,
+                hasManualPosition = true
+            )
+        }
+
+        return graph.copy(
+            nodes = nodesWithPosition + newlyPositionedNodes,
+            notes = notesWithPosition + newlyPositionedNotes
+        )
+    }
+
+    /**
+     * Standard auto-layout mode: run full layout algorithm on all nodes.
+     * After layout, nodes and notes are marked as having manual positions.
+     */
+    private fun layoutAutoMode(graph: WorkflowGraph): WorkflowGraph {
         // Create virtual nodes for notes (notes have no edges → treated as orphans in final layer)
         val virtualNoteNodes = graph.notes.map { note ->
             createVirtualNodeForNote(note)
@@ -67,9 +180,19 @@ class WorkflowLayoutEngine {
             graph.notes
         )
 
+        // Mark all nodes as having manual positions after auto-layout
+        val nodesWithManualFlag = realNodes.map { node ->
+            node.copy(hasManualPosition = true)
+        }
+
+        // Mark all notes as having manual positions after auto-layout
+        val notesWithManualFlag = positionedNotes.map { note ->
+            note.copy(hasManualPosition = true)
+        }
+
         return layoutedWithVirtuals.copy(
-            nodes = realNodes,
-            notes = positionedNotes
+            nodes = nodesWithManualFlag,
+            notes = notesWithManualFlag
         )
     }
 

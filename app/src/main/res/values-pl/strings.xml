@@ -200,6 +200,13 @@
     <string name="content_description_queue_menu">Menu kolejki</string>
     <string name="content_description_server_menu">Menu serwera</string>
 
+    <!-- Workflow editor menu strings -->
+    <string name="menu_enable_manual_placement">Włącz ręczne rozmieszczanie</string>
+    <string name="menu_disable_manual_placement">Wyłącz ręczne rozmieszczanie</string>
+    <string name="title_disable_manual_placement">Wyłączyć ręczne rozmieszczanie?</string>
+    <string name="msg_disable_manual_placement">Spowoduje to automatyczne uporządkowanie wszystkich węzłów i usunięcie niestandardowych pozycji. Tej operacji nie można cofnąć.</string>
+    <string name="button_disable">Wyłącz</string>
+
     <!-- Error and status messages -->
     <string name="error_not_comfyui_server">To nie jest serwer ComfyUI</string>
     <string name="error_invalid_server_response">Nieprawidłowa odpowiedź serwera</string>

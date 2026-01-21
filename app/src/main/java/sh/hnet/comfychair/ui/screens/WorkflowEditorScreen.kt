@@ -320,7 +320,7 @@ fun WorkflowEditorScreen(
                             editingNodeId = uiState.selectedNodeForEditing?.id,
                             nodeAttributeEdits = uiState.nodeAttributeEdits,
                             editableInputNames = uiState.editableInputNames,
-                            enableManualTransform = !uiState.isEditingNode,
+                            enableManualTransform = !uiState.isEditingNode && uiState.draggingNodeId == null && uiState.draggingNoteId == null,
                             isEditMode = uiState.isEditMode,
                             selectedNodeIds = uiState.selectedNodeIds,
                             connectionModeState = uiState.connectionModeState,
@@ -435,6 +435,39 @@ fun WorkflowEditorScreen(
                             },
                             onInputSlotLongPressed = { slot ->
                                 viewModel.startLongPressConnection(slot)
+                            },
+                            // Manual node placement
+                            showGrid = uiState.isManualPlacementMode && uiState.isEditMode,
+                            isManualPlacementEnabled = uiState.isManualPlacementMode,
+                            draggingNodeId = uiState.draggingNodeId,
+                            dragOffset = uiState.dragOffset,
+                            onNodeDragStart = { nodeId ->
+                                viewModel.startNodeDrag(nodeId)
+                            },
+                            onNodeDrag = { delta ->
+                                viewModel.updateNodeDrag(delta)
+                            },
+                            onNodeDragEnd = {
+                                viewModel.endNodeDrag()
+                            },
+                            onNodeDragCancel = {
+                                viewModel.cancelNodeDrag()
+                            },
+                            justDroppedNodeId = uiState.justDroppedNodeId,
+                            onJustDroppedNodeRendered = {
+                                viewModel.clearJustDroppedNode()
+                            },
+                            // Manual note placement
+                            draggingNoteId = uiState.draggingNoteId,
+                            onNoteDragStart = { noteId ->
+                                viewModel.startNoteDrag(noteId)
+                            },
+                            onNoteDragEnd = {
+                                viewModel.endNoteDrag()
+                            },
+                            justDroppedNoteId = uiState.justDroppedNoteId,
+                            onJustDroppedNoteRendered = {
+                                viewModel.clearJustDroppedNote()
                             },
                             onTransform = { scale, offset ->
                                 viewModel.onTransform(scale, offset)
@@ -559,7 +592,12 @@ fun WorkflowEditorScreen(
                     viewModel.showNodeBrowser(Offset(centerX, centerY))
                 },
                 onAddNote = {
-                    viewModel.addNote()
+                    // Use manual placement if enabled, otherwise standard auto-layout
+                    if (uiState.isManualPlacementMode) {
+                        viewModel.addNoteManual()
+                    } else {
+                        viewModel.addNote()
+                    }
                 },
                 onBypassSelected = {
                     // Toggle bypass for all selected nodes
@@ -574,7 +612,9 @@ fun WorkflowEditorScreen(
                 onUngroupSelected = { viewModel.ungroupSelectedNode() },
                 canUngroup = viewModel.isSelectedNodeInGroup(),
                 onCleanup = { viewModel.relayoutGraph() },
-                onDone = { viewModel.showSaveDialog(context) }
+                onDone = { viewModel.showSaveDialog(context) },
+                isManualPlacementEnabled = uiState.isManualPlacementMode,
+                onToggleManualPlacement = { viewModel.toggleManualPlacementMode() }
             )
         }
 
@@ -631,7 +671,12 @@ fun WorkflowEditorScreen(
                     scope.launch {
                         nodeBrowserSheetState.hide()
                     }.invokeOnCompletion {
-                        viewModel.addNode(nodeType)
+                        // Use manual placement if enabled, otherwise standard auto-layout
+                        if (uiState.isManualPlacementMode) {
+                            viewModel.addNodeManual(nodeType)
+                        } else {
+                            viewModel.addNode(nodeType)
+                        }
                     }
                 },
                 onDismiss = {
@@ -711,6 +756,25 @@ fun WorkflowEditorScreen(
             DiscardConfirmationDialog(
                 onConfirm = { viewModel.confirmDiscard() },
                 onDismiss = { viewModel.dismissDiscardConfirmation() }
+            )
+        }
+
+        // Disable manual placement confirmation dialog
+        if (uiState.showDisableManualPlacementConfirmation) {
+            AlertDialog(
+                onDismissRequest = { viewModel.cancelDisableManualPlacement() },
+                title = { Text(stringResource(R.string.title_disable_manual_placement)) },
+                text = { Text(stringResource(R.string.msg_disable_manual_placement)) },
+                confirmButton = {
+                    Button(onClick = { viewModel.confirmDisableManualPlacement() }) {
+                        Text(stringResource(R.string.button_disable))
+                    }
+                },
+                dismissButton = {
+                    OutlinedButton(onClick = { viewModel.cancelDisableManualPlacement() }) {
+                        Text(stringResource(R.string.button_cancel))
+                    }
+                }
             )
         }
 
@@ -941,6 +1005,8 @@ private fun WorkflowEditorFloatingToolbar(
     canUngroup: Boolean,
     onCleanup: () -> Unit,
     onDone: () -> Unit,
+    isManualPlacementEnabled: Boolean = false,
+    onToggleManualPlacement: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     // Custom colors that properly follow the system theme
@@ -1002,6 +1068,28 @@ private fun WorkflowEditorFloatingToolbar(
                             expanded = showMoreMenu,
                             onDismissRequest = { showMoreMenu = false }
                         ) {
+                            // Manual placement mode toggle
+                            DropdownMenuItem(
+                                text = {
+                                    Text(stringResource(
+                                        if (isManualPlacementEnabled) R.string.menu_disable_manual_placement
+                                        else R.string.menu_enable_manual_placement
+                                    ))
+                                },
+                                onClick = {
+                                    onToggleManualPlacement()
+                                    showMoreMenu = false
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        Icons.Default.GridView,
+                                        contentDescription = null
+                                    )
+                                }
+                            )
+
+                            HorizontalDivider()
+
                             // Clone (enabled when nodes selected)
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.workflow_editor_duplicate_node)) },
@@ -1102,22 +1190,24 @@ private fun WorkflowEditorFloatingToolbar(
                                 }
                             )
 
-                            HorizontalDivider()
+                            // Cleanup (hidden in manual placement mode)
+                            if (!isManualPlacementEnabled) {
+                                HorizontalDivider()
 
-                            // Cleanup (always enabled)
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.workflow_editor_cleanup)) },
-                                onClick = {
-                                    onCleanup()
-                                    showMoreMenu = false
-                                },
-                                leadingIcon = {
-                                    Icon(
-                                        Icons.Default.AutoFixHigh,
-                                        contentDescription = null
-                                    )
-                                }
-                            )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.workflow_editor_cleanup)) },
+                                    onClick = {
+                                        onCleanup()
+                                        showMoreMenu = false
+                                    },
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Default.AutoFixHigh,
+                                            contentDescription = null
+                                        )
+                                    }
+                                )
+                            }
                         }
                     }
 

@@ -216,6 +216,13 @@
     <string name="content_description_queue_menu">Queue menu</string>
     <string name="content_description_server_menu">Server menu</string>
 
+    <!-- Workflow editor menu strings -->
+    <string name="menu_enable_manual_placement">Enable manual placement</string>
+    <string name="menu_disable_manual_placement">Disable manual placement</string>
+    <string name="title_disable_manual_placement">Disable Manual Placement?</string>
+    <string name="msg_disable_manual_placement">This will auto-arrange all nodes and clear custom positions. This cannot be undone.</string>
+    <string name="button_disable">Disable</string>
+
     <!-- Error and status messages -->
     <string name="error_not_comfyui_server">Not a ComfyUI server</string>
     <string name="error_invalid_server_response">Invalid server response</string>

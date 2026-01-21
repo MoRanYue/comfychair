@@ -458,6 +458,7 @@ fun ApplicationSettingsScreen(
                         Text(stringResource(R.string.option_edge_router_bezier))
                     }
                 }
+
             }
         }
 

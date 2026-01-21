@@ -177,4 +177,5 @@ object AppSettings {
             .putString(KEY_EDGE_ROUTER, routerId)
             .apply()
     }
+
 }

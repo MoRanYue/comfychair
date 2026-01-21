@@ -21,7 +21,8 @@ data class WorkflowNode(
     var x: Float = 0f,
     var y: Float = 0f,
     var width: Float = 0f,
-    var height: Float = 0f
+    var height: Float = 0f,
+    var hasManualPosition: Boolean = false  // True if position was set manually (from JSON or drag)
 ) {
     /** True if this node has any template input keys */
     val hasTemplateVariables: Boolean get() = templateInputKeys.isNotEmpty()
@@ -132,8 +133,9 @@ data class WorkflowNote(
     val content: String,
     val x: Float = 0f,
     val y: Float = 0f,
-    val width: Float = 420f,  // Same as NODE_WIDTH
-    var height: Float = 0f    // Set by renderer after TextMeasurer measurement
+    val width: Float = 480f,  // Same as NODE_WIDTH (6 grid cells)
+    var height: Float = 0f,   // Set by renderer after TextMeasurer measurement
+    val hasManualPosition: Boolean = false  // True if position was set manually (from JSON or drag)
 ) {
     companion object {
         /** Convert note ID to member ID string for group membership */
@@ -164,7 +166,13 @@ data class WorkflowGraph(
      * Maps (nodeId, inputName) pairs to placeholder names for fields that have {{...}} values.
      * Used to show "UI: X" labels even when saved edits replace placeholders with literal values.
      */
-    val mappedFields: Map<Pair<String, String>, String> = emptyMap()
+    val mappedFields: Map<Pair<String, String>, String> = emptyMap(),
+    /**
+     * Whether manual placement mode is enabled for this workflow.
+     * When true, nodes/notes can be dragged to custom positions on a grid.
+     * When false, auto-layout is used.
+     */
+    val isManualPlacementMode: Boolean = false
 )
 
 /**
@@ -180,7 +188,9 @@ data class MutableWorkflowGraph(
     val notes: MutableList<WorkflowNote>,
     val templateVariables: MutableSet<String>,
     /** Immutable - original workflow mappings don't change during editing */
-    val mappedFields: Map<Pair<String, String>, String> = emptyMap()
+    val mappedFields: Map<Pair<String, String>, String> = emptyMap(),
+    /** Whether manual placement mode is enabled for this workflow */
+    var isManualPlacementMode: Boolean = false
 ) {
     /**
      * Convert to immutable WorkflowGraph
@@ -193,7 +203,8 @@ data class MutableWorkflowGraph(
         groups = groups.toList(),
         notes = notes.toList(),
         templateVariables = templateVariables.toSet(),
-        mappedFields = mappedFields
+        mappedFields = mappedFields,
+        isManualPlacementMode = isManualPlacementMode
     )
 
     companion object {
@@ -208,7 +219,8 @@ data class MutableWorkflowGraph(
             groups = graph.groups.toMutableList(),
             notes = graph.notes.toMutableList(),
             templateVariables = graph.templateVariables.toMutableSet(),
-            mappedFields = graph.mappedFields
+            mappedFields = graph.mappedFields,
+            isManualPlacementMode = graph.isManualPlacementMode
         )
     }
 }
@@ -333,7 +345,20 @@ data class WorkflowEditorUiState(
 
     // Discard confirmation
     val showDiscardConfirmation: Boolean = false,
-    val discardAction: DiscardAction = DiscardAction.EXIT_EDIT_MODE
+    val discardAction: DiscardAction = DiscardAction.EXIT_EDIT_MODE,
+
+    // Manual node placement drag state
+    val draggingNodeId: String? = null,
+    val dragOffset: Offset = Offset.Zero,
+    val justDroppedNodeId: String? = null,  // Set after drop to skip animation
+
+    // Manual note placement drag state
+    val draggingNoteId: Int? = null,
+    val justDroppedNoteId: Int? = null,  // Set after drop to skip animation
+
+    // Per-workflow manual placement mode
+    val isManualPlacementMode: Boolean = false,
+    val showDisableManualPlacementConfirmation: Boolean = false
 )
 
 /**
