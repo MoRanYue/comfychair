@@ -1,7 +1,10 @@
 package sh.hnet.comfychair.ui.screens
 
+import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import sh.hnet.comfychair.BrowserAuthActivity
 import sh.hnet.comfychair.CertificateIssue
 import sh.hnet.comfychair.ComfyUIClient
 import sh.hnet.comfychair.MainContainerActivity
@@ -54,6 +58,7 @@ import sh.hnet.comfychair.storage.ServerStorage
 import sh.hnet.comfychair.ui.components.ConnectionSplitButton
 import sh.hnet.comfychair.ui.components.ServerDialog
 import sh.hnet.comfychair.ui.components.ServerDropdown
+import sh.hnet.comfychair.util.ServerUrlUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -105,18 +110,75 @@ fun LoginScreen() {
     var showOfflinePrompt by remember { mutableStateOf(false) }
     var offlinePromptServer by remember { mutableStateOf<Server?>(null) }
 
+    // Browser auth state:
+    // - pendingBrowserAuthServer: the server whose cookies are being captured
+    // - pendingBrowserAuthUrl: non-null triggers BrowserAuthActivity launch (cleared after launch)
+    // - retryAfterAuthServer: non-null triggers a retry connect after successful auth
+    var pendingBrowserAuthServer by remember { mutableStateOf<Server?>(null) }
+    var pendingBrowserAuthUrl by remember { mutableStateOf<String?>(null) }
+    var retryAfterAuthServer by remember { mutableStateOf<Server?>(null) }
+
+    // Launcher for BrowserAuthActivity.
+    // Declared before attemptConnection so that the lambda captures only state vars
+    // (all declared above), not the local function. attemptConnection sets state to
+    // trigger the launch; LaunchedEffect below calls the launcher.
+    val browserAuthLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val server = pendingBrowserAuthServer ?: return@rememberLauncherForActivityResult
+        pendingBrowserAuthServer = null
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            val cookies = result.data
+                ?.getStringExtra(BrowserAuthActivity.RESULT_COOKIES)
+                .orEmpty()
+            if (cookies.isNotEmpty()) {
+                credentialStorage.saveCredentials(server.id, AuthCredentials.Cookie(cookies))
+                retryAfterAuthServer = server  // Triggers retry via LaunchedEffect below
+            } else {
+                // User tapped Done before completing sign-in
+                Toast.makeText(
+                    context,
+                    R.string.error_browser_auth_cancelled,
+                    Toast.LENGTH_SHORT
+                ).show()
+                connectionState = ConnectionState.IDLE
+            }
+        } else {
+            // User closed the WebView without authenticating
+            connectionState = ConnectionState.IDLE
+        }
+    }
+
     // String resources
     val warningSelfSigned = stringResource(R.string.warning_self_signed_cert)
     val warningUnknownCa = stringResource(R.string.warning_unknown_ca)
 
-    // Connection function
-    fun attemptConnection(server: Server) {
+    // Connection function.
+    // isRetryAfterAuth: true when called after a successful WebView auth — prevents a
+    // second WebView launch if the connection still fails (e.g. wrong cookies).
+    // When browser auth is needed, sets pendingBrowserAuth* state instead of calling
+    // the launcher directly (avoids a forward-reference to browserAuthLauncher).
+    fun attemptConnection(server: Server, isRetryAfterAuth: Boolean = false) {
         connectionState = ConnectionState.CONNECTING
         warningMessage = null
 
         scope.launch {
             // Load credentials for the server
             val credentials = credentialStorage.getCredentials(server.id, server.authType)
+
+            // For BROWSER auth with no saved cookies, skip the connection test and go
+            // straight to the WebView so the user can sign in before we try the server.
+            if (server.authType == AuthType.BROWSER
+                && credentials is AuthCredentials.None
+                && !isRetryAfterAuth
+            ) {
+                pendingBrowserAuthServer = server
+                pendingBrowserAuthUrl =
+                    ServerUrlUtils.buildServerUrl("https", server.hostname, server.port)
+                connectionState = ConnectionState.IDLE
+                return@launch
+            }
 
             val client = ComfyUIClient(
                 context.applicationContext,
@@ -171,6 +233,14 @@ fun LoginScreen() {
                 // Navigate to main activity
                 val intent = Intent(context, MainContainerActivity::class.java)
                 context.startActivity(intent)
+            } else if (server.authType == AuthType.BROWSER && !isRetryAfterAuth) {
+                // Connection failed with browser auth and WebView hasn't been tried yet.
+                // The server may be reachable but behind an SSO that blocked the request.
+                val protocol = client.getWorkingProtocol() ?: "https"
+                pendingBrowserAuthServer = server
+                pendingBrowserAuthUrl =
+                    ServerUrlUtils.buildServerUrl(protocol, server.hostname, server.port)
+                connectionState = ConnectionState.IDLE
             } else {
                 connectionState = ConnectionState.FAILED
 
@@ -189,6 +259,20 @@ fun LoginScreen() {
                 connectionState = ConnectionState.IDLE
             }
         }
+    }
+
+    // Launch BrowserAuthActivity when attemptConnection signals it via state
+    LaunchedEffect(pendingBrowserAuthUrl) {
+        val url = pendingBrowserAuthUrl ?: return@LaunchedEffect
+        pendingBrowserAuthUrl = null  // Clear to prevent re-trigger on recomposition
+        browserAuthLauncher.launch(BrowserAuthActivity.createIntent(context, url))
+    }
+
+    // Retry connection after successful browser auth (triggered by launcher result handler)
+    LaunchedEffect(retryAfterAuthServer) {
+        val server = retryAfterAuthServer ?: return@LaunchedEffect
+        retryAfterAuthServer = null
+        attemptConnection(server, isRetryAfterAuth = true)
     }
 
     // Offline connection function - loads from cache instead of connecting to server

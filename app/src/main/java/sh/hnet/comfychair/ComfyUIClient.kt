@@ -55,8 +55,8 @@ class ComfyUIClient(
         private const val STALL_CHECK_INTERVAL_MS = 5_000L    // Check every 5 seconds
     }
 
-    // Auth interceptor for adding Authorization headers
-    private val authInterceptor = AuthInterceptor(credentials)
+    // Auth interceptor for adding auth headers and detecting session expiry
+    private val authInterceptor = AuthInterceptor(credentials, hostname)
 
     // OkHttpClient for HTTP requests - short timeouts are fine
     private val httpClient = SelfSignedCertHelper.configureToAcceptSelfSigned(
@@ -123,6 +123,21 @@ class ComfyUIClient(
      * @return The current authentication credentials
      */
     fun getCredentials(): AuthCredentials = authInterceptor.getCredentials()
+
+    /**
+     * Register a callback to be invoked when a Cookie-authenticated session expires.
+     * Called at most once per session; re-armed by [resetSessionExpiredFlag].
+     */
+    fun setOnSessionExpired(callback: () -> Unit) {
+        authInterceptor.onSessionExpired = callback
+    }
+
+    /**
+     * Re-arm session-expiry detection after a successful re-authentication.
+     */
+    fun resetSessionExpiredFlag() {
+        authInterceptor.resetSessionExpiredFlag()
+    }
 
     // Store the active WebSocket connection
     private var webSocket: WebSocket? = null

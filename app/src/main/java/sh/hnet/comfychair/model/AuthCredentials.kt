@@ -20,4 +20,12 @@ sealed class AuthCredentials {
     data class Bearer(
         val token: String
     ) : AuthCredentials()
+
+    /**
+     * Browser-session cookie authentication captured from a WebView login.
+     * [cookies] is the raw Cookie header value (e.g. "session=abc; cf_auth=xyz").
+     */
+    data class Cookie(
+        val cookies: String
+    ) : AuthCredentials()
 }

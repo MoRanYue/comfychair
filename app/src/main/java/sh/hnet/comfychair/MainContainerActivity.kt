@@ -1,5 +1,6 @@
 package sh.hnet.comfychair
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,21 +9,29 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.runBlocking
 import sh.hnet.comfychair.cache.MediaCache
 import sh.hnet.comfychair.cache.MediaStateHolder
 import sh.hnet.comfychair.connection.ConnectionManager
+import sh.hnet.comfychair.model.AuthCredentials
 import sh.hnet.comfychair.navigation.MainRoute
 import sh.hnet.comfychair.repository.GalleryRepository
 import sh.hnet.comfychair.storage.AppSettings
+import sh.hnet.comfychair.storage.CredentialStorage
 import sh.hnet.comfychair.ui.components.ConnectionAlertDialog
 import sh.hnet.comfychair.ui.navigation.MainNavHost
 import sh.hnet.comfychair.ui.theme.ComfyChairTheme
 import sh.hnet.comfychair.util.DebugLogger
+import sh.hnet.comfychair.util.ServerUrlUtils
 import sh.hnet.comfychair.viewmodel.GenerationViewModel
 import sh.hnet.comfychair.viewmodel.ImageToImageViewModel
 import sh.hnet.comfychair.viewmodel.ImageToVideoViewModel
@@ -44,6 +53,29 @@ class MainContainerActivity : ComponentActivity() {
     private val generationViewModel: GenerationViewModel by viewModels()
     private val imageToImageViewModel: ImageToImageViewModel by viewModels()
     private val imageToVideoViewModel: ImageToVideoViewModel by viewModels()
+
+    // Credential storage — used to persist refreshed browser-session cookies
+    private val credentialStorage by lazy { CredentialStorage(applicationContext) }
+
+    // Launcher for BrowserAuthActivity — handles mid-session cookie refresh
+    private val browserAuthLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val cookies = result.data
+                ?.getStringExtra(BrowserAuthActivity.RESULT_COOKIES)
+                .orEmpty()
+            if (cookies.isNotEmpty()) {
+                val serverId = ConnectionManager.currentServerId ?: return@registerForActivityResult
+                val newCredentials = AuthCredentials.Cookie(cookies)
+                credentialStorage.saveCredentials(serverId, newCredentials)
+                ConnectionManager.updateCredentials(newCredentials)
+                ConnectionManager.retrySingleAttempt(this@MainContainerActivity)
+            }
+        }
+        // If cancelled or no cookies: leave the user in the current state;
+        // the session-expired dialog remains dismissible via Return to Login.
+    }
 
     // Activity result launchers
     private val settingsLauncher = registerForActivityResult(
@@ -128,11 +160,13 @@ class MainContainerActivity : ComponentActivity() {
             else -> MainRoute.TextToImage.route
         }
 
+        val activity = this
         setContent {
             ComfyChairTheme {
                 // Observe connection alert state from ConnectionManager (single source of truth)
                 val connectionAlertState by ConnectionManager.connectionAlertState.collectAsState()
                 val isReconnecting by ConnectionManager.isReconnecting.collectAsState()
+                val sessionExpired by ConnectionManager.sessionExpired.collectAsState()
 
                 Surface(modifier = Modifier.fillMaxSize()) {
                     MainNavHost(
@@ -143,6 +177,40 @@ class MainContainerActivity : ComponentActivity() {
                         onNavigateToGallery = { openGallery() },
                         onLogout = { logout() },
                         startDestination = startDestination
+                    )
+                }
+
+                // Session-expired dialog for browser-based (Cookie) authentication.
+                // Shown when the AuthInterceptor detects a 401/403 or SSO redirect.
+                if (sessionExpired) {
+                    AlertDialog(
+                        onDismissRequest = { ConnectionManager.resetSessionExpired() },
+                        title = { Text(stringResource(R.string.title_session_expired)) },
+                        text = { Text(stringResource(R.string.msg_session_expired)) },
+                        confirmButton = {
+                            Button(onClick = {
+                                ConnectionManager.resetSessionExpired()
+                                val serverUrl = ServerUrlUtils.buildServerUrl(
+                                    ConnectionManager.protocol,
+                                    ConnectionManager.hostname,
+                                    ConnectionManager.port
+                                )
+                                browserAuthLauncher.launch(
+                                    BrowserAuthActivity.createIntent(activity, serverUrl)
+                                )
+                            }) {
+                                Text(stringResource(R.string.button_reauthenticate))
+                            }
+                        },
+                        dismissButton = {
+                            OutlinedButton(onClick = {
+                                ConnectionManager.resetSessionExpired()
+                                generationViewModel.logout()
+                                finish()
+                            }) {
+                                Text(stringResource(R.string.action_return_to_login))
+                            }
+                        }
                     )
                 }
 

@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Visibility
@@ -185,7 +186,7 @@ fun ServerDialog(
                     isValid = false
                 }
             }
-            AuthType.NONE -> { /* No validation needed */ }
+            AuthType.NONE, AuthType.BROWSER -> { /* No credential validation needed */ }
         }
 
         return isValid
@@ -197,6 +198,8 @@ fun ServerDialog(
             AuthType.NONE -> AuthCredentials.None
             AuthType.BASIC -> AuthCredentials.Basic(username.trim(), password)
             AuthType.BEARER -> AuthCredentials.Bearer(token.trim())
+            // Browser cookies are captured via BrowserAuthActivity at connection time
+            AuthType.BROWSER -> AuthCredentials.None
         }
     }
 
@@ -347,11 +350,29 @@ fun ServerDialog(
                             }
                         },
                         modifier = Modifier.weight(1f),
-                        shapes = ButtonGroupDefaults.connectedTrailingButtonShapes()
+                        shapes = ButtonGroupDefaults.connectedMiddleButtonShapes()
                     ) {
                         Icon(
                             imageVector = Icons.Default.Key,
                             contentDescription = stringResource(R.string.option_auth_type_bearer)
+                        )
+                    }
+                    ToggleButton(
+                        checked = authType == AuthType.BROWSER,
+                        onCheckedChange = { isChecked ->
+                            if (isChecked) {
+                                authType = AuthType.BROWSER
+                                usernameError = null
+                                passwordError = null
+                                tokenError = null
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                        shapes = ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Language,
+                            contentDescription = stringResource(R.string.option_auth_type_browser)
                         )
                     }
                 }
@@ -405,6 +426,16 @@ fun ServerDialog(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+                }
+
+                // Browser auth info text
+                AnimatedVisibility(visible = authType == AuthType.BROWSER) {
+                    Text(
+                        text = stringResource(R.string.label_auth_browser_info),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
 
                 // Bearer token field

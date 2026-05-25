@@ -112,6 +112,11 @@ object ConnectionManager {
     private val _isReconnecting = MutableStateFlow(false)
     val isReconnecting: StateFlow<Boolean> = _isReconnecting.asStateFlow()
 
+    // Session expired signal for browser-based (Cookie) authentication.
+    // Set by the AuthInterceptor when a 401/403 or an SSO redirect is detected.
+    private val _sessionExpired = MutableStateFlow(false)
+    val sessionExpired: StateFlow<Boolean> = _sessionExpired.asStateFlow()
+
     private var _client: ComfyUIClient? = null
     private var _clientId: String? = null
     private var _applicationContext: Context? = null
@@ -144,6 +149,30 @@ object ConnectionManager {
      */
     fun clearLogoutFlag() {
         isUserInitiatedLogout = false
+    }
+
+    /**
+     * Acknowledge that the session-expiry event has been handled.
+     * Call this after presenting the re-authentication UI to the user.
+     * Also re-arms the AuthInterceptor so it can detect the next expiry.
+     */
+    fun resetSessionExpired() {
+        _sessionExpired.value = false
+        _client?.resetSessionExpiredFlag()
+        DebugLogger.d(TAG, "Session expiry acknowledged, detection re-armed")
+    }
+
+    /**
+     * Update the credentials used for subsequent requests without reconnecting.
+     * Intended for refreshing browser-session cookies after re-authentication.
+     * Also re-arms session-expiry detection.
+     *
+     * @param credentials New credentials (typically [AuthCredentials.Cookie])
+     */
+    fun updateCredentials(credentials: AuthCredentials) {
+        _client?.setCredentials(credentials)
+        _client?.resetSessionExpiredFlag()
+        DebugLogger.d(TAG, "Credentials updated")
     }
 
     /**
@@ -256,6 +285,10 @@ object ConnectionManager {
         _client = ComfyUIClient(context.applicationContext, hostname, port, credentials).apply {
             setWorkingProtocol(protocol)
             setClientId(_clientId!!)
+            setOnSessionExpired {
+                DebugLogger.w(TAG, "Browser auth session expired — notifying UI")
+                _sessionExpired.value = true
+            }
         }
 
         _connectionState.value = ConnectionState.Connected(
@@ -289,6 +322,7 @@ object ConnectionManager {
         _client?.shutdown()
         _client = null
         _clientId = null
+        _sessionExpired.value = false
         _connectionState.value = ConnectionState.Disconnected
         DebugLogger.i(TAG, "Disconnected")
     }

@@ -20,6 +20,7 @@ class CredentialStorage(context: Context) {
         private const val KEY_USERNAME_PREFIX = "username_"
         private const val KEY_PASSWORD_PREFIX = "password_"
         private const val KEY_TOKEN_PREFIX = "token_"
+        private const val KEY_COOKIES_PREFIX = "cookies_"
     }
 
     private val prefs: SharedPreferences by lazy {
@@ -49,10 +50,11 @@ class CredentialStorage(context: Context) {
      */
     fun saveCredentials(serverId: String, credentials: AuthCredentials) {
         prefs.edit().apply {
-            // Clear existing credentials first
+            // Clear all existing credentials first
             remove("$KEY_USERNAME_PREFIX$serverId")
             remove("$KEY_PASSWORD_PREFIX$serverId")
             remove("$KEY_TOKEN_PREFIX$serverId")
+            remove("$KEY_COOKIES_PREFIX$serverId")
 
             when (credentials) {
                 is AuthCredentials.None -> { /* Nothing to store */ }
@@ -62,6 +64,9 @@ class CredentialStorage(context: Context) {
                 }
                 is AuthCredentials.Bearer -> {
                     putString("$KEY_TOKEN_PREFIX$serverId", credentials.token)
+                }
+                is AuthCredentials.Cookie -> {
+                    putString("$KEY_COOKIES_PREFIX$serverId", credentials.cookies)
                 }
             }
             apply()
@@ -95,6 +100,14 @@ class CredentialStorage(context: Context) {
                     AuthCredentials.None
                 }
             }
+            AuthType.BROWSER -> {
+                val cookies = prefs.getString("$KEY_COOKIES_PREFIX$serverId", null)
+                if (cookies != null) {
+                    AuthCredentials.Cookie(cookies)
+                } else {
+                    AuthCredentials.None
+                }
+            }
         }
     }
 
@@ -107,6 +120,7 @@ class CredentialStorage(context: Context) {
             remove("$KEY_USERNAME_PREFIX$serverId")
             remove("$KEY_PASSWORD_PREFIX$serverId")
             remove("$KEY_TOKEN_PREFIX$serverId")
+            remove("$KEY_COOKIES_PREFIX$serverId")
             apply()
         }
         DebugLogger.d(TAG, "Deleted credentials for server $serverId")
@@ -124,6 +138,9 @@ class CredentialStorage(context: Context) {
             }
             AuthType.BEARER -> {
                 prefs.getString("$KEY_TOKEN_PREFIX$serverId", null) != null
+            }
+            AuthType.BROWSER -> {
+                prefs.getString("$KEY_COOKIES_PREFIX$serverId", null) != null
             }
         }
     }

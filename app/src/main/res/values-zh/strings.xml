@@ -33,6 +33,12 @@
     <string name="label_auth_password">密码</string>
     <string name="label_auth_token">API 密钥 / 令牌</string>
     <string name="error_auth_unauthorized">身份验证失败。请检查您的凭据。</string>
+    <string name="option_auth_type_browser">浏览器</string>
+    <string name="label_auth_browser_info">通过浏览器进行身份验证。连接时将提示您登录。</string>
+    <string name="title_browser_auth">登录</string>
+    <string name="button_browser_auth_done">完成</string>
+    <string name="button_reauthenticate">重新登录</string>
+    <string name="error_browser_auth_cancelled">登录未完成</string>
 
     <!-- Connection alert dialog -->
     <string name="title_connection_lost">连接丢失</string>
