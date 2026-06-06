@@ -89,6 +89,20 @@ class GalleryRepository private constructor() {
                 instance ?: GalleryRepository().also { instance = it }
             }
         }
+
+        /**
+         * Normalize a timestamp that may be in seconds (ComfyUI raw) to milliseconds.
+         * ComfyUI's status.timestamp is Unix epoch SECONDS (from Python's time.time()).
+         * If the value is > 0 and < 100 billion, it's in seconds → multiply by 1000.
+         */
+        private fun normalizeTimestamp(item: GalleryItem): GalleryItem {
+            val t = item.timestamp
+            return if (t > 0L && t < 100_000_000_000L) {
+                item.copy(timestamp = t * 1000L)
+            } else {
+                item
+            }
+        }
     }
 
     /**
@@ -216,7 +230,8 @@ class GalleryRepository private constructor() {
             // Step 1: Always load local data first (works in both online and offline modes)
             val localItems = if (context != null) {
                 withContext(Dispatchers.IO) {
-                    LocalGalleryStorage.loadIndex(context)
+                    // Normalize timestamps from old index entries that may be in seconds
+                    LocalGalleryStorage.loadIndex(context).map { normalizeTimestamp(it) }
                 }
             } else {
                 emptyList()
@@ -655,9 +670,18 @@ class GalleryRepository private constructor() {
             val promptHistory = historyJson.optJSONObject(promptId) ?: continue
             val outputs = promptHistory.optJSONObject("outputs") ?: continue
 
-            // Extract timestamp from history entry (ComfyUI provides it in the status object)
+            // Extract timestamp from history entry.
+            // ComfyUI's status.timestamp is in Unix SECONDS (from Python's time.time()).
+            // We need to convert to milliseconds for proper comparison with System.currentTimeMillis().
             val status = promptHistory.optJSONObject("status")
-            val timestamp = status?.optLong("timestamp", 0L) ?: 0L
+            val rawTimestamp = status?.optLong("timestamp", 0L) ?: 0L
+            val timestamp = if (rawTimestamp > 0L && rawTimestamp < 100_000_000_000L) {
+                // Value is in seconds (e.g., 1717000000), convert to milliseconds
+                rawTimestamp * 1000L
+            } else {
+                // Already in milliseconds or zero
+                rawTimestamp
+            }
 
             val nodeIds = outputs.keys()
             while (nodeIds.hasNext()) {
