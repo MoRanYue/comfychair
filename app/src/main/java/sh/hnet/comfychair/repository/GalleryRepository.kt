@@ -90,19 +90,6 @@ class GalleryRepository private constructor() {
             }
         }
 
-        /**
-         * Normalize a timestamp that may be in seconds (ComfyUI raw) to milliseconds.
-         * ComfyUI's status.timestamp is Unix epoch SECONDS (from Python's time.time()).
-         * If the value is > 0 and < 100 billion, it's in seconds → multiply by 1000.
-         */
-        private fun normalizeTimestamp(item: GalleryItem): GalleryItem {
-            val t = item.timestamp
-            return if (t > 0L && t < 100_000_000_000L) {
-                item.copy(timestamp = t * 1000L)
-            } else {
-                item
-            }
-        }
     }
 
     /**
@@ -230,8 +217,7 @@ class GalleryRepository private constructor() {
             // Step 1: Always load local data first (works in both online and offline modes)
             val localItems = if (context != null) {
                 withContext(Dispatchers.IO) {
-                    // Normalize timestamps from old index entries that may be in seconds
-                    LocalGalleryStorage.loadIndex(context).map { normalizeTimestamp(it) }
+                    LocalGalleryStorage.loadIndex(context)
                 }
             } else {
                 emptyList()
@@ -671,16 +657,36 @@ class GalleryRepository private constructor() {
             val outputs = promptHistory.optJSONObject("outputs") ?: continue
 
             // Extract timestamp from history entry.
-            // ComfyUI's status.timestamp is in Unix SECONDS (from Python's time.time()).
-            // We need to convert to milliseconds for proper comparison with System.currentTimeMillis().
+            // ComfyUI does NOT put a timestamp directly on the status object.
+            // Instead, timestamps are inside status.messages array, e.g.:
+            //   "messages": [["execution_start", {..., "timestamp": 1780716272859}],
+            //                ["execution_success", {..., "timestamp": 1780716371499}]]
+            // These timestamps are already in milliseconds.
             val status = promptHistory.optJSONObject("status")
-            val rawTimestamp = status?.optLong("timestamp", 0L) ?: 0L
-            val timestamp = if (rawTimestamp > 0L && rawTimestamp < 100_000_000_000L) {
-                // Value is in seconds (e.g., 1717000000), convert to milliseconds
-                rawTimestamp * 1000L
+            val messages = status?.optJSONArray("messages")
+            val timestamp = if (messages != null && messages.length() > 0) {
+                // Look for execution_success message, fallback to last message's timestamp
+                var extractedTimestamp = 0L
+                for (i in 0 until messages.length()) {
+                    val msg = messages.optJSONArray(i) ?: continue
+                    if (msg.length() >= 2) {
+                        val msgType = msg.optString(0, "")
+                        val msgData = msg.optJSONObject(1)
+                        if (msgData != null) {
+                            val t = msgData.optLong("timestamp", 0L)
+                            if (t > 0L) {
+                                extractedTimestamp = t
+                                // Prefer execution_success as it's the completion time
+                                if (msgType == "execution_success") {
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+                extractedTimestamp
             } else {
-                // Already in milliseconds or zero
-                rawTimestamp
+                0L
             }
 
             val nodeIds = outputs.keys()
